@@ -13,23 +13,16 @@
     >
       <div class="inner">
         <div class="event-headline">
-          <div v-html="setAttendeeCount(page.homepage_hero_content)"></div>
-          <!-- Wondering where this is? Go to "Guests" in the forked Airtable Base and change the "Grid view" to the form's view. -->
-          <a
-            href="EVENTBRITE_LINIK"
-            target="_blank" rel="noopener"
-          >
-            <button>Register Now</button>
-          </a>
+          <h1>Details for be.camp 2025 are coming soon!</h1>
         </div>
 
         <div class="event-countdown">
           <div class="countdown-timer">
             <div
               class="countdown-label"
-              v-html="page.event_date_label"
-            />
-            <countdown-clock />
+            >
+              Date: TBA
+            </div>
           </div>
           <div
             class="intro-video"
@@ -78,7 +71,7 @@
       </div>
     </section>
 
-    <section class="page-section tac why-attend-becamp decorative-bg">
+    <!-- <section class="page-section tac why-attend-becamp decorative-bg">
       <div class="wysiwyg-block">
         <h1 class="section-title small-margin">Why should I attend beCamp?</h1>
         <div v-html="page.why_attend_becamp"></div>
@@ -106,18 +99,18 @@
         <div v-html="page.our_awesome_sponsors"></div>
       </div>
       <becampSponsors />
-    </section>
+    </section> -->
   </div>
 </template>
 
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import becampSponsors from '~/components/becampSponsors.vue'
+// import becampSponsors from '~/components/becampSponsors.vue'
 export default {
-  components: {
-     becampSponsors
-  },
+  // components: {
+  //    becampSponsors
+  // },
   data () {
     return {
       youtubeVideo: `<div class="embed-container"><iframe src="https://www.youtube.com/embed/aVMBvWumoF8?autoplay=1&rel=0" frameborder="0" allowfullscreen autoplay="1"></iframe></div>`
