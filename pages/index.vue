@@ -13,16 +13,23 @@
     >
       <div class="inner">
         <div class="event-headline">
-          <h1>Details for be.camp 2025 are coming soon!</h1>
+          <div v-html="setAttendeeCount(page.homepage_hero_content)"></div>
+          <!-- Wondering where this is? Go to "Guests" in the forked Airtable Base and change the "Grid view" to the form's view. -->
+          <a
+            href="https://airtable.com/applbJgB5JNe73ode/shrjsi9TQbUSHex8u"
+            target="_blank" rel="noopener"
+          >
+            <button>Register Now</button>
+          </a>
         </div>
 
         <div class="event-countdown">
           <div class="countdown-timer">
             <div
               class="countdown-label"
-            >
-              Date: TBA
-            </div>
+              v-html="page.event_date_label"
+            />
+            <countdown-clock />
           </div>
           <div
             class="intro-video"
@@ -45,10 +52,9 @@
 
     <section class="page-section what-is-becamp">
       <h1 class="section-title">What is beCamp?</h1>
-      <template v-for="(block, index) in page.what_is_becamp">
+      <template v-for="(block, index) in page.what_is_becamp" :key="block.copy">
         <media-block
           :content="block"
-          :key="block.copy"
           :alt-layout="index%2 === 1"
         />
       </template>
@@ -61,7 +67,7 @@
           :href="`https://www.youtube.com/watch?v=${page.homepage_hero_video_youtube_id}`"
           target="_blank"
           rel="noopener"
-          @click.prevent="/**/"
+          @click.prevent=""
           name="beCamp promo video link"
         >
           <button @click="showLightbox(youtubeVideo)">
@@ -71,7 +77,7 @@
       </div>
     </section>
 
-    <!-- <section class="page-section tac why-attend-becamp decorative-bg">
+    <section class="page-section tac why-attend-becamp decorative-bg">
       <div class="wysiwyg-block">
         <h1 class="section-title small-margin">Why should I attend beCamp?</h1>
         <div v-html="page.why_attend_becamp"></div>
@@ -82,7 +88,7 @@
         <h2>Let us know you're attending!</h2>
         <p>It's quick and easy, and guarantees we get your shirt size correct.</p>
         <a
-          href="EVENTBRITE_LINIK"
+          href="https://airtable.com/applbJgB5JNe73ode/shrjsi9TQbUSHex8u"
           target="_blank" rel="noopener"
         >
           <button>Register Now</button>
@@ -99,18 +105,18 @@
         <div v-html="page.our_awesome_sponsors"></div>
       </div>
       <becampSponsors />
-    </section> -->
+    </section>
   </div>
 </template>
 
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-// import becampSponsors from '~/components/becampSponsors.vue'
+import becampSponsors from '~/components/becampSponsors.vue'
 export default {
-  // components: {
-  //    becampSponsors
-  // },
+  components: {
+     becampSponsors
+  },
   data () {
     return {
       youtubeVideo: `<div class="embed-container"><iframe src="https://www.youtube.com/embed/aVMBvWumoF8?autoplay=1&rel=0" frameborder="0" allowfullscreen autoplay="1"></iframe></div>`
@@ -132,8 +138,16 @@ export default {
     }
   },
   created () {
-    this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
-    this.setEventTime(this.page.event_start_date)
+    this.$store.dispatch('loadData').then(() => {
+      if (this.page && this.page.page_accent_color) {
+        this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
+      }
+    }).catch(error => {
+      console.error('Error loading data in index.vue:', error);
+    });
+    if (this.page && this.page.event_start_date) {
+      this.setEventTime(this.page.event_start_date)
+    }
   },
   methods: {
     ...mapActions([

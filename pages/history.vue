@@ -37,7 +37,13 @@ export default {
     }
   },
   created () {
-    this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
+    this.$store.dispatch('loadData').then(() => {
+      if (this.page && this.page.page_accent_color) {
+        this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
+      }
+    }).catch(error => {
+      console.error('Error loading data in history.vue:', error);
+    });
   },
   computed: {
     ...mapState({

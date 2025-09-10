@@ -33,6 +33,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @use "@/assets/sass/global.scss" as *;
   .media-block {
     margin-bottom: gutter()*3;
     display: flex;

@@ -69,6 +69,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "sass:color";
+
 .event-time {
   color: $accent4;
 }
@@ -83,7 +85,7 @@ export default {
   }
 
   .event {
-    padding: gutter()/2;
+    padding: calc(gutter() / 2);
     border: 1px solid #f5f5f5;
     border-radius: 5px;
     box-shadow: 0 .25em 1em 0 rgba($dark, .1);
@@ -102,49 +104,49 @@ export default {
     &[data-location="Red"] {
       .event-location {
         color: #fff;
-        background: linear-gradient(to bottom, red, darken(red, 5%)) !important;
+        background: linear-gradient(to bottom, red, color.scale(red, $lightness: -5%)) !important;
       }
     }
     &[data-location="Black"] {
       .event-location {
         color: #fff;
-        background: linear-gradient(to bottom, #555, darken(#555, 5%)) !important;
+        background: linear-gradient(to bottom, #555, color.scale(#555, $lightness: -5%)) !important;
       }
     }
     &[data-location="Brown"] {
       .event-location {
         color: #fff;
-        background: linear-gradient(to bottom, #885e27, darken(#885e27, 5%)) !important;
+        background: linear-gradient(to bottom, #885e27, color.scale(#885e27, $lightness: -5%)) !important;
       }
     }
     &[data-location="Pink"] {
       .event-location {
         color: #222;
-        background: linear-gradient(to bottom, pink, darken(pink, 5%)) !important;
+        background: linear-gradient(to bottom, pink, color.scale(pink, $lightness: -5%)) !important;
       }
     }
     &[data-location="Blue"] {
       .event-location {
         color: #fff;
-        background: linear-gradient(to bottom, #446b97, darken(#446b97, 5%)) !important;
+        background: linear-gradient(to bottom, #446b97, color.scale(#446b97, $lightness: -5%)) !important;
       }
     }
     &[data-location="6"] {
       .event-location {
         color: $dark;
-        background: linear-gradient(to bottom, $light-d, darken($light-d, 8%)) !important;
+        background: linear-gradient(to bottom, $light-d, color.scale($light-d, $lightness: -8%)) !important;
       }
     }
 
     .event-data {
-      margin-right: gutter()/2;
+      margin-right: calc(gutter() / 2);
       width: 65%;
 
       .topic {
         margin: 0;
         font-weight: bold;
         line-height: 1;
-        margin-bottom: gutter()/4;
+        margin-bottom: calc(gutter() / 4);
       }
       .speaker {
         color: #666;
@@ -167,7 +169,7 @@ export default {
 
       .event-location {
         text-align: center;
-        padding: gutter()/2;
+        padding: calc(gutter() / 2);
         background: #eee;
         border-radius: 5px;
       }

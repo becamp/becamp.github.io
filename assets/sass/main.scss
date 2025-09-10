@@ -1,8 +1,8 @@
-@import '../../node_modules/reset-css/sass/reset';
-@import 'global';
-@import './partials/animations';
-@import './partials/typography';
-@import './partials/elements';
+@use "reset-css/sass/reset";
+
+@use "./partials/animations";
+@use "./partials/typography";
+@use "./partials/elements";
 
 * {
   box-sizing: border-box;
@@ -12,8 +12,14 @@ body {
   overflow-x: hidden;
 }
 
-::-moz-selection { background: $accent; color: #fff }
-::selection { background: $accent; color: #fff }
+::-moz-selection {
+  background: $accent;
+  color: #fff;
+}
+::selection {
+  background: $accent;
+  color: #fff;
+}
 
 .page-section {
   @include row();
@@ -41,7 +47,7 @@ body {
 
     &:before,
     &:after {
-      content: '';
+      content: "";
       display: none;
       position: absolute;
 
@@ -112,7 +118,9 @@ body {
   overflow: hidden;
   max-width: 100%;
 
-  iframe, object, embed {
+  iframe,
+  object,
+  embed {
     position: absolute;
     top: 0;
     left: 0;
@@ -121,17 +129,19 @@ body {
   }
 }
 
-.page-enter-active, .page-leave-active {
-  transition: all .2s;
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.2s;
   opacity: 1;
 
   .page-hero + .page-section {
-    transition: all .15s .05s;
+    transition: all 0.15s 0.05s;
     transform: translateY(0);
     opacity: 1;
   }
 }
-.page-enter, .page-leave-active {
+.page-enter,
+.page-leave-active {
   opacity: 0;
 
   .page-hero + .page-section {

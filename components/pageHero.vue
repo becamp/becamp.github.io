@@ -8,7 +8,7 @@
       <slot />
     </div>
 
-    <no-ssr>
+    <ClientOnly>
       <div
         class="background-video"
         v-show="showVideo"
@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-    </no-ssr>
+    </ClientOnly>
   </section>
 </template>
 
@@ -90,7 +90,7 @@ export default {
       }
     }
   },
-  beforeDestroy () {
+  beforeUnmount () {
     if (this.player) {
       this.player.destroy()
     }
@@ -247,7 +247,7 @@ export default {
     right: 0;
     bottom: 0;
 
-    & /deep/ iframe {
+    :deep(iframe) {
       display: block;
       position: absolute;
       top: 0;
@@ -320,11 +320,11 @@ export default {
     }
   }
 }
-.page-title {
+:deep(.page-title) {
   text-align: center;
   font-weight: bold;
 }
-.page-description {
+:deep(.page-description) {
   text-align: center;
 }
 </style>

@@ -1,6 +1,7 @@
-import Vue from 'vue'
-import VueLazyload from 'vue-lazyload'
+import VueLazyload from "vue-lazyload";
 
-Vue.use(VueLazyload, {
-  preLoad: 1.5
-})
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.use(VueLazyload, {
+    preLoad: 1.5,
+  });
+});

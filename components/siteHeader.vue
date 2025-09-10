@@ -84,7 +84,7 @@ export default {
   }
 
   .site-nav {
-    padding: gutter()/2 0 0 0;
+    padding: calc(gutter() / 2) 0 0 0;
     display: block;
     font-size: 1rem;
     display: flex;

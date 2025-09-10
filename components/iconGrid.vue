@@ -31,6 +31,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/assets/sass/global.scss" as *;
 .icon-grid {
   padding: gutter()*2 0;
   display: flex;
@@ -39,11 +40,11 @@ export default {
   justify-content: center;
 
   .icon {
-    margin: gutter()/2;
+    margin: calc(gutter() / 2);
     max-width: 200px;
 
     @include bp($m) {
-      margin: gutter()/2 gutter();
+      margin: calc(gutter() / 2) gutter();
     }
 
     img {

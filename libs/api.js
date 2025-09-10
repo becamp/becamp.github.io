@@ -1,50 +1,34 @@
-import axios from 'axios'
-import Butter from 'buttercms';
-import Airtable from 'airtable'
+import axios from "axios";
+import Butter from "buttercms";
+import Airtable from "airtable";
 
 class Api {
   /**
    * Create our instance of the api class.
    */
-  constructor () {
-    this.axios = axios
-    this.butter = Butter(process.env.butterKey);
-  }
+  constructor(config = {}) {
+    this.axios = axios.create({
+      timeout: 15000, // 15 seconds
+    });
+    this.butter = Butter(config.butterKey);
+    this.config = config;
 
-  /**
-   * Installs this instance as a plugin of Vue.
-   * @param {Vue} Vue
-   * @param {null|Object} options
-   */
-  install (Vue, options) {
-    this.options = options
-    this.api = this.axios.create({
-      timeout: 10000,
-      headers: {
-        Accept: 'application/json'
-      }
-    })
     Airtable.configure({
-      endpointUrl: 'https://api.airtable.com',
-      apiKey: process.env.airtableKey
-    })
-    // Access the generated Airtable API docs for the base, and note the URL:
-    // https://airtable.com/<key>/api/docs
-    //
-    // Use this <key> as the string argument to Airtable.base('...').
-    this.airtable = Airtable.base('applbJgB5JNe73ode') // beCamp 2024
-    Vue.prototype.$api = this
+      endpointUrl: "https://api.airtable.com",
+      apiKey: this.config.airtableKey,
+    });
+    this.airtable = Airtable.base("applbJgB5JNe73ode"); // beCamp 2024
   }
 
   /**
    * Bind in the context of our current instance.
    */
-  addContext (context) {
-    this.context = context
-    return this
+  addContext(context) {
+    this.context = context;
+    return this;
   }
 }
 
-export default function () {
-  return new Api()
+export default function (config = {}) {
+  return new Api(config);
 }

@@ -12,6 +12,10 @@ export const state = () => ({
   },
   navItems: [
     {
+      name: 'Attendees',
+      route: '/attendees'
+    },
+    {
       name: 'Schedule',
       route: '/schedule'
     },

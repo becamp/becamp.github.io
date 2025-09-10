@@ -52,7 +52,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: gutter()/4;
+  padding: calc(gutter() / 4);
   max-width: 33.333%;
 
   @include bp($m) {
@@ -79,14 +79,14 @@ export default {
     align-items: center;
     justify-content: space-between;
     background: #fff;
-    padding: gutter()/2;
+    padding: calc(gutter() / 2);
     border: 1px solid #f5f5f5;
     border-radius: 5px;
     box-shadow: 0 .25em 1em 0 rgba($dark, .1);
 
     span {
       font-size: 1rem;
-      margin-top: gutter()/2;
+      margin-top: calc(gutter() / 2);
       text-transform: capitalize;
     }
   }
