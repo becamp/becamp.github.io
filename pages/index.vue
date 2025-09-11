@@ -146,7 +146,8 @@ export default {
         this.setEventTime(this.page.event_start_date)
       }
     }).catch(error => {
-      console.error('Error loading data in index.vue:', error);
+      const message = (error && (error.message || error.toString && error.toString())) || 'Unknown error';
+      console.error('Error loading data in index.vue:', message);
     });
   },
   methods: {
