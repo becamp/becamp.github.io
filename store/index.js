@@ -74,17 +74,26 @@ export const actions = {
     await dispatch('loadData')
   },
   async loadData ({dispatch}) {
-    return Promise.all([
-      dispatch('getSponsors'),
-      dispatch('getAttendees'),
-      dispatch('getSchedule'),
+    // Avoid Airtable calls during SSR to prevent abort-controller issues
+    const pagePromises = [
       dispatch('getPage', 'homepage'),
       dispatch('getPage', 'faqs'),
       dispatch('getPage', 'schedule'),
       dispatch('getPage', 'history'),
       dispatch('getPage', 'attendees'),
       dispatch('getPage', 'sponsors')
-    ])
+    ]
+
+    if (process.client) {
+      return Promise.all([
+        dispatch('getSponsors'),
+        dispatch('getAttendees'),
+        dispatch('getSchedule'),
+        ...pagePromises
+      ])
+    } else {
+      return Promise.all(pagePromises)
+    }
   },
   getPage ({commit, state}, page) {
     return new Promise((resolve, reject) => {
@@ -102,8 +111,12 @@ export const actions = {
     })
   },
   getSponsors({commit}) {
-
     return new Promise((resolve, reject) => {
+      if (process.server) {
+        // Skip Airtable on server; load on client
+        resolve()
+        return
+      }
       this.$api.airtable('Sponsors').select({
         fields: [
           'Sponsor',
@@ -138,6 +151,11 @@ export const actions = {
   },
   getAttendees({commit}) {
     return new Promise((resolve, reject) => {
+      if (process.server) {
+        // Skip Airtable on server; load on client
+        resolve()
+        return
+      }
       this.$api.airtable('Guests').select({
         fields: [
           'Guest Name',
@@ -167,6 +185,11 @@ export const actions = {
   },
   getSchedule({commit}) {
     return new Promise((resolve, reject) => {
+      if (process.server) {
+        // Skip Airtable on server; load on client
+        resolve()
+        return
+      }
       this.$api.airtable('Saturday Schedule').select({
         maxRecords: 999,
         view: "Grid view"
