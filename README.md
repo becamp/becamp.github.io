@@ -19,15 +19,38 @@ $ npm install
 # serve with hot reload at localhost:3000
 $ npm run dev
 
-# build for production and launch server
+# build for production
 $ npm run build
-$ npm start
+
+# preview production build locally
+$ npm run preview
 
 # generate static copy of project
+$ npm run generate
+
+# generate static copy with local environment
 $ npm run generate:local
+
+# run linter
+$ npm run lint
+
+# run linter with auto-fix
+$ npm run lint:fix
+
+# run type checking
+$ npm run typecheck
 ```
 
-Note that `npm run dev` hosts on 0.0.0.0. Edit `HOST` in package.json to adjust this behavior (e.g. to 127.0.0.1).
+## Technology Stack
+
+This project is built with:
+- **Nuxt 3** - The Vue.js framework
+- **Vue 3** - JavaScript framework with TypeScript support
+- **Pinia** - State management
+- **@nuxt/image** - Optimized image handling
+- **SCSS/Sass** - CSS preprocessing
+- **TypeScript** - Type safety
+- **ESLint** - Code linting
 
 ## 3rd-Party APIs
 
@@ -42,6 +65,16 @@ AIRTABLEKEY=<your-airtable-key>
 
 **never commit your API keys to the project history. the `.env` file is gitignored by default.**
 
+## Development
+
+This project uses:
+- **Node.js 20.17.0** (managed via Volta)
+- **Nuxt 3.13.2** with TypeScript configuration
+- **ESLint** for code quality
+- Pre-commit hooks for code validation
+
 ## Docs
 
-This project is built on Nuxt.js, an opinionated framework for building with Vue.js. For a detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
+This project is built on Nuxt 3, the intuitive Vue framework. For detailed documentation:
+- [Nuxt 3 Documentation](https://nuxt.com/docs)
+- [Vue 3 Documentation](https://vuejs.org/)
