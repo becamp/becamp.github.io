@@ -11,14 +11,16 @@
       class="page"
       @click.stop="$store.commit('system/setMobileNavDisplay', false)"
     >
-      <no-ssr>
+      <ClientOnly>
         <easter-egg />
-      </no-ssr>
+      </ClientOnly>
       <site-header />
       <div class="page-content">
-        <nuxt />
+        <NuxtPage />
       </div>
-      <site-footer />
+      <ClientOnly>
+        <site-footer />
+      </ClientOnly>
     </div>
   </div>
 </template>

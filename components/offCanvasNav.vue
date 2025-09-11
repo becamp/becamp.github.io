@@ -5,7 +5,7 @@
   >
     <ul class="site-nav">
       <li @click.stop="$store.commit('system/setMobileNavDisplay', false)">
-        <nuxt-link to="/swarm">
+        <nuxt-link to="/">
           <img
             src="/beCampLogo1.png"
             alt="beCamp"
@@ -71,7 +71,7 @@ export default {
     }
     a {
       display: block;
-      padding: gutter()/2 gutter();
+      padding: calc(gutter() / 2) gutter();
       border-top: 1px solid #f5f5f5;
       text-decoration: none;
 

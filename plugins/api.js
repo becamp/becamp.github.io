@@ -1,9 +1,12 @@
-import Vue from 'vue'
-import Api from '../libs/api'
+import Api from "../libs/api";
 
-let api = new Api()
-Vue.use(api)
+export default defineNuxtPlugin((nuxtApp) => {
+  const config = useRuntimeConfig();
+  const api = Api({
+    butterKey: config.public.butterKey,
+    airtableKey: config.public.airtableKey
+  });
 
-export default function (context) {
-  context.app.api = api.addContext(context)
-}
+  // Add api to the Nuxt app context
+  nuxtApp.provide("api", api.addContext(nuxtApp));
+});

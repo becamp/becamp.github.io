@@ -1,12 +1,20 @@
+@use "variables" as *;
+@use "mixins" as *;
+
 body {
   font-family: $body-font;
   font-size: 20px;
 }
 
-h1, h2, h3, h4, h5, h6{
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: $header-font;
-  color: #21284C;
-  margin-bottom: .25em;
+  color: #21284c;
+  margin-bottom: 0.25em;
   line-height: 1.1;
 
   &.light {
@@ -22,11 +30,14 @@ em {
 }
 figcaption {
   color: #999;
-  font-size: .8em;
-  margin-top: .25em;
+  font-size: 0.8em;
+  margin-top: 0.25em;
 }
 
-p, ul, ol, li {
+p,
+ul,
+ol,
+li {
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 1em;
@@ -90,4 +101,6 @@ h3 {
   }
 }
 
-.tac {text-align: center;}
+.tac {
+  text-align: center;
+}

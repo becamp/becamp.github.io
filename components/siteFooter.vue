@@ -12,12 +12,12 @@
         <div class="credits">
           <div class="logo">
             <div v-lazy-container="{ selector: 'img' }">
-              <nuxt-link to="/swarm">
+              <NuxtLink to="/">
                 <img
                   data-src="beCampLogo1.png"
                   alt="beCamp"
                 />
-              </nuxt-link>
+              </NuxtLink>
             </div>
           </div>
           <div class="copyright">
@@ -85,6 +85,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/assets/sass/global.scss" as *;
 .site-footer {
   background-repeat: no-repeat;
   background-size: cover;
@@ -188,7 +189,7 @@ export default {
 .content {
   max-width: 250px;
   margin: 0 auto;
-  padding: gutter()/2;
+  padding: calc(gutter() / 2);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -212,7 +213,7 @@ export default {
 
     .logo {
       max-width: 250px;
-      margin-bottom: gutter()/2;
+      margin-bottom: calc(gutter() / 2);
     }
 
     .copyright,
@@ -257,7 +258,7 @@ export default {
       display: flex;
       align-items: center;
       margin-top: gutter();
-      padding: gutter()/2;
+      padding: calc(gutter() / 2);
       text-decoration: none;
       border: 1px solid #ddd;
       justify-content: center;

@@ -1,7 +1,9 @@
-import WebFont from 'webfontloader'
+import WebFont from "webfontloader";
 
-WebFont.load({
-  google: {
-    families: ['Open Sans:700']
-  }
-})
+export default defineNuxtPlugin(() => {
+  WebFont.load({
+    google: {
+      families: ["Open Sans:700"],
+    },
+  });
+});

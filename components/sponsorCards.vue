@@ -14,19 +14,17 @@
               rel="noopener"
               :name="`${sponsor.sponsor} logo website link`"
             >
-              <nuxt-img
-                provider="static"
+              <img
                 :src="getSponsorLogo(sponsor)"
-                format="png"
+                :alt="`${sponsor.sponsor} logo`"
                 loading="lazy"
               />
             </a>
           </template>
           <template v-else>
-            <nuxt-img
-              provider="static"
+            <img
               :src="getSponsorLogo(sponsor)"
-              format="png"
+              :alt="`${sponsor.sponsor} logo`"
               loading="lazy"
             />
           </template>
@@ -89,7 +87,7 @@ export default {
 
 .sponsor-card {
   width: 100%;
-  padding: gutter()/2;
+  padding: calc(gutter() / 2);
   display: flex;
 
   @include bp($ms) {

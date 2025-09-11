@@ -127,7 +127,7 @@ export default {
 
 .close {
   position: absolute;
-  bottom: gutter()/4;
+  bottom: calc(gutter() / 4);
   right: 0;
   font-size: 1.5em;
   vertical-align: top;
@@ -183,7 +183,7 @@ export default {
     @include bp($m) {
       min-width: 200px;
       text-align: right;
-      padding-left: gutter()/2;
+      padding-left: calc(gutter() / 2);
     }
   }
 }

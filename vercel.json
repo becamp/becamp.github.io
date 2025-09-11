@@ -1,7 +1,7 @@
 {
   "github": {
     "silent": false,
-    "enabled": false
+    "enabled": true
   },
   "public": false
 }

@@ -1,6 +1,8 @@
 // File: _mixins.scss
 // Used to define useful mixins
 
+@use "variables" as *;
+
 // Layout
 // -----------------------------------------------------------------------------
 @mixin row() {
@@ -32,4 +34,3 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-

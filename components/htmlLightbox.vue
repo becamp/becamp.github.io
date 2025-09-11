@@ -9,7 +9,7 @@
       <div
         class="lightbox-inner"
         v-html="content"
-        @click.stop="/**/"
+        @click.stop
       >
       </div>
     </div>
@@ -43,7 +43,7 @@ export default {
   bottom: 0;
   background: rgba($dark, .75);
   z-index: 99;
-  padding: gutter()*4 gutter()/2;
+  padding: gutter()*4 calc(gutter() / 2);
 
   .close {
     position: absolute;
@@ -68,7 +68,7 @@ export default {
 .lightbox-content {
   @include row();
   max-width: 800px;
-  padding: gutter()/2;
+  padding: calc(gutter() / 2);
   display: flex;
   position: absolute;
   top: 0;
@@ -85,13 +85,13 @@ export default {
 
 .lightbox-inner {
   background-color: #fff;
-  padding: gutter()/2;
+  padding: calc(gutter() / 2);
   margin: auto;
   width: 100%;
   border-radius: 5px;
   box-shadow: 0 .5em 1em 0 rgba($dark, .25);
 
-  & /deep/ iframe {
+  :deep(iframe) {
     width: 100%;
   }
 }

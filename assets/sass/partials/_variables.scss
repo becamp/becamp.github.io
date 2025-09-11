@@ -4,21 +4,23 @@
 // Colors
 // -----------------------------------------------------------------------------
 $light: #fff;
-$light-d: #EEF0F2;
+$light-d: #eef0f2;
 
-$accent: #FF750F;
-$accent-d: darken($accent, 5%);
-$accent-l: #DD5D05;
+@use "sass:color";
 
-$accent2: #67C1A2;
+$accent: #ff750f;
+$accent-d: color.adjust($accent, $lightness: -5%);
+$accent-l: #dd5d05;
+
+$accent2: #67c1a2;
 $accent3: #800080;
-$accent4: #22A3AE;
+$accent4: #22a3ae;
 $accent5: rgb(218, 181, 19);
 
 $dark-l: #363537;
-$dark: #24292E;
+$dark: #24292e;
 $dark-d: #111;
-$dark-b: #21284C;
+$dark-b: #21284c;
 
 $body-color: $light;
 $text-ui-color: $dark;
@@ -31,17 +33,17 @@ $row: 1200px;
 
 // Breakpoints
 // -----------------------------------------------------------------------------
-$xs:  400px;
-$s:   450px;
-$ms:  500px;
-$m:   680px;
-$ml:  860px;
-$l:   1000px;
-$xl:  1200px;
+$xs: 400px;
+$s: 450px;
+$ms: 500px;
+$m: 680px;
+$ml: 860px;
+$l: 1000px;
+$xl: 1200px;
 $xxl: 1350px;
 
 // font families
 // -----------------------------------------------------------------------------
 $header-font: "jaf-domus", sans-serif;
 $body-font: "mr-eaves-xl-modern", sans-serif;
-$display: 'Open Sans', sans-serif;
+$display: "Open Sans", sans-serif;

@@ -1,17 +1,26 @@
+@use "sass:color";
+@use "sass:math";
+@use "variables" as *;
+@use "mixins" as *;
+
 button,
 .button {
   border: 1px solid $accent-d;
   background: $accent-d;
-  background: linear-gradient(to bottom, $accent-d, darken($accent-d, 5%));
+  background: linear-gradient(
+    to bottom,
+    $accent-d,
+    color.adjust($accent-d, $lightness: -5%)
+  );
   color: #fff;
   font-size: 1rem;
-  padding: gutter()/1.5 gutter()*1.5;
+  padding: math.div(gutter(), 1.5) gutter() * 1.5;
   text-transform: uppercase;
   font-family: $display;
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
   border-radius: 5px;
-  box-shadow: 0 .25em .5em 0 rgba(#000, .1);
+  box-shadow: 0 0.25em 0.5em 0 rgba(#000, 0.1);
   cursor: pointer;
   outline: none;
 
@@ -26,13 +35,13 @@ button,
   &.alt {
     background: linear-gradient(to bottom, $accent2, $accent4);
 
-     &:hover {
+    &:hover {
       background: linear-gradient(to bottom, $accent4, $accent4);
     }
   }
 
   &.narrow {
-    padding: gutter()/2 gutter()*1.25;
+    padding: math.div(gutter(), 2) gutter() * 1.25;
   }
 
   &[data-disabled] {
@@ -48,11 +57,11 @@ img {
 .wysiwyg-block {
   img {
     border: 5px solid #fff;
-    box-shadow: 0 2px 1em 0 rgba($dark, .2);
+    box-shadow: 0 2px 1em 0 rgba($dark, 0.2);
     border-radius: 3px;
 
-    &[src$='.png'],
-    &[src$='.svg'],
+    &[src$=".png"],
+    &[src$=".svg"],
     &.no-border {
       border: none;
       box-shadow: none;
@@ -60,9 +69,12 @@ img {
     }
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     margin-top: 2em;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 
     &:first-child {
       margin-top: 1em;
@@ -75,7 +87,7 @@ img {
 }
 
 a {
-  color: darken($accent-d, 10%);
+  color: color.adjust($accent-d, $lightness: -10%);
 
   &.no-decoration {
     text-decoration: none;
@@ -90,10 +102,10 @@ a {
 
 ul {
   list-style-type: disc;
-  padding: gutter()/4 gutter() gutter()/2 gutter();
+  padding: math.div(gutter(), 4) gutter() math.div(gutter(), 2) gutter();
 
   li {
-    margin-bottom: gutter()/2;
+    margin-bottom: math.div(gutter(), 2);
     line-height: 1.4;
 
     &:last-child {

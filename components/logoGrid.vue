@@ -57,7 +57,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: gutter()/2 0 gutter()*2 0;
+  padding: calc(gutter() / 2) 0 gutter()*2 0;
 }
 
 .logo {

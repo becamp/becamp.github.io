@@ -15,7 +15,7 @@
       </div>
       <div class="tac register">
         <a
-          href="EVENTBRITE_LINIK"
+          href="https://airtable.com/applbJgB5JNe73ode/shrjsi9TQbUSHex8u"
           target="_blank" rel="noopener"
         >
           <button>Register Now</button>
@@ -50,7 +50,18 @@ export default {
     }
   },
   created () {
-    this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
+    this.$store.dispatch('loadData').then(() => {
+      if (this.page && this.page.page_accent_color) {
+        this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
+      }
+    }).catch(error => {
+      console.error('Error loading data in attendees.vue:', error);
+    });
+  },
+  mounted () {
+    if (this.directoryAttendees.length === 0) {
+      this.$store.dispatch('getAttendees')
+    }
   },
   computed: {
     ...mapState({

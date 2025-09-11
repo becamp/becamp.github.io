@@ -104,7 +104,7 @@ export default {
   }
   .supporter {
     display: inline-block;
-    margin-right: gutter()/2;
+    margin-right: calc(gutter() / 2);
   }
   .supporter:last-child {
     margin-right: 0;

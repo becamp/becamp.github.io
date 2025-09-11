@@ -16,7 +16,10 @@ export const state = () => ({
 
 export const getters = {
   eventTimeObject (state) {
-    let duration = state.timeToEvent
+    if (state.timeToEvent === null) {
+      return null
+    }
+    let duration = moment.duration(state.timeToEvent, 'milliseconds')
     if (duration) {
       return {
         months: duration.months() >= 10 ? duration.months() : '0' + (duration.months() >= 0 ? duration.months() : '0'),
@@ -85,7 +88,7 @@ export const actions = {
   },
   getPage ({commit, state}, page) {
     return new Promise((resolve, reject) => {
-      this.app.api.butter.page.retrieve('*', page).then((res) => {
+      this.$api.butter.page.retrieve('*', page).then((res) => {
         if (!state.butterPages[res.data.data.slug]) {
           commit('setPage', {
             key: res.data.data.slug,
@@ -94,7 +97,6 @@ export const actions = {
         }
         resolve()
       }).catch((res) => {
-        console.log(res)
         reject()
       })
     })
@@ -102,8 +104,7 @@ export const actions = {
   getSponsors({commit}) {
 
     return new Promise((resolve, reject) => {
-      let base = this.app.api.airtable
-      base('Sponsors').select({
+      this.$api.airtable('Sponsors').select({
         fields: [
           'Sponsor',
           'Logo',
@@ -116,7 +117,13 @@ export const actions = {
       }).eachPage(function page(records, fetchNextPage) {
 
         records.forEach(function(record) {
-          commit('setSponsor', record.fields)
+          commit('setSponsor', {
+            Sponsor: record.fields['Sponsor'],
+            Logo: record.fields['Logo'],
+            Url: record.fields['Url'],
+            "Write up": record.fields['Write up'],
+            Level: record.fields['Level']
+          })
         });
         fetchNextPage();
       }, function done(err) {
@@ -131,8 +138,7 @@ export const actions = {
   },
   getAttendees({commit}) {
     return new Promise((resolve, reject) => {
-      let base = this.app.api.airtable
-      base('Guests').select({
+      this.$api.airtable('Guests').select({
         fields: [
           'Guest Name',
           'Directory Permission',
@@ -142,12 +148,16 @@ export const actions = {
         view: "[be.camp] Attendees Feed"
       }).eachPage(function page(records, fetchNextPage) {
         records.forEach(function(record) {
-          commit('setAttendee', record.fields)
+          commit('setAttendee', {
+            "Guest Name": record.fields['Guest Name'],
+            "Directory Permission": record.fields['Directory Permission'],
+            Email: record.fields['Email']
+          })
         });
         fetchNextPage();
       }, function done(err) {
         if (err) {
-          console.error(err)
+          console.error('Airtable getAttendees error:', err)
           reject()
           return
         }
@@ -157,13 +167,18 @@ export const actions = {
   },
   getSchedule({commit}) {
     return new Promise((resolve, reject) => {
-      let base = this.app.api.airtable
-      base('Saturday Schedule').select({
+      this.$api.airtable('Saturday Schedule').select({
         maxRecords: 999,
         view: "Grid view"
       }).eachPage(function page(records, fetchNextPage) {
         records.forEach(function(record) {
-          commit('setScheduleItem', record.fields)
+          const plainFields = {};
+          for (const key in record.fields) {
+            if (Object.prototype.hasOwnProperty.call(record.fields, key)) {
+              plainFields[key] = record.fields[key];
+            }
+          }
+          commit('setScheduleItem', plainFields)
         });
         fetchNextPage();
       }, function done(err) {
@@ -192,8 +207,8 @@ export const actions = {
     }
   },
   updateEventCountdown ({commit, dispatch, state}, interval) {
-    let duration = moment.duration(state.timeToEvent.asMilliseconds() - interval, 'milliseconds');
-    commit('setEventCountdown', duration)
+    let duration = moment.duration(state.timeToEvent - interval, 'milliseconds');
+    commit('setEventCountdown', duration.asMilliseconds())
   }
 }
 
@@ -202,7 +217,7 @@ export const mutations = {
     state.viewMode = mode
   },
   setPage(state, {key, data}) {
-    state.butterPages = Object.assign({}, state.butterPages ? state.butterPages : {}, {[key]: data})
+    state.butterPages = Object.assign({}, state.butterPages ? state.butterPages : {}, {[key]: JSON.parse(JSON.stringify(data))})
   },
   setCurrentPageAccentColor(state, payload) {
     state.currentPageAccentColor = payload
@@ -210,7 +225,7 @@ export const mutations = {
   setSponsor(state, payload) {
     state.sponsors.push({
       sponsor: payload['Sponsor'],
-      logo: payload['Logo'],
+            logo: payload['Logo'],
       url: payload['Url'],
       write_up: payload['Write up'],
       level: payload['Level']
