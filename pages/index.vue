@@ -142,12 +142,12 @@ export default {
       if (this.page && this.page.page_accent_color) {
         this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
       }
+      if (this.page && this.page.event_start_date) {
+        this.setEventTime(this.page.event_start_date)
+      }
     }).catch(error => {
       console.error('Error loading data in index.vue:', error);
     });
-    if (this.page && this.page.event_start_date) {
-      this.setEventTime(this.page.event_start_date)
-    }
   },
   methods: {
     ...mapActions([

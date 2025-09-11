@@ -1,6 +1,7 @@
 /**
  * Import components
  */
+import { defineNuxtPlugin } from "nuxt/app";
 import braidLink from "~/components/BraidLink";
 import siteHeader from "~/components/siteHeader";
 import siteFooter from "~/components/siteFooter";
