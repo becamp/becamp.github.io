@@ -41,6 +41,13 @@ $ npm run lint:fix
 $ npm run typecheck
 ```
 
+## Static Generation Workflow
+
+- `npm run generate` prerenders the public site, including `/`, `/attendees`, `/faqs`, `/history`, `/schedule`, `/sponsors`, and `/sitemap.xml`.
+- CMS content is fetched at build time through internal Nitro API routes; set `BUTTERKEY` and `AIRTABLEKEY` before generating to embed live data.
+- When keys are absent the build still succeeds, but the generated HTML omits CMS content (warnings will be logged).
+- Inspect the static output in `.output/public` and run `npm run preview` (or `npx serve .output/public`) to smoke test the generated bundle.
+
 ## Technology Stack
 
 This project is built with:

@@ -7,6 +7,7 @@ if (!isProd || process.env.LOCAL_ENV) {
 const butterKey = process.env.BUTTERKEY || "";
 const airtableKey = process.env.AIRTABLEKEY || "";
 
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -81,9 +82,7 @@ export default defineNuxtConfig({
 
   // Plugins
   plugins: [
-    "~/plugins/vuex",
     "~/plugins/components",
-    "~/plugins/api",
     { src: "~/plugins/webFontLoader", mode: "client" },
     // { src: "~/plugins/lazyload", mode: "client" }, // Temporarily disabled - incompatible with Nuxt 3
     { src: "~/plugins/events", mode: "client" },
@@ -122,9 +121,6 @@ export default defineNuxtConfig({
   // CSS configuration
   css: ["@/assets/sass/main.scss"],
 
-  // Loading progress bar
-  loading: { color: "#FF750F" },
-
   // Vite configuration for SCSS
   vite: {
     css: {
@@ -139,7 +135,17 @@ export default defineNuxtConfig({
   // Build configuration
   nitro: {
     prerender: {
-      routes: ["/sitemap.xml"],
+      routes: [
+        "/",
+        "/attendees",
+        "/faqs",
+        "/history",
+        "/schedule",
+        "/sponsors",
+        "/sitemap.xml",
+      ],
+      crawlLinks: true,
+      failOnError: false,
     },
     storage: {
       redis: {
@@ -150,36 +156,12 @@ export default defineNuxtConfig({
     routeRules: {
       "/**": { headers: { "Cache-Control": "max-age=604800" } }, // 1 week cache for static assets
     },
-    hooks: {
-      "render:route": async (url: any, result: any, context: any) => {
-        // This replaces the generate hook from Nuxt 2
-        // Image downloading logic would need to be adapted for Nuxt 3
-        // For now, keeping the basic structure
-        // Route rendering
-      },
-    } as any,
   },
 
   // Router configuration
   router: {
     options: {
       scrollBehaviorType: "smooth",
-      scrollBehavior(to: any, from: any, savedPosition: any) {
-        if (savedPosition) {
-          return savedPosition;
-        } else {
-          let position: any = {};
-          if (to.matched.length < 2) {
-            position = { left: 0, top: 0 };
-          } else if (to.matched.some((r: any) => r.components?.default?.options?.scrollToTop)) {
-            position = { left: 0, top: 0 };
-          }
-          if (to.hash) {
-            position = { el: to.hash };
-          }
-          return position;
-        }
-      },
     },
   },
 
