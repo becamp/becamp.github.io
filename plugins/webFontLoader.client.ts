@@ -1,4 +1,5 @@
 import WebFont from "webfontloader";
+import { defineNuxtPlugin } from '#app';
 
 export default defineNuxtPlugin(() => {
   WebFont.load({
