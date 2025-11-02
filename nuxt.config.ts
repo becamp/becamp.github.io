@@ -6,6 +6,7 @@ import { getRemoteImgContentType } from './libs/build'
 import { defineNuxtConfig } from 'nuxt/config'
 
 const isProd = process.env.NODE_ENV === 'production'
+const enablePwa = process.env.NUXT_ENABLE_PWA === 'true'
 
 if (!isProd || process.env.LOCAL_ENV) {
   const dotenv = await import('dotenv')
@@ -63,14 +64,14 @@ export default defineNuxtConfig({
 
   // ✅ Modern Nuxt 3 modules
   modules: [
-    'nuxt-simple-sitemap',   // sitemap replacement
+    '@pinia/nuxt',          // state management
+    '@nuxtjs/sitemap',   // sitemap replacement
     '@vite-pwa/nuxt',        // PWA replacement
     'nuxt-gtag',             // Google Analytics replacement
   ],
 
-  // nuxt-simple-sitemap configuration
-  sitemap: {
-    siteUrl: 'https://be.camp',
+  site: {
+    url: 'https://be.camp',
     autoLastmod: true,
     sitemapName: 'sitemap.xml',
   },
@@ -83,6 +84,7 @@ export default defineNuxtConfig({
 
   // PWA config (via @vite-pwa/nuxt)
   pwa: {
+    disable: !enablePwa,
     registerType: 'autoUpdate',
     manifest: {
       name: 'beCamp',
@@ -100,24 +102,22 @@ export default defineNuxtConfig({
     butterKey: process.env.BUTTERKEY || '',
     airtableKey: process.env.AIRTABLEKEY || '',
     public: {
-      butterKey: process.env.BUTTERKEY || '',
-      airtableKey: process.env.AIRTABLEKEY || '',
+      siteUrl: 'https://be.camp',
+      eventbriteLink:
+        process.env.EVENTBRITE_LINK ||
+        'https://airtable.com/applbJgB5JNe73ode/shrjsi9TQbUSHex8u',
     },
-  },
-
-  router: {
-    scrollBehaviorType: 'smooth',
   },
 
   devtools: { enabled: true },
 
   nitro: {
+    preset: 'static',
     prerender: {
       crawlLinks: true,
-      routes: ['/'],
-      ignore: ['/dynamic'],
+      failOnError: true,
+      routes: ['/', '/attendees', '/faqs', '/history', '/schedule', '/sponsors', '/sitemap.xml'],
     },
-
     hooks: {
       async 'prerender:generate'(route, nitro) {
         const baseDir = './.output/public/remote_img'

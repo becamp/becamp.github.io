@@ -19,16 +19,12 @@
   </div>
 </template>
 
-<script>
-import {mapGetters} from 'vuex'
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useContentStore } from '~/stores/content'
 
-export default {
-  computed: {
-    ...mapGetters([
-      'directoryAttendees'
-    ])
-  }
-}
+const contentStore = useContentStore()
+const { directoryAttendees } = storeToRefs(contentStore)
 </script>
 
 <style lang="scss" scoped>

@@ -38,7 +38,7 @@ export default {
   computed: {
     validSponsors () {
       return filter(this.sponsors, (sponsor) => {
-        let target = this.sponsors[sponsor]
+        const target = this.sponsors[sponsor]
         return target.logo
       })
     }

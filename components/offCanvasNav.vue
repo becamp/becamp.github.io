@@ -4,7 +4,7 @@
     :class="{'open': mobileNavDisplay}"
   >
     <ul class="site-nav">
-      <li @click.stop="$store.commit('system/setMobileNavDisplay', false)">
+      <li @click.stop="closeNav">
         <nuxt-link to="/">
           <img
             src="/beCampLogo1.png"
@@ -15,7 +15,7 @@
       <li
         v-for="item in siteNav"
         :key="item.route"
-        @click.stop="$store.commit('system/setMobileNavDisplay', false)"
+        @click.stop="closeNav"
       >
         <nuxt-link :to="item.route">{{ item.name }}</nuxt-link>
       </li>
@@ -23,16 +23,15 @@
   </nav>
 </template>
 
-<script>
-import {mapState} from 'vuex'
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useSystemStore } from '~/stores/system'
 
-export default {
-  computed: {
-    ...mapState({
-      mobileNavDisplay: state => state.system.mobileNavDisplay,
-      siteNav: state => state.system.navItems
-    })
-  }
+const systemStore = useSystemStore()
+const { mobileNavDisplay, navItems: siteNav } = storeToRefs(systemStore)
+
+const closeNav = () => {
+  systemStore.setMobileNavDisplay(false)
 }
 </script>
 

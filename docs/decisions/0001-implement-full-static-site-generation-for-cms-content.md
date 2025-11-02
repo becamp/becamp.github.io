@@ -246,12 +246,12 @@ Expected validation criteria:
   1. Nuxt 3 significantly changed state management patterns - migrated codebases using Vuex need careful attention to state serialization
   2. Not all API SDKs are SSR-compatible - callback-based pagination can cause hanging builds
   3. Client-side hydration is an acceptable pattern for static sites, especially when CMS integration is involved
-  4. Setting `failOnError: false` in nitro.prerender config prevents build failures from non-critical errors
+  4. Using `failOnError: true` during prerender keeps build failures visible when CMS data goes missing; the build currently enforces that setting
 
 - **Suggested improvements**:
-  1. **Migrate to Pinia**: Replace Vuex with Pinia (Nuxt 3's recommended state management) for better SSR state serialization
+  1. **Pinia hardening**: Continue adding typing/guards around Pinia state to ensure serialized payloads stay compatible with future CMS changes (initial migration complete)
   2. **Custom Airtable Fetching**: Replace `.eachPage()` with direct API calls using `.all()` or custom pagination for build-time data fetching
-  3. **Server API Routes**: Create Nuxt server routes (`/api/*`) to fetch and cache CMS data at build time, then consume via `useFetch` for proper state serialization
+  3. **Server API Routes**: Ensure `/api/cms` stays modular so additional CMS sources can be added without bloating the handler
   4. **Incremental Static Regeneration**: Consider platforms like Vercel or Netlify that support ISR for more dynamic content updates without full rebuilds
 
 ### Final Implementation Solution (Updated 2025-10-27)
@@ -260,16 +260,16 @@ After encountering Vuex state serialization issues, the implementation was updat
 
 **Changes Made:**
 
-1. **Created `/server/api/butter/pages.ts`**: Server API route that fetches all ButterCMS pages at build time
-2. **Created `plugins/zz-loadCMSData.ts`**: Plugin that uses `useFetch` to call the API route and populate Vuex store
-3. **Updated `store/index.js`**: Removed ButterCMS fetching from `loadData` action (now handled by plugin)
+1. **Created `/server/api/cms.get.ts`**: Server API endpoint that aggregates ButterCMS pages and Airtable data
+2. **Implemented `server/utils/cms.ts`**: Shared helper that performs build-time fetches and caches the CMS snapshot
+3. **Migrated state management to Pinia (`stores/content.ts`)**: Pages hydrate the store by calling `await contentStore.hydrate()` which uses Nuxt's `useRequestFetch` to hit `/api/cms`
 
 **Why This Works:**
 
-- Nuxt 3's `useFetch` automatically serializes data into the static payload
-- Server API routes are executed during prerendering and cached in the build output
-- The fetched data is baked into the HTML without additional runtime API calls
-- Vuex store is populated from the serialized payload on client hydration
+- Nuxt 3's request-fetch utilities automatically serialize API responses into the static payload
+- The consolidated `/api/cms` handler runs during prerendering and is cached alongside the generated HTML
+- ButterCMS and Airtable content are fetched server-side at build time, eliminating the need for client-only hydration
+- Pinia integrates cleanly with Nuxt 3 hydration, avoiding the Vuex serialization problems encountered earlier
 
 ### Current Deployment Status
 
@@ -280,5 +280,5 @@ The site is now ready for static hosting deployment with **ButterCMS content ful
 - ✅ Excellent SEO with complete HTML content in initial response
 - ✅ Fast initial page load with pre-rendered content
 - ✅ No JavaScript required for ButterCMS content display
-- ⚠️ Airtable data still loads client-side (due to SDK pagination compatibility issues)
-- ⚠️ Homepage has a Vue directive error during prerender (non-blocking, page still generates)
+- ✅ Airtable data fetched server-side via `/api/cms` and serialized into the static payload
+- ✅ Homepage prerender succeeds after introducing an SSR-safe `v-lazy` directive shim

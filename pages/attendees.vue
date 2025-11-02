@@ -15,8 +15,9 @@
       </div>
       <div class="tac register">
         <a
-          href="https://airtable.com/applbJgB5JNe73ode/shrjsi9TQbUSHex8u"
-          target="_blank" rel="noopener"
+          :href="eventbriteUrl"
+          target="_blank"
+          rel="noopener"
         >
           <button>Register Now</button>
         </a>
@@ -36,45 +37,60 @@
   </div>
 </template>
 
-<script>
-import {mapState, mapGetters} from 'vuex'
+<script setup lang="ts">
+import { computed, watchEffect } from 'vue'
+import { storeToRefs } from 'pinia'
+import { callOnce, definePageMeta, useHead, useRuntimeConfig } from '#imports'
+import { useContentStore } from '~/stores/content'
 
-export default {
+definePageMeta({
   middleware: 'beswarm',
-  head () {
-    return {
-      title: 'Attendee Directory | beCamp',
-      meta: [
-        { hid: 'description', name: 'description', content: 'The who\'s who of beCamp. These are some of the interesting people you\'ll run into.' }
-      ]
-    }
-  },
-  created () {
-    this.$store.dispatch('loadData').then(() => {
-      if (this.page && this.page.page_accent_color) {
-        this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
-      }
-    }).catch(error => {
-      console.error('Error loading data in attendees.vue:', error);
-    });
-  },
-  mounted () {
-    if (this.directoryAttendees.length === 0) {
-      this.$store.dispatch('getAttendees')
-    }
-  },
-  computed: {
-    ...mapState({
-      butterPages: state => state.butterPages,
-    }),
-    ...mapGetters([
-      'directoryAttendees'
-    ]),
-    page () {
-      return this.butterPages['attendees'] ? this.butterPages['attendees'] : {}
-    }
+})
+
+const contentStore = useContentStore()
+await callOnce(async () => {
+  await contentStore.hydrate()
+})
+
+const { butterPages } = storeToRefs(contentStore)
+const runtimeConfig = useRuntimeConfig()
+const fallbackEventbriteLink =
+  runtimeConfig.public.eventbriteLink ||
+  'https://airtable.com/applbJgB5JNe73ode/shrjsi9TQbUSHex8u'
+
+type CmsRecord = Record<string, any>
+
+const page = computed<CmsRecord | null>(() => {
+  const record = butterPages.value?.attendees as CmsRecord | undefined
+  return record ?? null
+})
+
+const eventbriteUrl = computed(() => {
+  const link = page.value?.eventbrite_link
+  if (typeof link === 'string' && link.trim() && !link.includes('EVENTBRITE_LINIK')) {
+    return link
   }
-}
+  return fallbackEventbriteLink
+})
+
+useHead({
+  title: 'Attendee Directory | beCamp',
+  meta: [
+    {
+      name: 'description',
+      content:
+        "The who's who of beCamp. These are some of the interesting people you'll run into.",
+      key: 'description',
+    },
+  ],
+})
+
+watchEffect(() => {
+  const accent = typeof page.value?.page_accent_color === 'string' ? page.value.page_accent_color : null
+  if (accent) {
+    contentStore.setCurrentPageAccentColor(accent)
+  }
+})
 </script>
 
 <style lang="scss" scoped>

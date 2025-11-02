@@ -9,7 +9,7 @@
     <off-canvas-nav />
     <div
       class="page"
-      @click.stop="$store.commit('system/setMobileNavDisplay', false)"
+      @click.stop="closeNav"
     >
       <ClientOnly>
         <easter-egg />
@@ -25,16 +25,19 @@
   </div>
 </template>
 
-<script>
-import {mapState} from 'vuex'
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useSystemStore } from '~/stores/system'
+import { useContentStore } from '~/stores/content'
 
-export default {
-  computed: {
-    ...mapState({
-      mobileNavDisplay: state => state.system.mobileNavDisplay,
-      layout: state => state.viewMode
-    })
-  }
+const systemStore = useSystemStore()
+const contentStore = useContentStore()
+
+const { mobileNavDisplay } = storeToRefs(systemStore)
+const { viewMode: layout } = storeToRefs(contentStore)
+
+const closeNav = () => {
+  systemStore.setMobileNavDisplay(false)
 }
 </script>
 
@@ -57,4 +60,3 @@ export default {
   }
 }
 </style>
-

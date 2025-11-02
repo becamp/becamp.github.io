@@ -24,40 +24,47 @@
   </div>
 </template>
 
-<script>
-import {mapState} from 'vuex'
+<script setup lang="ts">
+import { computed, watchEffect } from 'vue'
+import { storeToRefs } from 'pinia'
+import { callOnce, definePageMeta, useHead } from '#imports'
+import { useContentStore } from '~/stores/content'
 
-export default {
+definePageMeta({
   middleware: 'beswarm',
-  head () {
-    return {
-      title: 'Sponsors | beCamp',
-      meta: [
-        { hid: 'description', name: 'description', content: 'Check out all these wonderful sponsors who help make beCamp a reality.' }
-      ]
-    }
-  },
-  created () {
-    this.$store.dispatch('loadData').then(() => {
-      if (this.page && this.page.page_accent_color) {
-        this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
-      }
-    }).catch(error => {
-      console.error('Error loading data in sponsors.vue:', error);
-    });
-  },
-  computed: {
-    ...mapState({
-      butterPages: state => state.butterPages
-    }),
-    homepage () {
-      return this.butterPages['homepage'] ? this.butterPages['homepage'] : {}
+})
+
+const contentStore = useContentStore()
+await callOnce(async () => {
+  await contentStore.hydrate()
+})
+
+const { butterPages } = storeToRefs(contentStore)
+
+type CmsRecord = Record<string, any>
+
+const page = computed<CmsRecord | null>(() => {
+  const record = butterPages.value?.sponsors as CmsRecord | undefined
+  return record ?? null
+})
+
+useHead({
+  title: 'Sponsors | beCamp',
+  meta: [
+    {
+      name: 'description',
+      content: 'Check out all these wonderful sponsors who help make beCamp a reality.',
+      key: 'description',
     },
-    page () {
-      return this.butterPages['sponsors'] ? this.butterPages['sponsors'] : {}
-    }
+  ],
+})
+
+watchEffect(() => {
+  const accent = typeof page.value?.page_accent_color === 'string' ? page.value.page_accent_color : null
+  if (accent) {
+    contentStore.setCurrentPageAccentColor(accent)
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

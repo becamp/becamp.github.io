@@ -34,77 +34,63 @@
   </div>
 </template>
 
-<script>
-import {mapGetters} from 'vuex'
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useSystemStore } from '~/stores/system'
 
-export default {
-  props: {
-    promptId: {
-      type: String,
-      required: true
-    },
-    message: {
-      type: String,
-      required: true
-    },
-    ctaLink: {
-      type: String
-    },
-    ctaMessage: {
-      type: String,
-      default: 'Read More'
-    }
+const props = withDefaults(
+  defineProps<{
+    promptId: string
+    message: string
+    ctaLink?: string
+    ctaMessage?: string
+  }>(),
+  {
+    ctaMessage: 'Read More',
   },
-  data () {
-    return {
-      show: false,
-      shown: false,
-      componentHeight: 0
-    }
-  },
-  mounted () {
-    this.setComponentHeight()
+)
 
-    if (!this.dismissedPrompts.includes(this.promptId)) {
-      this.show = true
-      this.shown = true
-    }
-  },
-  computed: {
-    ...mapGetters({
-      viewportWidth: 'system/getViewportWidth',
-      dismissedPrompts: 'system/getDismissedPrompts'
-    }),
-    styles () {
-      if (this.show) {
-        return {
-          marginTop: 0
-        }
-      } else {
-        return {
-          marginTop: `-${this.componentHeight}px`
-        }
+const show = ref(false)
+const shown = ref(false)
+const componentHeight = ref(0)
+const prompt = ref<HTMLElement | null>(null)
+
+const systemStore = useSystemStore()
+const { viewportWidth, dismissedPrompts } = storeToRefs(systemStore)
+
+const styles = computed(() =>
+  show.value
+    ? {
+        marginTop: 0,
       }
-    }
-  },
-  methods: {
-    dismiss () {
-      this.setComponentHeight()
-      this.show = false
-      this.$store.commit('system/setDismissedPrompt', this.promptId)
-    },
-    setComponentHeight () {
-      this.componentHeight = this.$refs.prompt.clientHeight
-    }
-  },
-  watch: {
-    viewportWidth: {
-      handler () {
-        this.setComponentHeight()
-      }
-    }
-  }
+    : {
+        marginTop: `-${componentHeight.value}px`,
+      },
+)
+
+const setComponentHeight = () => {
+  componentHeight.value = prompt.value?.clientHeight ?? 0
 }
+
+const dismiss = () => {
+  setComponentHeight()
+  show.value = false
+  systemStore.dismissPrompt(props.promptId)
+}
+
+onMounted(() => {
+  setComponentHeight()
+
+  if (!dismissedPrompts.value.includes(props.promptId)) {
+    show.value = true
+    shown.value = true
+  }
+})
+
+watch(viewportWidth, () => {
+  setComponentHeight()
+})
 </script>
 
 <style lang="scss" scoped>

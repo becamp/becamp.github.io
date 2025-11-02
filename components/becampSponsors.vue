@@ -56,19 +56,16 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-import { filter } from '../libs/util'
+<script setup lang="ts">
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useContentStore } from '~/stores/content'
 
-export default {
-  computed:{
-    ...mapGetters({
-      premierSponsors: 'premierSponsors',
-      sponsors: 'sponsors',
-      supporters: 'supporters'
-    })
-  }
-}
+const contentStore = useContentStore()
+const { premierSponsors, sponsorPartners, supporterSponsors } = storeToRefs(contentStore)
+
+const sponsors = computed(() => sponsorPartners.value)
+const supporters = computed(() => supporterSponsors.value)
 </script>
 
 <style lang="scss" scoped>

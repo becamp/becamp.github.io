@@ -13,19 +13,15 @@
   </div>
 </template>
 
-<script>
-import {mapGetters} from 'vuex'
+<script setup lang="ts">
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useSystemStore } from '~/stores/system'
 
-export default {
-  computed: {
-    ...mapGetters({
-      viewportWidth: 'system/getViewportWidth'
-    }),
-    buttonLabel () {
-      return this.viewportWidth > 600 ? 'Join Now!' : 'Join!'
-    }
-  }
-}
+const systemStore = useSystemStore()
+const { viewportWidth } = storeToRefs(systemStore)
+
+const buttonLabel = computed(() => (viewportWidth.value > 600 ? 'Join Now!' : 'Join!'))
 </script>
 
 <style lang="scss" scoped>

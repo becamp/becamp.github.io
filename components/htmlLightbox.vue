@@ -16,21 +16,15 @@
   </div>
 </template>
 
-<script>
-import {mapState} from 'vuex'
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useLightboxStore } from '~/stores/lightbox'
 
-export default {
-  computed: {
-    ...mapState({
-      visible: state => state.lightbox.visible,
-      content: state => state.lightbox.content
-    })
-  },
-  methods: {
-    hideLightbox () {
-      this.$store.commit('lightbox/setVisibility', false);
-    }
-  }
+const lightboxStore = useLightboxStore()
+const { visible, content } = storeToRefs(lightboxStore)
+
+const hideLightbox = () => {
+  lightboxStore.close()
 }
 </script>
 

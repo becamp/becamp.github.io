@@ -23,37 +23,47 @@
   </div>
 </template>
 
-<script>
-import {mapState} from 'vuex'
+<script setup lang="ts">
+import { computed, watchEffect } from 'vue'
+import { storeToRefs } from 'pinia'
+import { callOnce, definePageMeta, useHead } from '#imports'
+import { useContentStore } from '~/stores/content'
 
-export default {
+definePageMeta({
   middleware: 'beswarm',
-  head () {
-    return {
-      title: 'FAQs | beCamp',
-      meta: [
-        { hid: 'description', name: 'description', content: 'Everything you wanted to know about beCamp, but were maybe too afraid to ask.' }
-      ]
-    }
-  },
-  created () {
-    this.$store.dispatch('loadData').then(() => {
-      if (this.page && this.page.page_accent_color) {
-        this.$store.commit('setCurrentPageAccentColor', this.page.page_accent_color)
-      }
-    }).catch(error => {
-      console.error('Error loading data in faqs.vue:', error);
-    });
-  },
-  computed: {
-    ...mapState({
-      butterPages: state => state.butterPages,
-    }),
-    page () {
-      return this.butterPages['faqs'] ? this.butterPages['faqs'] : {}
-    }
+})
+
+const contentStore = useContentStore()
+await callOnce(async () => {
+  await contentStore.hydrate()
+})
+
+const { butterPages } = storeToRefs(contentStore)
+
+type CmsRecord = Record<string, any>
+
+const page = computed<CmsRecord | null>(() => {
+  const record = butterPages.value?.faqs as CmsRecord | undefined
+  return record ?? null
+})
+
+useHead({
+  title: 'FAQs | beCamp',
+  meta: [
+    {
+      name: 'description',
+      content: 'Everything you wanted to know about beCamp, but were maybe too afraid to ask.',
+      key: 'description',
+    },
+  ],
+})
+
+watchEffect(() => {
+  const accent = typeof page.value?.page_accent_color === 'string' ? page.value.page_accent_color : null
+  if (accent) {
+    contentStore.setCurrentPageAccentColor(accent)
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

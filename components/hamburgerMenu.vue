@@ -11,26 +11,27 @@
   </div>
 </template>
 
-<script>
-import {mapState} from 'vuex'
+<script setup lang="ts">
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useSystemStore } from '~/stores/system'
 
-export default {
-  props: {
-    word: {
-      type: String,
-      default: 'Menu'
-    }
+const props = withDefaults(
+  defineProps<{
+    word?: string
+  }>(),
+  {
+    word: 'Menu',
   },
-  computed: {
-    ...mapState({
-      mobileNavDisplay: state => state.system.mobileNavDisplay,
-    })
-  },
-  methods: {
-    toggleNavigation () {
-      this.$store.commit('system/setMobileNavDisplay', !this.mobileNavDisplay)
-    }
-  }
+)
+
+const word = computed(() => props.word)
+
+const systemStore = useSystemStore()
+const { mobileNavDisplay } = storeToRefs(systemStore)
+
+const toggleNavigation = () => {
+  systemStore.toggleMobileNavDisplay()
 }
 </script>
 

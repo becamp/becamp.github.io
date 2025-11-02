@@ -32,20 +32,12 @@
   </header>
 </template>
 
-<script>
-import {mapGetters, mapState} from 'vuex'
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useSystemStore } from '~/stores/system'
 
-export default {
-  computed: {
-    ...mapState({
-      siteNav: state => state.system.navItems
-    }),
-    ...mapGetters({
-      viewportWidth: 'system/getViewportWidth'
-    })
-  }
-}
-
+const systemStore = useSystemStore()
+const { navItems: siteNav, viewportWidth } = storeToRefs(systemStore)
 </script>
 
 <style lang="scss" scoped>

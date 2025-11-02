@@ -58,30 +58,26 @@
   </footer>
 </template>
 
-<script>
-import {mapState} from 'vuex'
+<script setup lang="ts">
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useContentStore } from '~/stores/content'
 
-export default {
-  props: {
-    background: {
-      type: String,
-      default: '/hero-1.jpg'
-    }
+const props = withDefaults(
+  defineProps<{
+    background?: string
+  }>(),
+  {
+    background: '/hero-1.jpg',
   },
-  data () {
-    return {
-      year: (new Date()).getFullYear()
-    }
-  },
-  computed: {
-    ...mapState([
-      'currentPageAccentColor'
-    ]),
-    footerBackgroundImage () {
-      return `url("${this.background}")`
-    },
-  }
-}
+)
+
+const year = new Date().getFullYear()
+
+const contentStore = useContentStore()
+const { currentPageAccentColor } = storeToRefs(contentStore)
+
+const footerBackgroundImage = computed(() => `url("${props.background}")`)
 </script>
 
 <style lang="scss" scoped>

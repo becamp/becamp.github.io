@@ -3,16 +3,16 @@
     <div
       class="time-block"
       :data-time="[time]"
-      v-for="(events, time) in scheduleByTime"
-      :key="time[0]['Time']"
+      v-for="(events, time) in scheduleMap"
+      :key="time"
     >
       <h3 class="event-time">{{time}}</h3>
 
       <div class="event-cards">
         <div
           class="event"
-          v-for="event in events"
-          :key="event['Location']"
+          v-for="(event, eventIndex) in events"
+          :key="String(event['Location'] ?? eventIndex)"
           :data-location="getLocationID(event['Location'])"
         >
           <div class="event-data">
@@ -41,30 +41,25 @@
   </div>
 </template>
 
-<script>
-import {mapGetters} from 'vuex'
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useContentStore } from '~/stores/content'
 
-export default {
-  computed: {
-    ...mapGetters([
-      'scheduleByTime'
-    ])
-  },
-  methods: {
-    getLocationName(location) {
-      if (location) {
-        return location
-      }
-      return ""
-    },
-    getLocationID(location) {
-      if (location) {
-        let roomColor =  location.substring(0, location.indexOf(' Room'))
-        return roomColor ? roomColor : location
-      }
-      return ""
-    }
+const contentStore = useContentStore()
+const { scheduleByTime } = storeToRefs(contentStore)
+
+type ScheduleEntry = Record<string, any>
+type ScheduleMap = Record<string, ScheduleEntry[]>
+
+const scheduleMap = computed<ScheduleMap>(() => scheduleByTime.value as ScheduleMap)
+
+const getLocationID = (location: unknown) => {
+  if (typeof location !== 'string') {
+    return ''
   }
+
+  const roomColor = location.substring(0, location.indexOf(' Room'))
+  return roomColor || location
 }
 </script>
 

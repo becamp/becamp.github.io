@@ -28,92 +28,113 @@
   </section>
 </template>
 
-<script>
-import { mapGetters, mapState } from 'vuex'
+<script setup lang="ts">
+import { computed, onBeforeUnmount, ref, watchEffect } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useContentStore } from '~/stores/content'
+import { useSystemStore } from '~/stores/system'
 
-export default {
-  props: {
-    background: {
-      type: String,
-      default: '/hero-1.jpg'
-    },
-    videoBackground: {
-      type: String
+type YouTubePlayer = {
+  mute?: () => void
+  playVideo?: () => void
+  destroy?: () => void
+  seekTo?: (seconds: number, allowSeekAhead?: boolean) => void
+}
+
+declare global {
+  interface Window {
+    YT?: {
+      Player: new (elementId: string, options: Record<string, unknown>) => YouTubePlayer
     }
-  },
-  data () {
-    return {
-      showVideo: true,
-      unmaskVideo: false,
-      player: null
-    }
-  },
-  computed: {
-    ...mapState([
-      'youtubeAPIReady',
-      'currentPageAccentColor'
-    ]),
-    ...mapGetters({
-      viewportWidth: 'system/getViewportWidth'
-    }),
-    heroBackgroundImage () {
-      return this.background ? `url("${this.background}")` : `url("/hero-1.jpg")`
-    },
-    shouldBootVideo () {
-      return (this.videoBackground && this.viewportWidth >= 860)
-    },
-  },
-  methods: {
-    bootBackgroundVideo () {
-      if (this.youtubeAPIReady && this.shouldBootVideo) {
-        if (document.getElementById('yt-player')) {
-          this.player = new YT.Player('yt-player', {
-            videoId: this.videoBackground,
-            events: {
-              'onReady': this.onPlayerReady,
-              'onStateChange': this.onPlayerStateChange
-            }
-          })
-        } else {
-          window.setTimeout(() => this.bootBackgroundVideo(), 500)
-        }
-      }
-    },
-    onPlayerReady(event) {
-      this.player.mute()
-      this.player.playVideo()
-      this.unmaskVideo = true
-    },
-    onPlayerStateChange(event) {
-      if(event.data === 0) {
-        this.player.seekTo(0)
-      }
-    }
-  },
-  beforeUnmount () {
-    if (this.player) {
-      this.player.destroy()
-    }
-  },
-  watch: {
-    viewportWidth: {
-      immediate: true,
-      handler () {
-        if (this.viewportWidth >= 860) {
-          this.showVideo = true
-        } else {
-          this.showVideo = false
-        }
-      }
-    },
-    youtubeAPIReady: {
-      immediate: true,
-      handler () {
-        this.bootBackgroundVideo()
-      }
-    }
+    ytReady?: boolean
   }
 }
+
+const props = withDefaults(
+  defineProps<{
+    background?: string
+    videoBackground?: string
+  }>(),
+  {
+    background: '/hero-1.jpg',
+    videoBackground: undefined,
+  },
+)
+
+const showVideo = ref(true)
+const unmaskVideo = ref(false)
+const player = ref<YouTubePlayer | null>(null)
+
+const contentStore = useContentStore()
+const { youtubeAPIReady, currentPageAccentColor } = storeToRefs(contentStore)
+
+const systemStore = useSystemStore()
+const { viewportWidth } = storeToRefs(systemStore)
+
+const heroBackgroundImage = computed(() =>
+  props.background ? `url("${props.background}")` : 'url("/hero-1.jpg")',
+)
+
+const shouldBootVideo = computed(
+  () => Boolean(props.videoBackground) && viewportWidth.value >= 860,
+)
+
+const onPlayerReady = () => {
+  if (player.value) {
+    player.value.mute?.()
+    player.value.playVideo?.()
+    unmaskVideo.value = true
+  }
+}
+
+const onPlayerStateChange = (event: { data: number }) => {
+  if (event?.data === 0 && player.value) {
+    player.value.seekTo?.(0)
+  }
+}
+
+const bootBackgroundVideo = () => {
+  if (import.meta.server || typeof window === 'undefined' || !youtubeAPIReady.value || !shouldBootVideo.value || player.value) {
+    return
+  }
+
+  const mountPlayer = () => {
+    const target = document.getElementById('yt-player')
+    if (!target) {
+      window.setTimeout(mountPlayer, 500)
+      return
+    }
+
+    if (window.YT?.Player && props.videoBackground) {
+      player.value = new window.YT.Player('yt-player', {
+        videoId: props.videoBackground,
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
+        },
+      })
+    }
+  }
+
+  if (window.YT) {
+    mountPlayer()
+  }
+}
+
+watchEffect(() => {
+  showVideo.value = viewportWidth.value >= 860
+})
+
+watchEffect(() => {
+  bootBackgroundVideo()
+})
+
+onBeforeUnmount(() => {
+  if (player.value) {
+    player.value.destroy?.()
+    player.value = null
+  }
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,34 +1,47 @@
-export default defineNuxtPlugin((nuxtApp) => {
-  // Note: This plugin may need store access which will require Pinia migration
-  // For now, commenting out store-dependent code to prevent errors
+import { useSystemStore } from '~/stores/system'
+import { useContentStore } from '~/stores/content'
 
-  window.addEventListener("resize", function () {
-    // TODO: Update this to use Pinia store when store is migrated
-    // store.commit('system/setViewport', {
-    //   width: window.innerWidth,
-    //   height: window.innerHeight
-    // })
-  });
-  window.dispatchEvent(new Event("resize"));
+declare global {
+  interface Window {
+    ytReady?: boolean
+  }
+}
+
+export default defineNuxtPlugin(() => {
+  if (import.meta.server) {
+    return
+  }
+
+  const systemStore = useSystemStore()
+  const contentStore = useContentStore()
+
+  const updateViewport = () => {
+    systemStore.setViewport({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    })
+  }
+
+  window.addEventListener('resize', updateViewport)
+  updateViewport()
 
   // It's going to be faster to operate on our local variable.
-  var scrollTop = 0;
-  let observe = () => {
-    let unroundedPos = window.pageYOffset || document.documentElement.scrollTop;
-    let pos = Math.round(100 * unroundedPos) / 100;
+  let scrollTop = 0
+  const observe = () => {
+    const unroundedPos = window.pageYOffset || document.documentElement.scrollTop
+    const pos = Math.round(100 * unroundedPos) / 100
     if (scrollTop !== pos) {
-      scrollTop = pos;
-      // TODO: Update this to use Pinia store when store is migrated
-      // store.commit('system/setScroll', {
-      //   top: scrollTop
-      // })
+      scrollTop = pos
+      systemStore.setScrollPosition({
+        top: scrollTop,
+      })
     }
-    window.requestAnimationFrame(observe);
-  };
-  window.requestAnimationFrame(observe);
+    window.requestAnimationFrame(observe)
+  }
+  window.requestAnimationFrame(observe)
 
-  // check YT API status
-  // TODO: Update this to use Pinia store when store is migrated
-  // window.addEventListener('youtubeLoaded', () => store.commit('youtubeLoaded', true))
-  // if (window.ytReady) { store.commit('youtubeLoaded', true) }
-});
+  window.addEventListener('youtubeLoaded', () => contentStore.setYoutubeReady(true))
+  if (window.ytReady) {
+    contentStore.setYoutubeReady(true)
+  }
+})
