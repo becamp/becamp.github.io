@@ -14,6 +14,9 @@ if (!isProd || process.env.LOCAL_ENV) {
 }
 
 export default defineNuxtConfig({
+  image: {
+    domains: ['v5.airtableusercontent.com', 'cdn.buttercms.com']
+  },
   app: {
     head: {
       title: 'beCamp - The Charlottesville Unconference',
@@ -65,9 +68,10 @@ export default defineNuxtConfig({
   // ✅ Modern Nuxt 3 modules
   modules: [
     '@pinia/nuxt',          // state management
-    '@nuxtjs/sitemap',   // sitemap replacement
+    'nuxt-simple-sitemap',   // sitemap replacement
     '@vite-pwa/nuxt',        // PWA replacement
     'nuxt-gtag',             // Google Analytics replacement
+    '@nuxt/image',
   ],
 
   site: {
@@ -117,65 +121,6 @@ export default defineNuxtConfig({
       crawlLinks: true,
       failOnError: true,
       routes: ['/', '/attendees', '/faqs', '/history', '/schedule', '/sponsors', '/sitemap.xml'],
-    },
-    hooks: {
-      async 'prerender:generate'(route, nitro) {
-        const baseDir = './.output/public/remote_img'
-        const airtableDir = `${baseDir}/airtable`
-        const butterDir = `${baseDir}/buttercms`
-        for (const dir of [baseDir, airtableDir, butterDir]) {
-          if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
-        }
-
-        const html = await nitro.storage.getItem(`prerender/${route}.html`)
-        if (!html) return
-        let updatedHtml = html.toString()
-
-        // Airtable / remote images
-        const matches = updatedHtml.match(/(http(s?):)([/|.|\w|\s|-|%])*\.(?:jpg|jpeg|gif|png|svg)/g)
-        if (matches) {
-          const localUrls = await Promise.all(
-            matches.map(async (url) => {
-              const ext = url.split('.').pop()
-              const { filename } = await download.image({
-                url,
-                dest: `${airtableDir}/${md5(url)}.${ext}`,
-              })
-              return filename.replace('.output/public', '')
-            }),
-          )
-          matches.forEach((m, i) => (updatedHtml = updatedHtml.replace(m, localUrls[i])))
-        }
-
-        // ButterCMS images (no extension)
-        const butterMatches = updatedHtml.match(/(https:\/\/cdn\.buttercms\.com)([/|a-zA-Z0-9_])*/g)
-        if (butterMatches) {
-          const localButterUrls = await Promise.all(
-            butterMatches.map(async (url) => {
-              let fileFormat = await getRemoteImgContentType(url)
-              switch (fileFormat) {
-                case 'image/svg+xml':
-                  fileFormat = '.svg'
-                  break
-                case 'image/jpeg':
-                  fileFormat = '.jpg'
-                  break
-                case 'image/png':
-                  fileFormat = '.png'
-                  break
-                default:
-                  fileFormat = '.img'
-              }
-              const dest = `${butterDir}/${url.replace('https://cdn.buttercms.com/', '')}${fileFormat}`
-              const { filename } = await download.image({ url, dest })
-              return filename.replace('.output/public', '')
-            }),
-          )
-          butterMatches.forEach((m, i) => (updatedHtml = updatedHtml.replace(m, localButterUrls[i])))
-        }
-
-        await nitro.storage.setItem(`prerender/${route}.html`, updatedHtml)
-      },
     },
   },
 })

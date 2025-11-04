@@ -14,7 +14,8 @@
               rel="noopener"
               :name="`${sponsor.sponsor} logo website link`"
             >
-              <img
+              <NuxtImg
+                :key="getSponsorLogo(sponsor)"
                 :src="getSponsorLogo(sponsor)"
                 :alt="`${sponsor.sponsor} logo`"
                 loading="lazy"
@@ -22,7 +23,8 @@
             </a>
           </template>
           <template v-else>
-            <img
+            <NuxtImg
+              :key="getSponsorLogo(sponsor)"
               :src="getSponsorLogo(sponsor)"
               :alt="`${sponsor.sponsor} logo`"
               loading="lazy"

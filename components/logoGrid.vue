@@ -12,14 +12,15 @@
           rel="noopener"
           :name="`${sponsor.sponsor} website link`"
         >
-          <img
+          <NuxtImg
+            :key="getSponsorLogo(sponsor)"
             v-lazy="getSponsorLogo(sponsor)"
             :alt="`sponsor ${sponsor.sponsor}`"
           />
         </a>
       </template>
       <template v-else>
-        <img v-lazy="getSponsorLogo(sponsor)" />
+        <NuxtImg v-lazy="getSponsorLogo(sponsor)" />
       </template>
     </div>
   </div>
