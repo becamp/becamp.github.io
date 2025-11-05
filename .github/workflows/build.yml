@@ -5,6 +5,9 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  schedule:
+    - cron: '0 0 */2 * *'  # Run at midnight UTC every 2 days
+  workflow_dispatch:  # Allow manual triggering via GitHub UI
 
 jobs:
   build:
