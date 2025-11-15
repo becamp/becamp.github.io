@@ -17,19 +17,19 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 20.x
+    # - name: Set up Node.js
+    #   uses: actions/setup-node@v2
+    #   with:
+    #     node-version: 20.x
 
-    - name: Install dependencies
-      run: npm install
+    # - name: Install dependencies
+    #   run: npm install
 
-    - name: Build site
-      run: npm run generate 
-      env:
-        AIRTABLEKEY: ${{ secrets.AIRTABLEKEY }}
-        BUTTERKEY: ${{ secrets.BUTTERKEY }}
+    # - name: Build site
+    #   run: npm run generate 
+    #   env:
+    #     AIRTABLEKEY: ${{ secrets.AIRTABLEKEY }}
+    #     BUTTERKEY: ${{ secrets.BUTTERKEY }}
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:

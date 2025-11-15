@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>beCamp - The Charlottesville Unconference</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      font-family: "mr-eaves-xl-modern", "Open Sans", sans-serif;
+      font-size: 20px;
+      color: #363537;
+      background: #fff;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: "jaf-domus", "Open Sans", sans-serif;
+      color: #21284c;
+      margin-bottom: 0.25em;
+      line-height: 1.1;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5em;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1em;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1em;
+    }
+
+    .page-hero {
+      text-align: center;
+      padding: 3em 1em;
+      background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/hero-1.jpg') center/cover;
+      background-attachment: fixed;
+      position: relative;
+      overflow: hidden;
+      color: white;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-hero::before {
+      content: "";
+      position: absolute;
+      width: 120vw;
+      height: 40vh;
+      background: linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #f5f5f5 100%);
+      left: -50vw;
+      top: 33%;
+      z-index: 0;
+      transform: rotate(10deg);
+      display: none;
+    }
+
+    @media (min-width: 680px) {
+      .page-hero::before {
+        display: block;
+      }
+    }
+
+    .page-hero::after {
+      content: "";
+      position: absolute;
+      width: 120vw;
+      height: 40vh;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #f5f5f5 100%);
+      right: -50vw;
+      top: 15%;
+      z-index: 0;
+      transform: rotate(10deg);
+      display: none;
+    }
+
+    @media (min-width: 680px) {
+      .page-hero::after {
+        display: block;
+      }
+    }
+
+    .page-hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .page-hero-logo {
+      max-width: 400px;
+      height: auto;
+      margin-bottom: 1em;
+    }
+
+    .page-hero h1 {
+      color: white;
+      font-size: 2.25rem;
+      margin-bottom: 0.5em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 680px) {
+      .page-hero h1 {
+        font-size: 3rem;
+      }
+    }
+
+    .page-hero .subtitle {
+      font-size: 1.5rem;
+      color: #fff;
+      font-family: "mr-eaves-xl-modern", "Open Sans", sans-serif;
+      margin-bottom: 2em;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .accent {
+      color: #ff750f;
+    }
+
+    .page-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2em 1em 3em 1em;
+      max-width: 100%;
+    }
+
+    @media (min-width: 680px) {
+      .page-section {
+        padding: 2em 1em 4em 1em;
+      }
+    }
+
+    .page-section-content {
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .airtable-embed {
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2em 1em;
+      border-top: 1px solid #eee;
+      color: #767676;
+      font-size: 0.9rem;
+    }
+
+    footer p {
+      margin-bottom: 0.5em;
+    }
+
+    a {
+      color: #ff750f;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #dd5d05;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-content">
+        <img src="/beCampLogo1.png" alt="beCamp Logo" class="page-hero-logo">
+      </div>
+    </div>
+  </div>
+
+  <div class="page-section">
+    <div class="page-section-content">
+      <h2>Schedule</h2>
+      <iframe
+        class="airtable-embed"
+        src="https://airtable.com/embed/applbJgB5JNe73ode/shrEZjqxgVBWTmb3u?layout=card&viewControls=on"
+        frameborder="0"
+        onmousewheel=""
+        width="100%"
+        height="2000"
+        style="background: transparent; border: 1px solid #eef0f2;">
+      </iframe>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 beCamp. All rights reserved.</p>
+    <p><a href="https://be.camp">Visit the full site</a></p>
+  </footer>
+</body>
+</html>
