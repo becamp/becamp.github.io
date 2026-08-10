@@ -9,6 +9,26 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
   if (!name || !email) return redirect('/register?status=error', 303);
 
+  /* Honeypot: real users never fill this field. Pretend success so bots don't adapt. */
+  if (data.get('website')) return redirect('/register?status=success', 303);
+
+  /* reCAPTCHA v3 verification, active only when the secret is configured. */
+  const recaptchaSecret = import.meta.env.RECAPTCHA_SECRET_KEY;
+  if (recaptchaSecret) {
+    const token = data.get('recaptcha-token')?.toString();
+    if (!token) return redirect('/register?status=error', 303);
+
+    const verify = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ secret: recaptchaSecret, response: token }),
+    });
+    const result = await verify.json();
+    if (!result.success || (typeof result.score === 'number' && result.score < 0.5)) {
+      return redirect('/register?status=error', 303);
+    }
+  }
+
   /* Field names must match the Airtable column names exactly. */
   const fields = {
     'Guest Name': name,

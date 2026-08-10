@@ -57,23 +57,45 @@ const isActive = (href: string) => currentPath === href;
 
   <nav
     id="mobile-menu"
-    class="absolute inset-x-0 top-full z-10 hidden flex-col gap-5 bg-bg px-5 pb-6 font-mono text-sm text-white sm:hidden"
+    class="fixed inset-0 z-50 hidden flex-col bg-bg px-5 pb-8 pt-6 sm:hidden"
   >
-    {navLinks.map((link) => (
-      <a href={link.href} class={isActive(link.href) ? 'text-primary' : ''}>
-        {link.label}
-      </a>
-    ))}
+    <div class="flex items-center justify-between">
+      <LogoMark />
+      <button
+        id="menu-close"
+        type="button"
+        aria-label="Close menu"
+        class="flex size-10 items-center justify-center text-2xl text-white"
+      >
+        &#10005;
+      </button>
+    </div>
+
+    <div class="mt-auto flex flex-col">
+      <div class="flex flex-col divide-y divide-white/10 border-t border-white/10 font-mono text-2xl text-white">
+        {navLinks.map((link) => (
+          <a href={link.href} class={`py-5 ${isActive(link.href) ? 'text-primary' : ''}`}>
+            {link.label}
+          </a>
+        ))}
+      </div>
+      <Button href="/register" class="mt-8 w-full py-4 text-lg">Register [R]</Button>
+    </div>
   </nav>
 </header>
 
 <script>
   const toggle = document.getElementById('menu-toggle');
+  const closeBtn = document.getElementById('menu-close');
   const menu = document.getElementById('mobile-menu');
 
-  toggle?.addEventListener('click', () => {
-    const isOpen = menu?.classList.toggle('flex');
-    menu?.classList.toggle('hidden');
-    toggle.setAttribute('aria-expanded', String(Boolean(isOpen)));
-  });
+  const setOpen = (open: boolean) => {
+    menu?.classList.toggle('hidden', !open);
+    menu?.classList.toggle('flex', open);
+    document.body.classList.toggle('overflow-hidden', open);
+    toggle?.setAttribute('aria-expanded', String(open));
+  };
+
+  toggle?.addEventListener('click', () => setOpen(Boolean(menu?.classList.contains('hidden'))));
+  closeBtn?.addEventListener('click', () => setOpen(false));
 </script>

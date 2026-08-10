@@ -34,6 +34,9 @@ const volunteerOptions = [
   { id: 'volunteer-friday', checked: false, label: 'Yes, I can help out on Friday!', detail: 'We need and love our volunteers!' },
   { id: 'volunteer-saturday', checked: false, label: 'Yes, I can help out on Saturday!', detail: 'We need and love our volunteers!' },
 ];
+
+/* reCAPTCHA v3 activates when PUBLIC_RECAPTCHA_SITE_KEY is set; the honeypot works regardless. */
+const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 ---
 
 <Layout title="Register — beCamp">
@@ -59,10 +62,16 @@ const volunteerOptions = [
     </div>
 
     <form
+      id="registration-form"
       method="POST"
       action="/api/register"
       class="relative mx-5 mb-24 flex max-w-[800px] flex-col gap-9 border border-white/15 bg-[#0b0e2d] p-6 drop-shadow-[0px_16px_16px_rgba(0,0,0,0.25)] sm:mx-20 sm:p-12"
     >
+      <div class="absolute -left-[9999px] top-0" aria-hidden="true">
+        <label for="website">Leave this field empty</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <input type="hidden" name="recaptcha-token" id="recaptcha-token" />
       <fieldset class="flex flex-col gap-6">
         <legend class="mb-6 font-mono text-lg font-semibold text-primary">1. Attendee Information</legend>
         <div class="flex flex-col gap-3">
@@ -152,6 +161,26 @@ const volunteerOptions = [
     </form>
   </main>
   <Footer />
+
+  {recaptchaSiteKey && (
+    <script is:inline src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`}></script>
+  )}
+  {recaptchaSiteKey && (
+    <script is:inline define:vars={{ recaptchaSiteKey }}>
+      const form = document.getElementById('registration-form');
+      const tokenInput = document.getElementById('recaptcha-token');
+      form?.addEventListener('submit', (e) => {
+        if (tokenInput.value) return;
+        e.preventDefault();
+        grecaptcha.ready(() => {
+          grecaptcha.execute(recaptchaSiteKey, { action: 'register' }).then((token) => {
+            tokenInput.value = token;
+            form.submit();
+          });
+        });
+      });
+    </script>
+  )}
 </Layout>
 
 <script>
