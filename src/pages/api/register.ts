@@ -25,6 +25,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     });
     const result = await verify.json();
     if (!result.success || (typeof result.score === 'number' && result.score < 0.5)) {
+      console.error('reCAPTCHA rejected', JSON.stringify(result));
       return redirect('/register?status=error', 303);
     }
   }
