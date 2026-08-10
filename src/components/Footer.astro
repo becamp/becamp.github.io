@@ -1,0 +1,53 @@
+---
+import Logo from './Logo.astro';
+import footerMountains from '../assets/icons/footer-mountains.svg';
+
+const navLinks = [
+  { href: '/schedule', label: 'Schedule' },
+  { href: '/sponsors', label: 'Sponsors' },
+  { href: '/about', label: 'About' },
+  { href: '/faqs', label: 'FAQs' },
+];
+
+const secondaryLinks = [
+  { href: '/code-of-conduct', label: 'Code of Conduct' },
+  { href: '/sponsors#become-a-sponsor', label: 'Become a Sponsor' },
+  { href: '/about#contact', label: 'Contact organizers' },
+];
+---
+
+<footer class="relative mt-24 overflow-hidden pt-[calc(54.1667%-224px)]">
+  <img
+    src={footerMountains.src}
+    alt=""
+    class="pointer-events-none absolute inset-x-0 bottom-0 w-full"
+  />
+
+  <div class="relative flex flex-col gap-10 px-5 sm:px-20 pb-16">
+    <Logo />
+
+    <nav class="flex flex-wrap items-center gap-9 font-mono text-sm text-white">
+      {navLinks.map((link) => (
+        <a href={link.href} class="transition-colors duration-150 hover:text-primary">
+          {link.label}
+        </a>
+      ))}
+      <a href="/register" class="text-primary transition-colors duration-150 hover:text-[#ff8b33]">
+        Register [R]
+      </a>
+    </nav>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex flex-wrap gap-9 font-mono text-sm text-white">
+        {secondaryLinks.map((link) => (
+          <a href={link.href} class="transition-colors duration-150 hover:text-primary">
+            {link.label}
+          </a>
+        ))}
+      </div>
+      <p class="text-sm text-white/80">
+        © 2026 beCamp · Site built by <a href="https://scale.agency" class="underline transition-colors duration-150 hover:text-primary">Scale</a>
+      </p>
+    </div>
+  </div>
+</footer>

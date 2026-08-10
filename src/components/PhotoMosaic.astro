@@ -1,0 +1,26 @@
+---
+import { Image } from 'astro:assets';
+import eventPhotoA from '../assets/images/event-photo-a.png';
+import eventPhotoB from '../assets/images/event-photo-b.png';
+
+/* Orientation is tied to each photo's actual crop, alternating landscape/portrait in sequence.
+   Swap in final photos per their real orientation once they're set up in Figma. */
+const photos = [
+  { src: eventPhotoA, alt: 'Attendees networking at beCamp', orientation: 'landscape' },
+  { src: eventPhotoB, alt: "A beCamp session's sticky-note pitch board", orientation: 'portrait' },
+  { src: eventPhotoA, alt: 'beCamp attendees collaborating', orientation: 'landscape' },
+  { src: eventPhotoB, alt: 'A packed schedule board at beCamp', orientation: 'portrait' },
+];
+---
+
+<div class="relative left-1/2 mt-16 w-screen -translate-x-1/2 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_2%,black_98%,transparent)]">
+  <div class="flex w-max animate-marquee items-center gap-5 hover:[animation-play-state:paused] motion-reduce:animate-none">
+    {[...photos, ...photos].map((photo) => (
+      <Image
+        src={photo.src}
+        alt={photo.alt}
+        class={`shrink-0 object-cover ${photo.orientation === 'portrait' ? 'h-[400px] w-[330px]' : 'h-[280px] w-[420px]'}`}
+      />
+    ))}
+  </div>
+</div>

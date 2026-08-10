@@ -1,0 +1,30 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import TextLink from './TextLink.astro';
+import FaqItem from './FaqItem.astro';
+---
+
+<section class="px-5 sm:px-20 pt-24">
+  <SectionLabel>Common questions</SectionLabel>
+
+  <div class="mt-10 divide-y divide-divider border-b border-divider">
+    <FaqItem question="How much does beCamp cost?">
+      Nothing. beCamp is completely free, including the food, thanks to our generous
+      sponsors.
+    </FaqItem>
+    <FaqItem question="Can I attend just one day?">
+      You can, but come both days if you're able. If you're attending Saturday's
+      sessions, we ask that you also come to Friday's Pitch Night.
+    </FaqItem>
+    <FaqItem question="How are topics decided?">
+      Anyone can pitch a topic at Friday's Pitch Night. Attendees vote, and volunteers
+      arrange the winners into Saturday's schedule that same evening.
+    </FaqItem>
+    <FaqItem question="Are there rules?">
+      Just be kind, be curious, and treat everyone with respect. The full Code of
+      Conduct is linked in the footer.
+    </FaqItem>
+  </div>
+
+  <TextLink href="/faqs" class="mt-10 inline-block text-base">All FAQs →</TextLink>
+</section>

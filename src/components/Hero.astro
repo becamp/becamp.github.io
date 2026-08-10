@@ -1,0 +1,37 @@
+---
+import Button from './Button.astro';
+import EventInfoCard from './EventInfoCard.astro';
+import FlameBackdrop from './FlameBackdrop.astro';
+---
+
+<section class="relative overflow-hidden">
+  <FlameBackdrop />
+
+  <div class="pointer-events-none relative px-5 sm:px-20 pt-24 pb-16">
+    <div class="pointer-events-auto max-w-[660px]">
+    <p class="font-mono text-sm text-primary">November 14–15 in Charlottesville, VA</p>
+    <h1 class="mt-3 text-5xl font-medium leading-none tracking-[-0.64px] text-white sm:whitespace-nowrap sm:text-[64px]">
+      The un-conference
+    </h1>
+    <p class="mt-4 text-base text-white/80">The conference to help you build.</p>
+
+    <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <EventInfoCard
+        day="Fri, Nov 14 from 5–10pm"
+        title="Pitch night"
+        venue="The Looking Glass Art Bar"
+        directionsHref="https://www.google.com/maps/place/The+Looking+Glass+Immersive+Art+Experience/data=!4m2!3m1!1s0x0:0x2c08eaa2a44ba9c1?sa=X&ved=1t:2428&ictx=111"
+      />
+      <EventInfoCard
+        day="Sat, Nov 15 from 9am–4pm"
+        title="Sessions"
+        venue="UVA School of Data Science"
+        directionsHref="https://www.google.com/maps/place/School+of+Data+Science/data=!4m2!3m1!1s0x0:0x4105c4fd4e527c99?sa=X&ved=1t:2428&ictx=111"
+      />
+    </div>
+
+    <Button href="/register" class="mt-8 w-full">Register now [R]</Button>
+    </div>
+  </div>
+</section>
+

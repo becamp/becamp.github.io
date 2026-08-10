@@ -1,0 +1,150 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import FaqItem from '../components/FaqItem.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="FAQs — beCamp">
+  <Header />
+  <main>
+    <PageHero label="Frequently Asked Questions" title="Everything you're wondering before you say yes">
+      <Button href="/register" class="mt-12 w-full">Register now [R]</Button>
+    </PageHero>
+
+    <section class="px-5 sm:px-20 pt-8 pb-4">
+      <div class="divide-y divide-divider border-y border-divider">
+        <FaqItem question="Does it cost anything?">
+          <p>
+            No. beCamp is completely free to attend, including the food, thanks to our
+            generous sponsors.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="What about food and drinks?">
+          <p>
+            Friday night we'll have pizza, plus a cash bar for drinks. Saturday includes
+            breakfast, lunch, and beverages throughout the day.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="Can I attend just one day?">
+          <p>
+            You can, but come both days if you're able. You'll get the most out of it
+            that way. If you're planning to attend Saturday's sessions, we ask that you
+            also come to Friday's Pitch Night, since that's where the schedule gets
+            built.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="Is there a code of conduct?">
+          <p>
+            Yes. The short version: be kind, be curious, and treat everyone with respect.
+            You'll find the full Code of Conduct linked in the footer of every page.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="I have an accessibility need or a specific request.">
+          <p>
+            Reach out to us. We want beCamp to work for everyone. Use the "Contact
+            organizers" link in the footer and we'll do everything we can to accommodate
+            you.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="Do people bring laptops?">
+          <p>
+            Many do, and some hands-on sessions make good use of them, but they're not
+            required. A notebook and curiosity work just as well.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="What is beCamp?" open>
+          <p>
+            Like any good conference: multiple sessions running at once, relevant and
+            current topics, a proper lunch break. The differences are that it's local to
+            Charlottesville, it's free (including food, thanks to sponsors), and the
+            entire agenda gets built by attendees the night before.
+          </p>
+          <p>Come both days if you can. You'll get the most out of it that way.</p>
+          <p>
+            beCamp is a genuine barcamp; it's been through years of retrospectives,
+            iteration, and a rotating cast of organizers who keep improving the format.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="Who attends?">
+          <p>
+            Developers, designers, students, founders, researchers, and the generally
+            tech-curious from across the Charlottesville area. You don't need to be an
+            expert in anything. If you're interested, you belong.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="When and where is beCamp 2026?">
+          <p>
+            November 14–15, 2026. Friday's Pitch Night runs 5–10pm at The Looking Glass
+            Art Bar, and Saturday's sessions run 9am–4pm at UVA. Directions to both
+            venues are on the home page.
+          </p>
+        </FaqItem>
+
+        <FaqItem question={'Why does the schedule say "TBD"?'}>
+          <p>
+            Because it hasn't been written yet, and that's the point. The Saturday
+            schedule gets filled in by whoever shows up Friday night, and the empty
+            slots are where your topic goes.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="How are topics decided?">
+          <p>
+            Anyone can pitch a topic at Friday's Pitch Night, anything they want to
+            teach, share, demonstrate, discuss, or understand better. Attendees vote on
+            the pitches, and volunteers arrange the winners into Saturday's schedule that
+            same evening. You don't need to be an expert to pitch.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="What happens to topics that don't get picked?">
+          <p>
+            They don't disappear. Unpicked topics often turn into hallway conversations
+            on Saturday, and plenty come back as sharper pitches the following year.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="How did beCamp get started?">
+          <p>
+            The first beCamp happened in 2006 in the backyard of local technologist Steve
+            Stedman, as an offshoot of the beTech meetup and inspired by BarCamp, the
+            open, anyone-welcome answer to Foo Camp. It's been running ever since. The
+            full story is on our <a href="/about" class="underline">About page</a>.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="How can I help?">
+          <p>
+            Volunteer! There are checkboxes on the registration form for helping out
+            Friday or Saturday, and we need and love our volunteers. Organizations can
+            also support the event as sponsors, and simply spreading the word helps more
+            than you'd think.
+          </p>
+        </FaqItem>
+
+        <FaqItem question="beCamp vs. beSwarm, what's the difference?">
+          <p>
+            beSwarm is the spirit of beCamp's Friday night, minus the pitches, run on a
+            Saturday. It started in 2010 for people who wanted beCamp more than once a
+            year. beCamp is the full two-day unconference; beSwarm is the hangout.
+          </p>
+        </FaqItem>
+      </div>
+    </section>
+
+    <CtaSection />
+  </main>
+  <Footer />
+</Layout>

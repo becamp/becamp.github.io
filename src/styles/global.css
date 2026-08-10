@@ -1,0 +1,38 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/geist-mono";
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+
+  --color-bg: #060926;
+  --color-primary: #ff750f;
+  --color-link: #51a2ff;
+  --color-divider: #1e203b;
+  --color-mountain: #555e92;
+}
+
+body {
+  background-color: var(--color-bg);
+  font-family: var(--font-sans);
+}
+
+button,
+summary,
+label:has(input) {
+  cursor: pointer;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 80s linear infinite;
+}

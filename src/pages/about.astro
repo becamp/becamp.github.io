@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Footer from '../components/Footer.astro';
+import postItPlanning from '../assets/images/post-it-planning.png';
+---
+
+<Layout title="About — beCamp">
+  <Header />
+  <main>
+    <PageHero wide label="The Story of Cville's Tech Unconference" title="How a backyard meetup became beCamp" />
+
+    <div class="divide-y divide-divider px-5 sm:px-20">
+      <section class="grid grid-cols-1 gap-10 py-20 lg:grid-cols-[480px_1fr] lg:gap-20">
+        <div>
+          <SectionLabel>Genesis</SectionLabel>
+          <h2 class="mt-3 text-4xl font-medium tracking-[-0.36px] text-white">
+            It started with Foo Camp
+          </h2>
+        </div>
+        <div class="flex max-w-[720px] flex-col gap-6">
+          <p class="text-base leading-relaxed text-white/80">
+            In 2003, Tim O'Reilly held an invitation-only conference on the future of
+            technology called Foo Camp, built on the Open Space Technology approach: a
+            simple way to run productive meetings for anywhere from five to 2,000+ people.
+          </p>
+          <div class="flex flex-col gap-4 border-l-[3px] border-primary pl-6">
+            <p class="font-mono text-[15px] font-medium text-primary">
+              Open Space runs on four principles:
+            </p>
+            <ul class="flex flex-col gap-2 text-base text-white">
+              <li>• Whoever comes is the right people</li>
+              <li>• Whatever happens is the only thing that could've</li>
+              <li>• When it starts is the right time</li>
+              <li>• When it's over, it's over</li>
+            </ul>
+          </div>
+          <p class="text-base leading-relaxed text-white/80">
+            And one rule of movement: the Law of Two Feet, meaning anyone's free to walk
+            to whatever discussion they actually care about.
+          </p>
+          <p class="text-base leading-relaxed text-white/80">
+            Foo Camp was invite-only. In 2005, BarCamp launched in Palo Alto as its open,
+            anyone-welcome counterpart.
+          </p>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 gap-10 py-20 lg:grid-cols-[480px_1fr] lg:gap-20">
+        <div>
+          <SectionLabel>Local Roots</SectionLabel>
+          <h2 class="mt-3 text-4xl font-medium tracking-[-0.36px] text-white">
+            Meanwhile, in Charlottesville
+          </h2>
+        </div>
+        <div class="flex max-w-[720px] flex-col gap-6">
+          <p class="text-base leading-relaxed text-white/80">
+            Around the same time, a group of UVA employees started a meetup called beTech,
+            trying to bring one technologist at a time into a more modern software
+            mindset. UVA's developers were largely siloed then, and this group often met
+            during the workday instead of after.
+          </p>
+          <p class="text-base leading-relaxed text-white/80">
+            beCamp broke off from beTech, inspired by BarCamp. The first one happened in
+            2006, in the backyard of local technologist Steve Stedman. Up until 2018's
+            rebrand, beTech's logo was the only thing left connecting the two.
+          </p>
+          <p class="text-base leading-relaxed text-white/80">
+            From 2007 until becamp.org existed, beCamp ran off a wiki hosted at
+            barcamp.org/becamp.
+          </p>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 gap-10 py-20 lg:grid-cols-[480px_1fr] lg:gap-20">
+        <div class="flex flex-col gap-6">
+          <div>
+            <SectionLabel>Philosophy</SectionLabel>
+            <h2 class="mt-3 text-4xl font-medium tracking-[-0.36px] text-white">
+              Sharing makes it better
+            </h2>
+          </div>
+          <p class="text-base leading-relaxed text-white/80">
+            Former organizer Ron DuPlain describes two rules that keep a room running
+            well:
+          </p>
+          <div class="flex flex-col gap-3 font-mono text-sm text-link">
+            <p>[1] Whatever topic the room cares about most is the one being discussed</p>
+            <p>[2] Whoever has relevant perspective gets the floor</p>
+          </div>
+        </div>
+        <div class="flex max-w-[720px] flex-col gap-6">
+          <p class="text-base leading-relaxed text-white/80">
+            The result: even a presenter who isn't the room's top expert usually gets
+            useful input from someone else in the crowd, something that rarely happens at
+            a traditional conference.
+          </p>
+          <figure class="flex flex-col gap-3">
+            <Image src={postItPlanning} alt="A wall of Post-It notes forming the beCamp schedule" class="h-[360px] w-full rounded-xl object-cover" />
+            <figcaption class="font-mono text-[13px] text-white/50">Planning by Post-It</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 gap-10 py-20 lg:grid-cols-[480px_1fr] lg:gap-20">
+        <div>
+          <SectionLabel>Iteration</SectionLabel>
+          <h2 class="mt-3 text-4xl font-medium tracking-[-0.36px] text-white">
+            An evolving format
+          </h2>
+        </div>
+        <div class="flex max-w-[720px] flex-col gap-6">
+          <p class="text-base leading-relaxed text-white/80">
+            beCamp keeps iterating. Some ideas stick, some don't. The Present, Learn,
+            Share labels on pitched topics came from Ron DuPlain, based on two years of
+            retrospective feedback, after realizing an up-vote alone didn't guarantee a
+            good session; sometimes no one in the room was an expert, sometimes a
+            "presenter" actually wanted a discussion instead.
+          </p>
+          <p class="text-base leading-relaxed text-white/80">
+            beCamp has also spawned its own offshoots. Many people wanted a beCamp more
+            than once a year, but twice a year was too much given the planning involved.
+            Ron DuPlain started beSwarm in 2010 with John Chapin, first held that
+            February; it's the spirit of beCamp's Friday night, minus the pitches, run on
+            a Saturday.
+          </p>
+          <p class="text-base leading-relaxed text-white/80">
+            beSwarm led to beCraft in 2012, a software-craft meetup Stuart Leitch started
+            from emails collected at that year's beSwarm, with early help from Al
+            Tenhundfeld and later Cushing Whitney. It no longer meets, but it inspired
+            several other tech meetups still running today.
+          </p>
+          <p class="text-base leading-relaxed text-white/80">
+            The Cville Slack team also traces back to beCamp: it began at the 2015
+            retrospective, when the group decided to migrate its existing IRC community to
+            Slack. That community now has over 1,000 members.
+          </p>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 gap-10 py-20 lg:grid-cols-[480px_1fr] lg:gap-20">
+        <div>
+          <SectionLabel>Impact</SectionLabel>
+          <h2 class="mt-3 text-4xl font-medium tracking-[-0.36px] text-white">
+            A community of practice
+          </h2>
+        </div>
+        <div class="flex max-w-[720px] flex-col gap-6">
+          <p class="text-base leading-relaxed text-white/80">
+            beCamp stays a single annual event, but the community that runs it also backs
+            several meetups and gatherings throughout the year. beCamp and beSwarm both
+            grew out of tech, but the mission driving them, collaboration and inclusivity,
+            reaches well past technology alone.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <CtaSection />
+  </main>
+  <Footer />
+</Layout>

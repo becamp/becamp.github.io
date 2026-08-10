@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import SponsorPlaceholder from '../components/SponsorPlaceholder.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Footer from '../components/Footer.astro';
+import externalLinkIcon from '../assets/icons/external-link.svg';
+
+/* Placeholder sponsor entries — swap in real logos, copy, URLs, and slugs as
+   sponsors are confirmed. Keep the list alphabetical. Slugs are the anchor
+   targets that homepage premier boxes link to. */
+const premierSponsors = Array.from({ length: 6 }, (_, i) => ({
+  slug: `sponsor-${i + 1}`,
+  description:
+    'Excellence through industry-leading web design and development. Braid combines careful planning, design sense, and skilled engineering to build web projects that work the first time.',
+  url: 'https://spelled-out-url.com',
+  urlLabel: 'spelled-out-url.com',
+}));
+---
+
+<Layout title="Sponsors — beCamp">
+  <Header />
+  <main>
+    <PageHero label="Our Sponsors" title="The people and organizations who make this free">
+      <p class="mt-8 max-w-[463px] text-base leading-relaxed text-white/80">
+        beCamp wouldn't happen without these sponsors. Presented alphabetically, they
+        support Charlottesville's tech community and help keep the event free for
+        everyone who shows up.
+      </p>
+      <Button href="/register" class="mt-8 w-full">Register now [R]</Button>
+    </PageHero>
+
+    <section class="px-5 sm:px-20 pt-8">
+      <h2 class="text-4xl font-medium tracking-[-0.36px] text-white">Premier Sponsors</h2>
+
+      <div class="mt-12 flex flex-col gap-12">
+        {premierSponsors.map((sponsor) => (
+          <div id={sponsor.slug} class="flex scroll-mt-8 flex-col gap-6 lg:flex-row lg:gap-16">
+            <SponsorPlaceholder class="h-[185px] w-full max-w-[413px] shrink-0" />
+            <div class="flex max-w-[463px] flex-col justify-between gap-4">
+              <p class="text-base leading-relaxed text-white/80">{sponsor.description}</p>
+              <a
+                href={sponsor.url}
+                target="_blank"
+                rel="noopener"
+                class="flex items-center gap-2 font-mono text-base text-link hover:underline"
+              >
+                {sponsor.urlLabel}
+                <img src={externalLinkIcon.src} alt="" class="size-4" />
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h2 class="mt-24 text-xl font-medium tracking-[-0.2px] text-white">Sponsors</h2>
+      <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
+        {Array.from({ length: 3 }).map(() => (
+          <SponsorPlaceholder class="h-32" />
+        ))}
+      </div>
+    </section>
+
+    <CtaSection />
+  </main>
+  <Footer />
+</Layout>

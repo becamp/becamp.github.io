@@ -1,0 +1,25 @@
+---
+import FlameBackdrop from './FlameBackdrop.astro';
+
+interface Props {
+  label: string;
+  title: string;
+  wide?: boolean;
+}
+
+const { label, title, wide = false } = Astro.props;
+---
+
+<section class="relative overflow-hidden">
+  <FlameBackdrop />
+
+  <div class="pointer-events-none relative px-5 sm:px-20 pt-24 pb-16">
+    <div class={`pointer-events-auto ${wide ? 'max-w-[900px]' : 'max-w-[663px]'}`}>
+      <p class="font-mono text-sm text-primary">{label}</p>
+      <h1 class="mt-3 text-5xl font-medium leading-none tracking-[-0.64px] text-white sm:text-[64px]">
+        {title}
+      </h1>
+      <slot />
+    </div>
+  </div>
+</section>

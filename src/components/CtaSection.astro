@@ -1,0 +1,27 @@
+---
+import Button from './Button.astro';
+import TextLink from './TextLink.astro';
+import slackIcon from '../assets/icons/slack.svg';
+---
+
+<section class="px-5 sm:px-20 pt-24">
+  <p class="font-mono text-sm text-primary">November 14–15 in Charlottesville, VA</p>
+  <h2 class="mt-3 max-w-[532px] text-5xl font-medium leading-tight tracking-[-0.64px] text-white sm:text-[64px] sm:leading-none">
+    Join us in November of 2026
+  </h2>
+  <p class="mt-6 max-w-[841px] text-base text-white/80">
+    Quick and easy, and guarantees we get your shirt size right.
+  </p>
+
+  <div class="mt-10 flex flex-wrap gap-5">
+    <Button href="/register" class="w-full sm:w-[304px]">Register now [R]</Button>
+    <Button href="#newsletter" variant="secondary" class="w-full sm:w-[305px]">
+      Sign up for Newsletter [N]
+    </Button>
+  </div>
+
+  <a href="https://becamp.slack.com" class="mt-8 inline-flex items-center gap-2.5 font-mono text-base text-link transition-colors duration-150 hover:text-[#85bfff] hover:underline">
+    <img src={slackIcon.src} alt="" class="size-6" />
+    Join our Slack channel →
+  </a>
+</section>

@@ -1,0 +1,13 @@
+---
+import logo from '../assets/icons/logo.svg';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<a href="/" class={`block w-[180px] shrink-0 ${className}`} aria-label="beCamp home">
+  <img src={logo.src} alt="beCamp Charlottesville" width="180" height="40" />
+</a>

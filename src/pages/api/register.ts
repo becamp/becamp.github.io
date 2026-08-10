@@ -1,0 +1,43 @@
+import type { APIRoute } from 'astro';
+
+export const prerender = false;
+
+export const POST: APIRoute = async ({ request, redirect }) => {
+  const data = await request.formData();
+  const name = data.get('name')?.toString().trim();
+  const email = data.get('email')?.toString().trim();
+
+  if (!name || !email) return redirect('/register?status=error', 303);
+
+  /* Field names must match the Airtable column names exactly. */
+  const fields = {
+    'Guest Name': name,
+    Email: email,
+    "I'll be attending Pitch Night on Friday Oct 19th from 5pm -> 10pm": data.get('attend-friday') === 'on',
+    "I'll be attending Sessions Oct 19th from 9am -> 4pm": data.get('attend-saturday') === 'on',
+    'Directory Permission': data.get('attendee-directory') === 'on',
+    'Yes, I can help out on Friday!': data.get('volunteer-friday') === 'on',
+    'Yes, I can help out on Saturday!': data.get('volunteer-saturday') === 'on',
+  };
+
+  const { AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE } = import.meta.env;
+
+  const res = await fetch(
+    `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${AIRTABLE_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ records: [{ fields }] }),
+    }
+  );
+
+  if (!res.ok) {
+    console.error('Airtable error', res.status, await res.text());
+    return redirect('/register?status=error', 303);
+  }
+
+  return redirect('/register?status=success', 303);
+};

@@ -1,0 +1,22 @@
+---
+import TextLink from './TextLink.astro';
+
+interface Props {
+  day: string;
+  title: string;
+  venue: string;
+  directionsHref: string;
+  class?: string;
+}
+
+const { day, title, venue, directionsHref, class: className = '' } = Astro.props;
+---
+
+<div class={`relative h-[146px] w-full overflow-hidden border border-white/[0.08] bg-white/[0.03] ${className}`}>
+  <div class="flex h-full flex-col justify-center gap-1.5 px-5">
+    <p class="font-mono text-xs text-white/50">{day}</p>
+    <p class="text-xl font-medium tracking-[-0.2px] text-white">{title}</p>
+    <p class="text-sm text-white/80">{venue}</p>
+    <TextLink href={directionsHref} external class="text-[13px]">Get Directions →</TextLink>
+  </div>
+</div>

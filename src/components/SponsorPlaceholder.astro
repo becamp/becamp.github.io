@@ -1,0 +1,16 @@
+---
+interface Props {
+  class?: string;
+  href?: string;
+}
+
+const { class: className = '', href } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  href={href}
+  class={`flex items-center justify-center border border-white/[0.08] bg-white/[0.03] ${href ? 'transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08]' : ''} ${className}`}
+>
+  <span class="font-mono text-sm text-white/25">Coming soon</span>
+</Tag>

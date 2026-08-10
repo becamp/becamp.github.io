@@ -1,0 +1,41 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import TextLink from './TextLink.astro';
+import SponsorPlaceholder from './SponsorPlaceholder.astro';
+
+/* Replace slugs with real sponsor names as they're confirmed — each must match a
+   card id on the sponsors page (e.g. 'braid' → /sponsors#braid). */
+const premierSponsors = Array.from({ length: 9 }, (_, i) => ({ slug: `sponsor-${i + 1}` }));
+---
+
+<section class="px-5 sm:px-20 pt-24">
+  <SectionLabel>Sponsors</SectionLabel>
+  <div class="mt-4 flex max-w-[996px] flex-col gap-4">
+    <h2 class="max-w-[578px] text-4xl font-medium tracking-[-0.36px] text-white">
+      beCamp wouldn't be possible without our awesome sponsors!
+    </h2>
+    <p class="max-w-[567px] text-base leading-relaxed text-white/80">
+      The following generous sponsors (presented alphabetically) support the local
+      Charlottesville tech community and help make beCamp a reality.
+    </p>
+  </div>
+
+  <div class="mt-8 flex flex-wrap gap-x-10 gap-y-2">
+    <TextLink href="/sponsors" class="text-base">Meet all our sponsors →</TextLink>
+    <TextLink href="/sponsors#become-a-sponsor" class="text-base">Want to become a sponsor? →</TextLink>
+  </div>
+
+  <h3 class="mt-20 text-xl font-medium tracking-[-0.2px] text-white">Premier Sponsors</h3>
+  <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
+    {premierSponsors.map((sponsor) => (
+      <SponsorPlaceholder href={`/sponsors#${sponsor.slug}`} class="aspect-square" />
+    ))}
+  </div>
+
+  <h3 class="mt-16 text-xl font-medium tracking-[-0.2px] text-white">Sponsors</h3>
+  <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
+    {Array.from({ length: 3 }).map(() => (
+      <SponsorPlaceholder class="h-32" />
+    ))}
+  </div>
+</section>

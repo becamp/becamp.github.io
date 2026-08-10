@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import SectionLabel from './SectionLabel.astro';
+import TextLink from './TextLink.astro';
+import eventPhotoB from '../assets/images/event-photo-b.png';
+---
+
+<section class="flex flex-col gap-10 px-5 sm:px-20 pt-24 lg:flex-row lg:items-center lg:justify-between">
+  <div class="max-w-[567px]">
+    <SectionLabel>How it works</SectionLabel>
+    <h2 class="mt-3 text-4xl font-medium tracking-[-0.36px] text-white">
+      Planned by the people who show up
+    </h2>
+    <p class="mt-4 text-base leading-relaxed text-white/80">
+      Friday night: socialize over food &amp; drink, pitch topics, vote. Saturday:
+      volunteers arrange the schedule; you choose your own path through the day. You
+      don't need to be an expert to suggest a topic.
+    </p>
+    <TextLink href="/schedule" class="mt-6 inline-block text-base">
+      See the full schedule →
+    </TextLink>
+  </div>
+
+  <Image
+    src={eventPhotoB}
+    alt="beCamp volunteers arranging the day's schedule"
+    class="h-[381px] w-full max-w-[582px] object-cover"
+  />
+</section>

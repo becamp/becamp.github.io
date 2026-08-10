@@ -1,0 +1,163 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FlameBackdrop from '../components/FlameBackdrop.astro';
+import check from '../assets/icons/check.svg';
+
+/* Submissions post to /api/register, which maps these field names to Airtable columns. */
+const attendanceOptions = [
+  {
+    id: 'attend-friday',
+    checked: true,
+    label: "I'll be attending Pitch Night on Friday Nov 14th from 5pm -> 10pm",
+    detail:
+      'Pitch Night is open to everyone; however, we ask that you only pitch and/or vote on pitches if you are coming to Saturday sessions. Pizza will be provided, and there will be a cash bar for drinks.',
+  },
+  {
+    id: 'attend-saturday',
+    checked: true,
+    label: "I'll be attending Sessions on Saturday Nov 15th from 9am -> 4pm",
+    detail:
+      'If you want to attend Saturday Sessions, we ask that you also attend Pitch Night. Breakfast, lunch, and beverages will be served.',
+  },
+  {
+    id: 'attendee-directory',
+    checked: false,
+    label: 'I would like to be listed in the Attendee Directory',
+    detail:
+      'Leave this unchecked if you do not want to be listed on the becamp.org website. If listed, your profile image will be grabbed from https://en.gravatar.com/, so go there to make any desired changes for the avatar associated with your email address.',
+  },
+];
+
+const volunteerOptions = [
+  { id: 'volunteer-friday', checked: false, label: 'Yes, I can help out on Friday!', detail: 'We need and love our volunteers!' },
+  { id: 'volunteer-saturday', checked: false, label: 'Yes, I can help out on Saturday!', detail: 'We need and love our volunteers!' },
+];
+---
+
+<Layout title="Register — beCamp">
+  <Header />
+  <main class="relative overflow-hidden">
+    <div class="absolute inset-x-0 top-0 h-[600px]">
+      <FlameBackdrop />
+    </div>
+
+    <div class="pointer-events-none relative px-5 pt-20 pb-10 sm:px-20">
+      <p class="font-mono text-base text-primary">November 14–15 in Charlottesville, VA</p>
+      <h1 class="mt-5 text-5xl font-medium leading-none tracking-[-0.64px] text-white sm:text-[64px]">
+        BeCamp 2026 Registration
+      </h1>
+      <p class="mt-5 text-xl text-[#a3adc6]">Woo hoo! BeCamp's almost here!</p>
+    </div>
+
+    <div id="form-status-success" class="mx-5 mb-6 hidden max-w-[800px] border border-primary bg-primary/10 px-5 py-4 text-base text-white sm:mx-20">
+      You're registered! See you in November.
+    </div>
+    <div id="form-status-error" class="mx-5 mb-6 hidden max-w-[800px] border border-red-400 bg-red-400/10 px-5 py-4 text-base text-white sm:mx-20">
+      Something went wrong submitting your registration. Please try again.
+    </div>
+
+    <form
+      method="POST"
+      action="/api/register"
+      class="relative mx-5 mb-24 flex max-w-[800px] flex-col gap-9 border border-white/15 bg-[#0b0e2d] p-6 drop-shadow-[0px_16px_16px_rgba(0,0,0,0.25)] sm:mx-20 sm:p-12"
+    >
+      <fieldset class="flex flex-col gap-6">
+        <legend class="mb-6 font-mono text-lg font-semibold text-primary">1. Attendee Information</legend>
+        <div class="flex flex-col gap-3">
+          <label for="guest-name" class="font-mono text-sm font-semibold text-white">
+            Guest Name <span class="text-primary">*</span>
+          </label>
+          <input
+            id="guest-name"
+            name="name"
+            type="text"
+            required
+            placeholder="First and last name, please"
+            class="h-[52px] w-full rounded-lg border border-white/15 bg-white/5 px-4 text-base text-white placeholder:text-[#a3adc6]"
+          />
+        </div>
+        <div class="flex flex-col gap-3">
+          <label for="email" class="font-mono text-sm font-semibold text-white">
+            Email <span class="text-primary">*</span>
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="your.email@example.com"
+            class="h-[52px] w-full rounded-lg border border-white/15 bg-white/5 px-4 text-base text-white placeholder:text-[#a3adc6]"
+          />
+        </div>
+      </fieldset>
+
+      <hr class="border-divider" />
+
+      <fieldset class="flex flex-col gap-7">
+        <legend class="mb-7 font-mono text-lg font-semibold text-primary">2. Event Attendance</legend>
+        {attendanceOptions.map((option) => (
+          <label for={option.id} class="flex cursor-pointer items-start gap-4">
+            <span class="relative mt-0.5">
+              <input
+                id={option.id}
+                name={option.id}
+                type="checkbox"
+                checked={option.checked}
+                class="peer size-6 cursor-pointer appearance-none rounded-md border border-white/15 bg-white/5 checked:border-primary checked:bg-primary"
+              />
+              <img src={check.src} alt="" class="pointer-events-none absolute left-[5px] top-[5px] hidden size-3.5 peer-checked:block" />
+            </span>
+            <span class="flex flex-col gap-1.5">
+              <span class="text-base font-medium text-white">{option.label}</span>
+              <span class="text-sm leading-relaxed text-[#a3adc6]">{option.detail}</span>
+            </span>
+          </label>
+        ))}
+      </fieldset>
+
+      <hr class="border-divider" />
+
+      <fieldset class="flex flex-col gap-6">
+        <legend class="mb-6 font-mono text-lg font-semibold text-primary">3. Volunteering Opportunities</legend>
+        {volunteerOptions.map((option) => (
+          <label for={option.id} class="flex cursor-pointer items-start gap-4">
+            <span class="relative mt-0.5">
+              <input
+                id={option.id}
+                name={option.id}
+                type="checkbox"
+                checked={option.checked}
+                class="peer size-6 cursor-pointer appearance-none rounded-md border border-white/15 bg-white/5 checked:border-primary checked:bg-primary"
+              />
+              <img src={check.src} alt="" class="pointer-events-none absolute left-[5px] top-[5px] hidden size-3.5 peer-checked:block" />
+            </span>
+            <span class="flex flex-col gap-1.5">
+              <span class="text-base font-medium text-white">{option.label}</span>
+              <span class="text-sm leading-relaxed text-[#a3adc6]">{option.detail}</span>
+            </span>
+          </label>
+        ))}
+      </fieldset>
+
+      <div class="flex flex-col gap-5 pt-3">
+        <button type="submit" class="w-full bg-primary px-8 py-4 font-mono text-lg font-semibold text-bg">
+          Submit Registration
+        </button>
+        <p class="text-center text-xs text-[#858fc6]">
+          Do not submit passwords through Airtable forms. Report malicious form
+        </p>
+      </div>
+    </form>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const status = new URLSearchParams(location.search).get('status');
+  if (status === 'success' || status === 'error') {
+    document.getElementById(`form-status-${status}`)?.classList.remove('hidden');
+    document.getElementById(`form-status-${status}`)?.scrollIntoView({ block: 'center' });
+  }
+</script>

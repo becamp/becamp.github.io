@@ -1,0 +1,13 @@
+---
+import logoMark from '../assets/icons/logo-mark.svg';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<a href="/" class={`block size-10 shrink-0 ${className}`} aria-label="beCamp home">
+  <img src={logoMark.src} alt="" width="40" height="40" />
+</a>

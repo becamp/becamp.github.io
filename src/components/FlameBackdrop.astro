@@ -1,0 +1,70 @@
+<canvas id="hero-shader" class="absolute inset-0 hidden size-full lg:block"></canvas>
+
+<script>
+  import { createShader } from 'shaders/js';
+
+  const canvas = document.getElementById('hero-shader') as HTMLCanvasElement | null;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (canvas && !reducedMotion) {
+    createShader(canvas, {
+      components: [
+        {
+          type: 'Blob',
+          id: 'idmrmazjb3edkjkgryq',
+          props: {
+            center: { x: 0.73, y: 0.5 },
+            deformation: 0.3,
+            opacity: 0.6,
+            seed: 0,
+            size: 0.45,
+            softness: 0.9,
+            speed: 2,
+            stops: [
+              { color: '#FF750F', position: 0 },
+              { color: '#FF750F', position: 1 },
+            ],
+          },
+        },
+        {
+          type: 'ImageTexture',
+          id: 'idmrmaxo7uuixb4z9yy',
+          props: {
+            boundingBox: {
+              x: { unit: 'uv', value: 0.229 },
+              width: { unit: 'px', value: 480 },
+              height: { unit: 'px', value: 479 },
+              origin: 'center',
+            },
+            url: '/shader-flame.svg',
+          },
+        },
+        {
+          type: 'ChromaFlow',
+          id: 'idmrmay9k7pjeqbux4s',
+          props: {
+            baseColor: '#FF750F',
+            intensity: 0.9,
+            leftColor: '#FF750F',
+            maskSource: 'idmrmaxo7uuixb4z9yy',
+            radius: 2.2,
+            rightColor: '#ffbb00',
+            upColor: '#c4450c',
+          },
+        },
+        {
+          type: 'CursorRipples',
+          id: 'idmrmb51qyx6k82aeql',
+          props: {
+            boundingBox: {
+              x: { value: -0.1437, unit: 'uv' },
+            },
+            intensity: 1,
+            maskSource: 'idmrmazjb3edkjkgryq',
+            visible: true,
+          },
+        },
+      ],
+    }).catch((err) => console.error('Hero shader failed to load', err));
+  }
+</script>
