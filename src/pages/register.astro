@@ -37,6 +37,12 @@ const volunteerOptions = [
 
 /* reCAPTCHA v3 activates when PUBLIC_RECAPTCHA_SITE_KEY is set; the honeypot works regardless. */
 const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
+
+/* Flip to false when T-shirts run out — hides the field entirely. */
+const shirtsAvailable = true;
+
+/* Values must match the Airtable "T-shirt Size" single-select options exactly. */
+const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
 ---
 
 <Layout title="Register — beCamp">
@@ -100,6 +106,22 @@ const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
             class="h-[52px] w-full rounded-lg border border-white/15 bg-white/5 px-4 text-base text-white placeholder:text-[#a3adc6]"
           />
         </div>
+        {shirtsAvailable && (
+          <div class="flex flex-col gap-3">
+            <label for="shirt-size" class="font-mono text-sm font-semibold text-white">
+              T-shirt Size <span class="font-normal text-[#a3adc6]">(free, while supplies last)</span>
+            </label>
+            <select
+              id="shirt-size"
+              name="shirt-size"
+              class="h-[52px] w-full cursor-pointer rounded-lg border border-white/15 bg-white/5 px-4 text-base text-white [&>option]:bg-[#0b0e2d]"
+            >
+              {shirtSizes.map((size) => (
+                <option value={size}>{size}</option>
+              ))}
+            </select>
+          </div>
+        )}
       </fieldset>
 
       <hr class="border-divider" />

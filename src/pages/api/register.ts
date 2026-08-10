@@ -31,7 +31,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   }
 
   /* Field names must match the Airtable column names exactly. */
-  const fields = {
+  const fields: Record<string, string | boolean> = {
     'Guest Name': name,
     Email: email,
     "I'll be attending Pitch Night on Friday Oct 19th from 5pm -> 10pm": data.get('attend-friday') === 'on',
@@ -40,6 +40,10 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     'Yes, I can help out on Friday!': data.get('volunteer-friday') === 'on',
     'Yes, I can help out on Saturday!': data.get('volunteer-saturday') === 'on',
   };
+
+  /* Only sent while the form shows the field; value must match a single-select option. */
+  const shirtSize = data.get('shirt-size')?.toString();
+  if (shirtSize) fields['T-shirt Size'] = shirtSize;
 
   const { AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE } = import.meta.env;
 
