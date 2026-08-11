@@ -1,11 +1,15 @@
 ---
+import { Image } from 'astro:assets';
 import SectionLabel from './SectionLabel.astro';
 import TextLink from './TextLink.astro';
 import SponsorPlaceholder from './SponsorPlaceholder.astro';
+import { getSponsors } from '../lib/airtable';
 
-/* Replace slugs with real sponsor names as they're confirmed — each must match a
-   card id on the sponsors page (e.g. 'braid' → /sponsors#braid). */
-const premierSponsors = Array.from({ length: 9 }, (_, i) => ({ slug: `sponsor-${i + 1}` }));
+const { premier, regular } = await getSponsors();
+
+/* Grid sizes match the design; unclaimed spots show as "Coming soon". */
+const premierSlots = Math.max(9 - premier.length, 0);
+const regularSlots = Math.max(3 - regular.length, 0);
 ---
 
 <section class="px-5 sm:px-20 pt-24">
@@ -22,19 +26,55 @@ const premierSponsors = Array.from({ length: 9 }, (_, i) => ({ slug: `sponsor-${
 
   <div class="mt-8 flex flex-wrap gap-x-10 gap-y-2">
     <TextLink href="/sponsors" class="text-base">Meet all our sponsors →</TextLink>
-    <TextLink href="/sponsors#become-a-sponsor" class="text-base">Want to become a sponsor? →</TextLink>
+    <TextLink href="mailto:ozanzal+becamp@gmail.com?subject=beCamp%20Sponsorship" class="text-base">Want to become a sponsor? →</TextLink>
   </div>
 
   <h3 class="mt-20 text-xl font-medium tracking-[-0.2px] text-white">Premier Sponsors</h3>
   <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
-    {premierSponsors.map((sponsor) => (
-      <SponsorPlaceholder href={`/sponsors#${sponsor.slug}`} class="aspect-square" />
+    {premier.map((sponsor) => (
+      <a
+        href={`/sponsors#${sponsor.slug}`}
+        class="flex aspect-square items-center justify-center border border-white/[0.08] bg-white/[0.03] p-10 transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08]"
+      >
+        {sponsor.logo ? (
+          <Image
+            src={sponsor.logo.url}
+            width={sponsor.logo.width}
+            height={sponsor.logo.height}
+            alt={sponsor.name}
+            class="max-h-full w-full object-contain"
+          />
+        ) : (
+          <span class="text-center text-xl font-medium text-white">{sponsor.name}</span>
+        )}
+      </a>
+    ))}
+    {Array.from({ length: premierSlots }).map(() => (
+      <SponsorPlaceholder class="aspect-square" />
     ))}
   </div>
 
   <h3 class="mt-16 text-xl font-medium tracking-[-0.2px] text-white">Sponsors</h3>
   <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
-    {Array.from({ length: 3 }).map(() => (
+    {regular.map((sponsor) => (
+      <a
+        href={`/sponsors#${sponsor.slug}`}
+        class="flex h-32 items-center justify-center border border-white/[0.08] bg-white/[0.03] p-6 transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08]"
+      >
+        {sponsor.logo ? (
+          <Image
+            src={sponsor.logo.url}
+            width={sponsor.logo.width}
+            height={sponsor.logo.height}
+            alt={sponsor.name}
+            class="max-h-full w-auto object-contain"
+          />
+        ) : (
+          <span class="text-center text-lg font-medium text-white">{sponsor.name}</span>
+        )}
+      </a>
+    ))}
+    {Array.from({ length: regularSlots }).map(() => (
       <SponsorPlaceholder class="h-32" />
     ))}
   </div>
