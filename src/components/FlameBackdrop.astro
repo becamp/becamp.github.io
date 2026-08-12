@@ -1,4 +1,4 @@
-<canvas id="hero-shader" class="absolute inset-0 hidden size-full lg:block"></canvas>
+<canvas id="hero-shader" class="absolute inset-0 size-full"></canvas>
 
 <script>
   import { createShader } from 'shaders/js';
@@ -6,14 +6,36 @@
   const canvas = document.getElementById('hero-shader') as HTMLCanvasElement | null;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const BLOB_ID = 'idmrmazjb3edkjkgryq';
+  const FLAME_ID = 'idmrmaxo7uuixb4z9yy';
+
+  // Slide the composition left as the viewport narrows from 1440px down to
+  // 1024px, drifting the flame behind the frosted hero cards; below that it
+  // stays near center. The flame texture also shrinks to fit narrow screens.
+  const leftShift = () =>
+    0.21 * Math.min(1, Math.max(0, (1440 - window.innerWidth) / (1440 - 1024)));
+
+  const blobCenter = (shift: number) => ({ x: 0.73 - shift, y: 0.5 });
+  const flameBoundingBox = (shift: number) => {
+    const size = Math.min(480, window.innerWidth * 0.85);
+    return {
+      x: { unit: 'uv', value: 0.229 - shift },
+      width: { unit: 'px', value: size },
+      height: { unit: 'px', value: size * (479 / 480) },
+      origin: 'center',
+    };
+  };
+
   if (canvas && !reducedMotion) {
+    const shift = leftShift();
+
     createShader(canvas, {
       components: [
         {
           type: 'Blob',
-          id: 'idmrmazjb3edkjkgryq',
+          id: BLOB_ID,
           props: {
-            center: { x: 0.73, y: 0.5 },
+            center: blobCenter(shift),
             deformation: 0.3,
             opacity: 0.6,
             seed: 0,
@@ -28,14 +50,9 @@
         },
         {
           type: 'ImageTexture',
-          id: 'idmrmaxo7uuixb4z9yy',
+          id: FLAME_ID,
           props: {
-            boundingBox: {
-              x: { unit: 'uv', value: 0.229 },
-              width: { unit: 'px', value: 480 },
-              height: { unit: 'px', value: 479 },
-              origin: 'center',
-            },
+            boundingBox: flameBoundingBox(shift),
             url: '/shader-flame.svg',
           },
         },
@@ -46,7 +63,7 @@
             baseColor: '#FF750F',
             intensity: 0.9,
             leftColor: '#FF750F',
-            maskSource: 'idmrmaxo7uuixb4z9yy',
+            maskSource: FLAME_ID,
             radius: 2.2,
             rightColor: '#ffbb00',
             upColor: '#c4450c',
@@ -57,11 +74,39 @@
           id: 'idmrmb51qyx6k82aeql',
           props: {
             intensity: 1,
-            maskSource: 'idmrmazjb3edkjkgryq',
+            maskSource: BLOB_ID,
             visible: true,
           },
         },
       ],
-    }).catch((err) => console.error('Hero shader failed to load', err));
+    })
+      .then((shader) => {
+        let appliedFor = 0;
+        const applyLayout = () => {
+          appliedFor = window.innerWidth;
+          const s = leftShift();
+          shader.update(BLOB_ID, { center: blobCenter(s) });
+          shader.update(FLAME_ID, { boundingBox: flameBoundingBox(s) });
+        };
+
+        // Observe the canvas box rather than window resize: some resize paths
+        // (viewport emulation, orientation changes) never fire the window
+        // event. ResizeObserver also fires once on observe, syncing any resize
+        // that happened while the shader was still loading.
+        let settle = 0;
+        new ResizeObserver(() => {
+          applyLayout();
+          clearTimeout(settle);
+          settle = window.setTimeout(applyLayout, 150);
+        }).observe(canvas);
+
+        // Safety net for anything the observer misses (e.g. the library
+        // rebuilding after GPU device loss with creation-time props): cheap
+        // width check, no-op while the width matches what was last applied.
+        setInterval(() => {
+          if (window.innerWidth !== appliedFor) applyLayout();
+        }, 500);
+      })
+      .catch((err) => console.error('Hero shader failed to load', err));
   }
 </script>
