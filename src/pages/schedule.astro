@@ -94,7 +94,7 @@ const placeholderRows = [
         <div class="mt-12 divide-y divide-divider border-y border-divider">
           {pitchNightRows.map((row) => (
             <div class="flex flex-col gap-2 py-6 sm:flex-row sm:items-baseline sm:gap-0">
-              <p class="w-40 shrink-0 text-lg font-medium tracking-[-0.18px] text-[#858fc6]">{row.time}</p>
+              <p class="w-44 shrink-0 whitespace-nowrap text-base font-medium tracking-[-0.18px] text-[#858fc6]">{row.time}</p>
               <p class="text-2xl font-medium tracking-[-0.24px] text-white">{row.title}</p>
             </div>
           ))}
@@ -122,7 +122,7 @@ const placeholderRows = [
         {sessions.length > 0
           ? scheduleRows.map((row) => (
               <div class="flex flex-col gap-3 py-5 sm:flex-row sm:gap-0">
-                <p class="w-40 shrink-0 pt-4 text-lg font-medium tracking-[-0.18px] text-[#858fc6]">{row.time}</p>
+                <p class="w-44 shrink-0 whitespace-nowrap pt-4 text-base font-medium tracking-[-0.18px] text-[#858fc6]">{row.time}</p>
                 <div class={`grid flex-1 grid-cols-1 gap-5 ${row.sessions.length > 1 ? 'sm:grid-cols-3' : ''}`}>
                   {row.sessions.length > 0 ? (
                     row.sessions.map((session) => (
@@ -142,7 +142,7 @@ const placeholderRows = [
             ))
           : placeholderRows.map((row) => (
               <div class="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:gap-0">
-                <p class="w-40 shrink-0 text-lg font-medium tracking-[-0.18px] text-[#858fc6]">{row.time}</p>
+                <p class="w-44 shrink-0 whitespace-nowrap text-base font-medium tracking-[-0.18px] text-[#858fc6]">{row.time}</p>
                 {row.slots === 3 ? (
                   <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-3">
                     <SponsorPlaceholder class="h-[65px]" />
