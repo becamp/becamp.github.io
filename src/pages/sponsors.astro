@@ -42,7 +42,7 @@ const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, '');
                     width={sponsor.logo.width}
                     height={sponsor.logo.height}
                     alt={sponsor.name}
-                    class="max-h-full w-auto object-contain brightness-0 invert"
+                    class="max-h-[80px] w-auto max-w-[65%] object-contain brightness-0 invert"
                   />
                 ) : (
                   <span class="text-xl font-medium text-white">{sponsor.name}</span>
