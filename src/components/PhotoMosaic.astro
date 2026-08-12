@@ -2,13 +2,34 @@
 import { Image } from 'astro:assets';
 import eventPhotoA from '../assets/images/event-photo-a.jpg';
 import eventPhotoB from '../assets/images/event-photo-b.jpg';
+import speakerPresenting from '../assets/images/becamp-speaker-presenting-charlottesville.webp';
+import panelDiscussion from '../assets/images/becamp-panel-discussion-organizers.webp';
+import glassConferenceRoom from '../assets/images/becamp-session-glass-conference-room.webp';
+import pitchNightPresentation from '../assets/images/becamp-pitch-night-presentation.webp';
+import attendeesLunch from '../assets/images/becamp-attendees-lunch-session.webp';
+import attendeesNetworking from '../assets/images/becamp-attendees-networking-conversation.webp';
+import attendeesSmiling from '../assets/images/becamp-attendees-smiling-name-tags.webp';
+import crowdTechCommunity from '../assets/images/becamp-crowd-tech-community-charlottesville.webp';
+import coworkingSpace from '../assets/images/becamp-coworking-space-charlottesville.webp';
+import discussionCircle from '../assets/images/becamp-unconference-discussion-circle.webp';
+import conversationBrickLoft from '../assets/images/becamp-attendees-conversation-brick-loft.webp';
 
-/* Orientation is tied to each photo's actual crop, alternating landscape/portrait in sequence.
-   Swap in final photos per their real orientation once they're set up in Figma. */
+/* Strict landscape/portrait alternation; the marquee loops, so the count stays even
+   (one portrait repeats) to keep the cadence unbroken across the seam. */
 const photos = [
   { src: eventPhotoA, alt: 'Attendees networking at beCamp', orientation: 'landscape' },
   { src: eventPhotoB, alt: "A beCamp session's sticky-note pitch board", orientation: 'portrait' },
-  { src: eventPhotoA, alt: 'beCamp attendees collaborating', orientation: 'landscape' },
+  { src: speakerPresenting, alt: 'A speaker presenting to beCamp attendees in Charlottesville', orientation: 'landscape' },
+  { src: panelDiscussion, alt: 'beCamp organizers leading a panel discussion', orientation: 'portrait' },
+  { src: glassConferenceRoom, alt: 'A beCamp session underway in a glass conference room', orientation: 'landscape' },
+  { src: pitchNightPresentation, alt: 'A Pitch Night presentation at beCamp', orientation: 'portrait' },
+  { src: attendeesNetworking, alt: 'Two beCamp attendees chatting between sessions', orientation: 'landscape' },
+  { src: attendeesLunch, alt: 'beCamp attendees sharing lunch during Saturday sessions', orientation: 'portrait' },
+  { src: crowdTechCommunity, alt: "Charlottesville's tech community gathered at beCamp", orientation: 'landscape' },
+  { src: attendeesSmiling, alt: 'Smiling beCamp attendees wearing name tags', orientation: 'portrait' },
+  { src: coworkingSpace, alt: 'The beCamp venue buzzing between sessions', orientation: 'landscape' },
+  { src: discussionCircle, alt: 'An unconference discussion circle at beCamp', orientation: 'portrait' },
+  { src: conversationBrickLoft, alt: 'beCamp attendees in conversation at the venue', orientation: 'landscape' },
   { src: eventPhotoB, alt: 'A packed schedule board at beCamp', orientation: 'portrait' },
 ];
 ---
@@ -19,6 +40,7 @@ const photos = [
       <Image
         src={photo.src}
         alt={photo.alt}
+        loading="eager"
         class={`shrink-0 object-cover ${photo.orientation === 'portrait' ? 'h-[400px] w-[330px]' : 'h-[280px] w-[420px]'}`}
       />
     ))}
