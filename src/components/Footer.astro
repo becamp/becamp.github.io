@@ -1,6 +1,5 @@
 ---
 import Logo from './Logo.astro';
-import footerMountains from '../assets/icons/footer-mountains.svg';
 
 const navLinks = [
   { href: '/schedule', label: 'Schedule' },
@@ -16,38 +15,120 @@ const secondaryLinks = [
 ];
 ---
 
-<footer class="relative mt-24 overflow-hidden pt-[calc(54.1667%-224px)]">
-  <img
-    src={footerMountains.src}
-    alt=""
-    class="pointer-events-none absolute inset-x-0 bottom-0 w-full"
-  />
+<footer id="site-footer" class="relative mt-24 overflow-hidden pt-[calc(54.1667%-224px)]">
+  <!-- Layered mountain illustration: the sun group and each ridge parallax into
+       place as the footer scrolls into view. -->
+  <svg
+    class="pointer-events-none absolute inset-x-0 bottom-0 aspect-[1440/780] h-auto w-full"
+    viewBox="0 0 1440 780"
+    fill="none"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g data-parallax="150" data-parallax-x="5">
+      <g opacity="0.3" filter="url(#filter0_f_182_1203)">
+        <ellipse cx="1231" cy="338.5" rx="158" ry="158.5" fill="#FF750F"/>
+      </g>
+      <g opacity="0.2" filter="url(#filter1_f_182_1203)">
+        <ellipse cx="71" cy="71.5" rx="71" ry="71.5" transform="matrix(1 0 0 -1 1160 410)" fill="#FFBB0F"/>
+      </g>
+    </g>
+    <g data-parallax="120" data-parallax-x="7">
+      <path d="M-296.912 282.895C-328.904 273.692 -370.967 286.73 -388 294.4V552H1827V307.905C1818.61 305.237 1800.04 299.902 1792.93 299.902C1784.05 299.902 1735.91 314.407 1720.36 322.41C1704.81 330.413 1678.89 332.914 1637.42 332.914C1595.95 332.914 1515.97 343.419 1481.16 342.418C1453.32 341.618 1383.16 335.749 1351.56 332.914H1210.86C1201.97 332.914 1107.92 322.41 1079.78 314.407C1051.64 306.404 1039.79 307.905 1013.87 299.902C993.135 293.499 976.596 297.234 970.918 299.902H886.495C843.543 299.902 847.986 299.902 826.51 294.4C805.034 288.898 810.958 289.398 780.596 282.895C750.233 276.393 699.135 282.895 665.069 277.893C631.004 272.89 603.603 282.895 566.575 282.895C529.548 282.895 502.147 289.398 489.558 289.398C479.486 289.398 449.815 296.4 436.238 299.902C426.857 302.569 404.098 307.905 388.102 307.905C368.107 307.905 354.777 314.407 339.225 314.407C323.673 314.407 297.754 299.902 270.353 294.4C242.953 288.898 190.373 294.4 179.265 299.902C168.157 305.403 123.724 307.905 107.431 307.905C91.1391 307.905 42.2625 294.4 19.3052 294.4C-3.65195 294.4 -18.4631 282.895 -34.0147 282.895C-49.5664 282.895 -59.1936 282.895 -82.1508 271.891C-105.108 260.886 -106.589 271.891 -113.995 271.891C-121.4 271.891 -143.617 269.89 -159.909 271.891C-176.201 273.892 -201.38 282.895 -232.483 289.398C-263.587 295.9 -256.922 294.4 -296.912 282.895Z" fill="#111537"/>
+    </g>
+    <g data-parallax="80" data-parallax-x="12">
+      <path d="M-291.536 374.021H-388V583H1827V403.518C1818.65 399.352 1789.59 387.619 1740.11 374.021C1678.25 357.023 1634.07 361.522 1615.66 344.524C1597.25 327.526 1544.23 330.025 1497.84 311.027C1451.45 292.029 1394.75 330.025 1338.79 330.025C1282.82 330.025 1276.93 344.524 1223.91 344.524C1170.89 344.524 1137.02 361.522 1084.74 374.021C1032.46 386.52 988.275 361.522 969.129 361.522C953.813 361.522 861.619 340.524 817.437 330.025C784.301 334.858 714.934 344.524 702.563 344.524C687.1 344.524 652.49 361.522 611.99 361.522C571.49 361.522 540.562 374.021 525.098 361.522C512.727 351.523 497.362 346.024 491.225 344.524H432.316H366.779C354.261 339.691 318.768 326.226 276.942 311.027C224.66 292.029 236.441 308.527 220.978 311.027C205.514 313.527 186.368 330.025 127.459 344.524C68.5492 359.022 37.6217 344.524 19.2124 344.524C0.803192 344.524 -68.4156 330.025 -102.289 330.025C-136.162 330.025 -136.162 334.025 -186.235 344.524C-236.308 355.023 -239.253 374.021 -291.536 374.021Z" fill="#191E42"/>
+    </g>
+    <g data-parallax="45" data-parallax-x="18">
+      <path d="M1735.91 388.469C1767.9 376.617 1809.97 393.407 1827 403.283V735H-388V420.674C-379.607 417.238 -361.044 410.368 -353.934 410.368C-345.048 410.368 -296.912 429.047 -281.36 439.353C-265.808 449.659 -239.889 452.879 -198.418 452.879C-156.947 452.879 -76.9669 466.406 -42.1608 465.117C-14.3159 464.087 55.8394 456.529 87.4363 452.879H228.142C237.028 452.879 331.079 439.353 359.22 429.047C387.361 418.741 399.21 420.674 425.129 410.368C445.865 402.123 462.404 406.933 468.082 410.368H552.505C595.457 410.368 591.014 410.368 612.49 403.283C633.966 396.199 628.042 396.842 658.404 388.469C688.767 380.096 739.865 388.469 773.931 382.027C807.996 375.585 835.397 388.469 872.425 388.469C909.452 388.469 936.853 396.842 949.442 396.842C959.514 396.842 989.185 405.859 1002.76 410.368C1012.14 413.803 1034.9 420.674 1050.9 420.674C1070.89 420.674 1084.22 429.047 1099.78 429.047C1115.33 429.047 1141.25 410.368 1168.65 403.283C1196.05 396.199 1248.63 403.283 1259.73 410.368C1270.84 417.452 1315.28 420.674 1331.57 420.674C1347.86 420.674 1396.74 403.283 1419.69 403.283C1442.65 403.283 1457.46 388.469 1473.01 388.469C1488.57 388.469 1498.19 388.469 1521.15 374.298C1544.11 360.127 1545.59 374.298 1552.99 374.298C1560.4 374.298 1582.62 371.722 1598.91 374.298C1615.2 376.875 1640.38 388.469 1671.48 396.842C1702.59 405.215 1695.92 403.283 1735.91 388.469Z" fill="#22284E"/>
+    </g>
+    <g data-parallax="0" data-parallax-x="26">
+      <path d="M-296.912 466.481C-328.904 452.885 -370.967 472.145 -388 483.475V864H1827V503.424C1818.61 499.483 1800.04 491.602 1792.93 491.602C1784.05 491.602 1735.91 513.03 1720.36 524.852C1704.81 536.674 1678.89 540.368 1637.42 540.368C1595.95 540.368 1515.97 555.885 1481.16 554.407C1453.32 553.225 1383.16 544.555 1351.56 540.368H1210.86C1201.97 540.368 1107.92 524.852 1079.78 513.03C1051.64 501.207 1039.79 503.424 1013.87 491.602C993.135 482.144 976.596 487.661 970.918 491.602H886.495C843.543 491.602 847.986 491.602 826.51 483.475C805.034 475.348 810.958 476.086 780.596 466.481C750.233 456.875 699.135 466.481 665.069 459.091C631.004 451.701 603.603 466.481 566.575 466.481C529.548 466.481 502.147 476.086 489.558 476.086C479.486 476.086 449.815 486.43 436.238 491.602C426.857 495.543 404.098 503.424 388.102 503.424C368.107 503.424 354.777 513.03 339.225 513.03C323.673 513.03 297.754 491.602 270.353 483.475C242.953 475.348 190.373 483.475 179.265 491.602C168.157 499.729 123.724 503.424 107.431 503.424C91.1391 503.424 42.2625 483.475 19.3052 483.475C-3.65195 483.475 -18.4631 466.481 -34.0147 466.481C-49.5664 466.481 -59.1936 466.481 -82.1508 450.225C-105.108 433.969 -106.589 450.225 -113.995 450.225C-121.4 450.225 -143.617 447.269 -159.909 450.225C-176.201 453.18 -201.38 466.481 -232.483 476.086C-263.587 485.691 -256.922 483.475 -296.912 466.481Z" fill="#2F3661"/>
+    </g>
+    <defs>
+      <filter id="filter0_f_182_1203" x="893" y="0" width="676" height="677" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+        <feGaussianBlur stdDeviation="90" result="effect1_foregroundBlur_182_1203"/>
+      </filter>
+      <filter id="filter1_f_182_1203" x="1116" y="223" width="230" height="231" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+        <feGaussianBlur stdDeviation="22" result="effect1_foregroundBlur_182_1203"/>
+      </filter>
+    </defs>
+  </svg>
 
   <div class="relative flex flex-col gap-10 px-5 sm:px-20 pb-16">
     <Logo />
 
-    <nav class="flex flex-wrap items-center gap-9 font-mono text-sm text-white">
-      {navLinks.map((link) => (
-        <a href={link.href} class="transition-colors duration-150 hover:text-primary">
-          {link.label}
+    <div class="grid grid-cols-2 gap-8 sm:grid-cols-[1fr_auto] sm:gap-y-10">
+      <nav class="flex flex-col gap-4 font-mono text-sm text-white sm:col-span-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-9">
+        {navLinks.map((link) => (
+          <a href={link.href} class="transition-colors duration-150 hover:text-primary">
+            {link.label}
+          </a>
+        ))}
+        <a href="/register" class="text-primary transition-colors duration-150 hover:text-[#ff8b33]">
+          Register [R]
         </a>
-      ))}
-      <a href="/register" class="text-primary transition-colors duration-150 hover:text-[#ff8b33]">
-        Register [R]
-      </a>
-    </nav>
+      </nav>
 
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div class="flex flex-wrap gap-9 font-mono text-sm text-white">
+      <div class="flex flex-col gap-4 font-mono text-sm text-white sm:flex-row sm:flex-wrap sm:gap-9">
         {secondaryLinks.map((link) => (
           <a href={link.href} class="transition-colors duration-150 hover:text-primary">
             {link.label}
           </a>
         ))}
       </div>
-      <p class="text-sm text-white/80">
-        © 2026 beCamp · Site built by <a href="https://scale.agency" class="underline transition-colors duration-150 hover:text-primary">Scale</a>
+
+      <p class="col-span-2 text-sm text-white/80 sm:col-span-1 sm:justify-self-end">
+        © 2026 beCamp · Site built by <a href="https://scale.agency" target="_blank" rel="noopener" class="underline transition-colors duration-150 hover:text-primary">Scale</a>
       </p>
     </div>
   </div>
 </footer>
+
+<script>
+  const footer = document.getElementById('site-footer');
+  const layers = footer ? [...footer.querySelectorAll<SVGGElement>('[data-parallax]')] : [];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (footer && layers.length && !reducedMotion) {
+    let targetMouseX = 0;
+    let mouseX = 0;
+    let raf = 0;
+
+    const apply = () => {
+      const rect = footer.getBoundingClientRect();
+      const progress = Math.min(1, Math.max(0, (window.innerHeight - rect.top) / rect.height));
+      for (const layer of layers) {
+        const y = Number(layer.dataset.parallax) * (1 - progress);
+        const x = Number(layer.dataset.parallaxX ?? 0) * -mouseX;
+        layer.style.transform = `translate(${x}px, ${y}px)`;
+      }
+    };
+
+    const tick = () => {
+      mouseX += (targetMouseX - mouseX) * 0.08;
+      apply();
+      raf = Math.abs(targetMouseX - mouseX) > 0.002 ? requestAnimationFrame(tick) : 0;
+    };
+
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener('scroll', kick, { passive: true });
+    window.addEventListener('resize', kick, { passive: true });
+    window.addEventListener(
+      'mousemove',
+      (e) => {
+        targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        kick();
+      },
+      { passive: true }
+    );
+    apply();
+  }
+</script>

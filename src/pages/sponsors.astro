@@ -9,6 +9,7 @@ import CtaSection from '../components/CtaSection.astro';
 import Footer from '../components/Footer.astro';
 import externalLinkIcon from '../assets/icons/external-link.svg';
 import { getSponsors } from '../lib/airtable';
+import { BECOME_SPONSOR_HREF, BECOME_PREMIER_HREF } from '../lib/sponsorship';
 
 const { premier, regular } = await getSponsors();
 
@@ -31,7 +32,7 @@ const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, '');
       <h2 class="text-4xl font-medium tracking-[-0.36px] text-white">Premier Sponsors</h2>
 
       {premier.length > 0 ? (
-        <div class="mt-12 flex flex-col gap-12">
+        <div class="mt-12 flex flex-col gap-12 pb-12">
           {premier.map((sponsor) => (
             <div id={sponsor.slug} class="flex scroll-mt-8 flex-col gap-6 lg:flex-row lg:gap-16">
               <div class="flex h-[185px] w-full max-w-[413px] shrink-0 items-center justify-center border border-white/[0.08] bg-white/[0.03] p-8">
@@ -64,13 +65,9 @@ const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, '');
             </div>
           ))}
         </div>
-      ) : (
-        <div class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
-          {Array.from({ length: 3 }).map(() => (
-            <SponsorPlaceholder class="h-[185px]" />
-          ))}
-        </div>
-      )}
+      ) : null}
+
+      <SponsorPlaceholder href={BECOME_PREMIER_HREF} label="Click to become a Premier Sponsor" class="mt-12 h-[185px] w-full max-w-[413px]" />
 
       <h2 class="mt-24 text-xl font-medium tracking-[-0.2px] text-white">Sponsors</h2>
       <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -95,9 +92,7 @@ const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, '');
             )}
           </a>
         ))}
-        {Array.from({ length: Math.max(3 - regular.length, 0) }).map(() => (
-          <SponsorPlaceholder class="h-32" />
-        ))}
+        <SponsorPlaceholder href={BECOME_SPONSOR_HREF} label="Click to become a sponsor" class="h-32" />
       </div>
     </section>
 

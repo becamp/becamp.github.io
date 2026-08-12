@@ -45,9 +45,9 @@ export interface Sponsor {
   logo?: { url: string; width: number; height: number };
 }
 
-/* TEST ONLY — revert to false before launch. Pulls every sponsor row regardless of
-   the "Commitment confirmed" flag so we can preview a fully populated site. */
-const INCLUDE_UNCONFIRMED = true;
+/* When true, pulls every sponsor row regardless of the "Commitment confirmed"
+   flag — preview use only. */
+const INCLUDE_UNCONFIRMED = false;
 
 /* "Commitment confirmed" in the Sponsors table is the flag that shows a sponsor on the site. */
 export async function getSponsors(): Promise<{ premier: Sponsor[]; regular: Sponsor[] }> {

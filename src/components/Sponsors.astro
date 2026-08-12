@@ -4,12 +4,9 @@ import SectionLabel from './SectionLabel.astro';
 import TextLink from './TextLink.astro';
 import SponsorPlaceholder from './SponsorPlaceholder.astro';
 import { getSponsors } from '../lib/airtable';
+import { BECOME_SPONSOR_HREF, BECOME_PREMIER_HREF } from '../lib/sponsorship';
 
 const { premier, regular } = await getSponsors();
-
-/* Grid sizes match the design; unclaimed spots show as "Coming soon". */
-const premierSlots = Math.max(9 - premier.length, 0);
-const regularSlots = Math.max(3 - regular.length, 0);
 ---
 
 <section class="px-5 sm:px-20 pt-24">
@@ -34,7 +31,7 @@ const regularSlots = Math.max(3 - regular.length, 0);
     {premier.map((sponsor) => (
       <a
         href={`/sponsors#${sponsor.slug}`}
-        class="flex aspect-square items-center justify-center border border-white/[0.08] bg-white/[0.03] p-10 transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08]"
+        class="flex aspect-square items-center justify-center border border-white/[0.08] bg-white/[0.03] p-10 transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08] lg:p-25"
       >
         {sponsor.logo ? (
           <Image
@@ -49,9 +46,7 @@ const regularSlots = Math.max(3 - regular.length, 0);
         )}
       </a>
     ))}
-    {Array.from({ length: premierSlots }).map(() => (
-      <SponsorPlaceholder class="aspect-square" />
-    ))}
+    <SponsorPlaceholder href={BECOME_PREMIER_HREF} label="Click to become a Premier Sponsor" class="aspect-square" />
   </div>
 
   <h3 class="mt-16 text-xl font-medium tracking-[-0.2px] text-white">Sponsors</h3>
@@ -74,8 +69,6 @@ const regularSlots = Math.max(3 - regular.length, 0);
         )}
       </a>
     ))}
-    {Array.from({ length: regularSlots }).map(() => (
-      <SponsorPlaceholder class="h-32" />
-    ))}
+    <SponsorPlaceholder href={BECOME_SPONSOR_HREF} label="Click to become a sponsor" class="h-32" />
   </div>
 </section>

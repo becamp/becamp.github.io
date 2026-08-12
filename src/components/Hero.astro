@@ -17,16 +17,30 @@ import FlameBackdrop from './FlameBackdrop.astro';
 
     <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
       <EventInfoCard
-        day="Fri, Oct 2 from 5:30–8:30pm"
-        title="Pitch night"
-        venue="UVA School of Data Science"
-        directionsHref="https://www.google.com/maps/place/School+of+Data+Science/data=!4m2!3m1!1s0x0:0x4105c4fd4e527c99?sa=X&ved=1t:2428&ictx=111"
+        day="Fri, Oct 2 from 4:30–8:30pm"
+        title="Reception & Pitch night"
+        venues={[
+          {
+            note: '4:30',
+            name: 'The Poplar Restaurant',
+            directionsHref: 'https://www.google.com/maps/search/?api=1&query=The+Poplar+Restaurant+2017+Ivy+Rd+Charlottesville+VA',
+          },
+          {
+            note: '5:30',
+            name: 'UVA School of Data Science',
+            directionsHref: 'https://www.google.com/maps/place/School+of+Data+Science/data=!4m2!3m1!1s0x0:0x4105c4fd4e527c99?sa=X&ved=1t:2428&ictx=111',
+          },
+        ]}
       />
       <EventInfoCard
         day="Sat, Oct 3 from 9am–4pm"
         title="Sessions"
-        venue="UVA School of Data Science"
-        directionsHref="https://www.google.com/maps/place/School+of+Data+Science/data=!4m2!3m1!1s0x0:0x4105c4fd4e527c99?sa=X&ved=1t:2428&ictx=111"
+        venues={[
+          {
+            name: 'UVA School of Data Science',
+            directionsHref: 'https://www.google.com/maps/place/School+of+Data+Science/data=!4m2!3m1!1s0x0:0x4105c4fd4e527c99?sa=X&ved=1t:2428&ictx=111',
+          },
+        ]}
       />
     </div>
 

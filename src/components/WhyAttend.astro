@@ -2,6 +2,8 @@
 import SectionLabel from './SectionLabel.astro';
 import Button from './Button.astro';
 import PhotoMosaic from './PhotoMosaic.astro';
+
+const VIDEO_EMBED_URL = 'https://www.youtube-nocookie.com/embed/aVMBvWumoF8?autoplay=1';
 ---
 
 <section class="pt-16">
@@ -16,9 +18,60 @@ import PhotoMosaic from './PhotoMosaic.astro';
       community and spend a day learning something new. There's nothing else quite like it
       in town.
     </p>
-    <Button href="https://www.youtube.com/watch?v=aVMBvWumoF8" external variant="secondary" class="mt-8">What is beCamp? [V]</Button>
+    <Button href="#video" id="video-open" variant="secondary" class="mt-8">What is beCamp? [V]</Button>
   </div>
   </div>
 
   <PhotoMosaic />
 </section>
+
+<div
+  id="video-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-bg/95 p-4 sm:p-10"
+>
+  <button
+    id="video-close"
+    type="button"
+    aria-label="Close video"
+    class="absolute right-5 top-5 flex size-10 items-center justify-center text-2xl text-white transition-colors duration-150 hover:text-primary"
+  >
+    &#10005;
+  </button>
+  <div class="aspect-video w-full">
+    <iframe
+      id="video-iframe"
+      class="size-full"
+      title="What is beCamp?"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  </div>
+</div>
+
+<script>
+  const VIDEO_EMBED_URL = 'https://www.youtube-nocookie.com/embed/aVMBvWumoF8?autoplay=1';
+
+  const openBtn = document.getElementById('video-open');
+  const modal = document.getElementById('video-modal');
+  const closeBtn = document.getElementById('video-close');
+  const iframe = document.getElementById('video-iframe') as HTMLIFrameElement | null;
+
+  const setOpen = (open: boolean) => {
+    modal?.classList.toggle('hidden', !open);
+    modal?.classList.toggle('flex', open);
+    document.body.classList.toggle('overflow-hidden', open);
+    if (iframe) iframe.src = open ? VIDEO_EMBED_URL : '';
+  };
+
+  openBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    setOpen(true);
+  });
+  closeBtn?.addEventListener('click', () => setOpen(false));
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal?.classList.contains('hidden')) setOpen(false);
+  });
+</script>

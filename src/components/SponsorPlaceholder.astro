@@ -2,15 +2,20 @@
 interface Props {
   class?: string;
   href?: string;
+  label?: string;
 }
 
-const { class: className = '', href } = Astro.props;
+const { class: className = '', href, label = 'Coming soon' } = Astro.props;
 const Tag = href ? 'a' : 'div';
 ---
 
 <Tag
   href={href}
-  class={`flex items-center justify-center border border-white/[0.08] bg-white/[0.03] ${href ? 'transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08]' : ''} ${className}`}
+  class={`group flex items-center justify-center border border-white/[0.08] bg-white/[0.03] ${href ? 'transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08]' : ''} ${className}`}
 >
-  <span class="font-mono text-sm text-white/25">Coming soon</span>
+  <span
+    class={`px-4 text-center font-mono text-sm text-white/25 ${href ? 'transition-colors duration-150 group-hover:text-primary' : ''}`}
+  >
+    {label}
+  </span>
 </Tag>

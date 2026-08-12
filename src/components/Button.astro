@@ -4,9 +4,10 @@ interface Props {
   variant?: 'primary' | 'secondary';
   external?: boolean;
   class?: string;
+  [key: string]: any;
 }
 
-const { href, variant = 'primary', external = false, class: className = '' } = Astro.props;
+const { href, variant = 'primary', external = false, class: className = '', ...rest } = Astro.props;
 
 const variants = {
   primary: 'bg-primary hover:bg-[#ff8b33]',
@@ -19,6 +20,7 @@ const variants = {
   target={external ? '_blank' : undefined}
   rel={external ? 'noopener' : undefined}
   class={`inline-flex items-center justify-center px-4 py-3 font-mono text-base font-medium text-bg transition-colors duration-150 ${variants[variant]} ${className}`}
+  {...rest}
 >
   <slot />
 </a>
