@@ -4,9 +4,12 @@
      instead of restarting, so nothing blinks or shifts between pages.
      pointer-events-none is safe: the shader library tracks the cursor on
      window, not the canvas. -->
+<!-- Geometry mirrors the homepage hero's original box (below the countdown bar
+     and header) so the composition sits exactly where the design placed it,
+     on every page. -->
 <div
   transition:persist="hero-shader"
-  class="pointer-events-none absolute inset-x-0 top-0 h-[600px] overflow-hidden"
+  class="pointer-events-none absolute inset-x-0 top-[128px] h-[869px] overflow-hidden sm:top-[156px] sm:h-[645px]"
   aria-hidden="true"
 >
   <canvas id="hero-shader" class="absolute inset-0 size-full"></canvas>
