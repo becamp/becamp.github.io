@@ -125,13 +125,14 @@
 
     const timer = setInterval(render, 1000);
 
-    /* The delayed slide-open + letter entrance plays once per session; every
-       page after that gets the bar instantly so navigation doesn't re-trigger it. */
+    /* The delayed slide-open + letter entrance plays on the first-ever visit;
+       localStorage persists across tabs and sessions, so it only replays after
+       the visitor clears their site data. */
     const SEEN_KEY = 'countdown-bar-seen';
     let seen = false;
     try {
-      seen = sessionStorage.getItem(SEEN_KEY) === '1';
-      sessionStorage.setItem(SEEN_KEY, '1');
+      seen = localStorage.getItem(SEEN_KEY) === '1';
+      localStorage.setItem(SEEN_KEY, '1');
     } catch {
       /* storage unavailable (private mode etc.) — treat every page as the first */
     }
