@@ -13,7 +13,8 @@ const navLinks = [
 ];
 
 const secondaryLinks = [
-  { href: '/code-of-conduct', label: 'Code of Conduct' },
+  /* Cville tech community's shared code of conduct. */
+  { href: 'https://github.com/cville/conduct', label: 'Code of Conduct', external: true },
   { href: 'mailto:ozanzal+becamp@gmail.com?subject=beCamp%20Sponsorship', label: 'Become a Sponsor' },
   { href: 'mailto:ozanzal+becamp@gmail.com', label: 'Contact organizers' },
 ];
@@ -81,7 +82,12 @@ const secondaryLinks = [
 
       <div class="flex flex-col gap-4 font-mono text-sm text-white sm:flex-row sm:flex-wrap sm:gap-9">
         {secondaryLinks.map((link) => (
-          <a href={link.href} class="transition-colors duration-150 hover:text-primary">
+          <a
+            href={link.href}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener' : undefined}
+            class="transition-colors duration-150 hover:text-primary"
+          >
             {link.label}
           </a>
         ))}
