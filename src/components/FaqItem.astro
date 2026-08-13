@@ -1,13 +1,16 @@
 ---
 interface Props {
   question: string;
-  open?: boolean;
 }
 
-const { question, open = false } = Astro.props;
+const { question } = Astro.props;
+
+/* Stable anchor derived from the question so other pages can deep-link a
+   specific FAQ, e.g. /faqs#how-are-topics-decided. */
+const id = question.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 ---
 
-<details class="group py-6" open={open}>
+<details id={id} class="group scroll-mt-14 py-6">
   <summary class="flex cursor-pointer list-none items-center justify-between gap-6 text-2xl font-medium tracking-[-0.36px] text-white sm:text-4xl [&::-webkit-details-marker]:hidden">
     <span class="transition-colors duration-150 group-open:text-link group-hover:text-link">{question}</span>
     <span class="shrink-0 group-open:hidden">+</span>

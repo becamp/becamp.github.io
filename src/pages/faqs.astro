@@ -62,7 +62,7 @@ import Footer from '../components/Footer.astro';
           </p>
         </FaqItem>
 
-        <FaqItem question="What is beCamp?" open>
+        <FaqItem question="What is beCamp?">
           <p>
             Like any good conference: multiple sessions running at once, relevant and
             current topics, a proper lunch break. The differences are that it's local to
@@ -149,3 +149,19 @@ import Footer from '../components/Footer.astro';
   </main>
   <Footer />
 </Layout>
+
+<script>
+  /* All items start collapsed; a hash (e.g. /faqs#how-are-topics-decided) pops
+     that one open and scrolls it into view, on load and on in-page hash changes. */
+  const openFromHash = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    const item = document.getElementById(id);
+    if (item instanceof HTMLDetailsElement) {
+      item.open = true;
+      item.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+  };
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
+</script>
