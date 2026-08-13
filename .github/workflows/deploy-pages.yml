@@ -18,12 +18,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: withastro/action@v3
+      # Third-party actions pinned to commit SHAs: this job holds the Airtable
+      # token, and a mutable tag could be repointed at attacker code.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: withastro/action@56781b97402ce0487b7e61ce2cb960c0e2cc5289 # v3
         with:
           node-version: 22
         env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          # Prefers the read-only PAT (build only ever GETs); falls back to the
+          # write-scoped token until AIRTABLE_READ_TOKEN is provisioned.
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_READ_TOKEN || secrets.AIRTABLE_TOKEN }}
           AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
           PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.PUBLIC_RECAPTCHA_SITE_KEY }}
           PUBLIC_FORM_ENDPOINT: https://be-camp-website.vercel.app/api/register
@@ -37,4 +41,4 @@ jobs:
     steps:
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

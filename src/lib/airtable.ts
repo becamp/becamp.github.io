@@ -1,6 +1,8 @@
 /* Build-time Airtable fetches. The site is static: this runs during `astro build`,
    so content changes in Airtable appear after the next rebuild (daily cron or manual).
-   Missing credentials or fetch failures degrade to empty data, never a broken build. */
+   Missing credentials degrade to empty data so local dev works; a FAILED fetch with
+   credentials present throws and fails the build — better a red build than the cron
+   silently publishing a site with no sponsors or schedule. */
 
 import { createHash } from 'node:crypto';
 
@@ -18,21 +20,16 @@ async function fetchAll(table: string, params: string): Promise<AirtableRecord[]
   }
   const records: AirtableRecord[] = [];
   let offset = '';
-  try {
-    do {
-      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}?${params}${offset ? `&offset=${offset}` : ''}`;
-      const res = await fetch(url, { headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` } });
-      if (!res.ok) {
-        console.warn(`[airtable] ${table} fetch failed: ${res.status}`);
-        return records;
-      }
-      const data = await res.json();
-      records.push(...data.records);
-      offset = data.offset ?? '';
-    } while (offset);
-  } catch (err) {
-    console.warn(`[airtable] ${table} fetch error`, err);
-  }
+  do {
+    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}?${params}${offset ? `&offset=${offset}` : ''}`;
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` } });
+    if (!res.ok) {
+      throw new Error(`[airtable] ${table} fetch failed: ${res.status} ${await res.text()}`);
+    }
+    const data = await res.json();
+    records.push(...data.records);
+    offset = data.offset ?? '';
+  } while (offset);
   return records;
 }
 
@@ -102,9 +99,11 @@ export const TIME_SLOTS = [
   '5:00pm - 7:00pm',
 ];
 
-/* Preview override: a number here fakes the registrant count so the hero line can
-   be reviewed locally; set back to null so the real Airtable count is used. */
-const FAKE_REGISTRANT_COUNT: number | null = 78;
+/* LAUNCH FLIP: one switch for all preview data. While true, the registrant count
+   and the attendee directory are faked so the team can review the gated UI before
+   real registrations exist. Set to false at launch to use Airtable. */
+const USE_FAKE_DATA = true;
+const FAKE_REGISTRANT_COUNT = 78;
 
 /* The peer-count line and the attendee directory stay hidden until this many
    people have registered (threshold ported from the old be.camp). */
@@ -118,7 +117,7 @@ const REGISTRATIONS_TABLE = import.meta.env.AIRTABLE_TABLE || 'Registrations';
 let registrantCountPromise: Promise<number> | null = null;
 export function getRegistrantCount(): Promise<number> {
   registrantCountPromise ??= (async () => {
-    if (FAKE_REGISTRANT_COUNT !== null) return FAKE_REGISTRANT_COUNT;
+    if (USE_FAKE_DATA) return FAKE_REGISTRANT_COUNT;
     const records = await fetchAll(REGISTRATIONS_TABLE, 'fields%5B%5D=Guest%20Name');
     return records.length;
   })();
@@ -134,9 +133,6 @@ export interface Attendee {
 
 const md5 = (value: string) => createHash('md5').update(value).digest('hex');
 
-/* Preview override: fakes the directory so the /attendees page can be reviewed
-   before real registrations exist; set to false to use Airtable data. */
-const FAKE_ATTENDEES = true;
 const FAKE_ATTENDEE_NAMES = [
   'Ada Whitfield', 'Ben Okafor', 'Camille Reyes', 'Devon Marsh', 'Elena Petrov',
   'Felix Nguyen', 'Grace Aldridge', 'Hank Morrow', 'Imani Clarke', 'Jonas Feld',
@@ -149,7 +145,7 @@ const FAKE_ATTENDEE_NAMES = [
 /* Attendees who opted into the public directory. Names + Gravatar hashes only —
    emails never leave the build. */
 export async function getAttendees(): Promise<Attendee[]> {
-  if (FAKE_ATTENDEES) {
+  if (USE_FAKE_DATA) {
     return FAKE_ATTENDEE_NAMES.map((name) => ({
       name,
       gravatarHash: md5(`${name.toLowerCase().replace(/\s+/g, '.')}@example.com`),

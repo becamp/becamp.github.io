@@ -18,8 +18,5 @@
     "astro": "^7.2.0",
     "shaders": "^3.0.448",
     "tailwindcss": "^4.3.3"
-  },
-  "devDependencies": {
-    "@vercel/node": "^5.9.9"
   }
 }

@@ -1,4 +1,17 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+/* Minimal typings for the Vercel Node runtime. The @vercel/node package was a
+   devDependency used solely for these two types while dragging in a transitive
+   tree with dozens of known advisories — these cover every member this handler
+   touches. */
+interface VercelRequest {
+  method?: string;
+  headers: { origin?: string };
+  body?: any;
+}
+interface VercelResponse {
+  status(code: number): VercelResponse;
+  send(body: string): VercelResponse;
+  redirect(statusCode: number, url: string): VercelResponse;
+}
 
 /* Origins allowed to submit the form; the redirect goes back to whichever one posted. */
 const ALLOWED_ORIGINS = [
@@ -17,6 +30,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const back = (status: 'success' | 'error') =>
     res.redirect(303, `${origin}/register?status=${status}`);
 
+  /* Everything past the origin check redirects back to the form on failure —
+     a network error against Google or Airtable must not surface as a bare
+     Vercel 500 that strands the visitor. */
+  try {
+    return await submit(req, back);
+  } catch (err) {
+    console.error('Registration failed', err);
+    return back('error');
+  }
+}
+
+async function submit(req: VercelRequest, back: (status: 'success' | 'error') => unknown) {
   const body = req.body ?? {};
   const name = body.name?.toString().trim();
   const email = body.email?.toString().trim();
@@ -26,8 +51,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   /* Honeypot: real users never fill this field. Pretend success so bots don't adapt. */
   if (body.website) return back('success');
 
-  /* reCAPTCHA v3 verification, active only when the secret is configured. */
+  /* reCAPTCHA v3 verification, active only when the secret is configured.
+     A missing secret in production means bot protection is silently off —
+     shout about it in the logs on every submission until it's fixed. */
   const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
+  if (!recaptchaSecret && process.env.VERCEL_ENV === 'production') {
+    console.error('RECAPTCHA_SECRET_KEY is not set — accepting submissions without bot verification');
+  }
   if (recaptchaSecret) {
     const token = body['recaptcha-token']?.toString();
     if (!token) return back('error');
