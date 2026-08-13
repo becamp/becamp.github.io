@@ -3,7 +3,6 @@
 <script>
   import { createShader } from 'shaders/js';
 
-  const canvas = document.getElementById('hero-shader') as HTMLCanvasElement | null;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const BLOB_ID = 'idmrmazjb3edkjkgryq';
@@ -26,7 +25,30 @@
     };
   };
 
-  if (canvas && !reducedMotion) {
+  /* Client-side routing replaces the canvas on every navigation, so each page
+     tears down the previous shader (GPU device, observers, timers) and builds a
+     fresh one. The generation counter discards creations that resolve after the
+     visitor has already navigated again. */
+  let generation = 0;
+  let activeShader: { destroy(): void; update(id: string, props: Record<string, any>): void } | null = null;
+  let activeObserver: ResizeObserver | null = null;
+  let settle = 0;
+  let widthCheck = 0;
+
+  const teardown = () => {
+    activeObserver?.disconnect();
+    activeObserver = null;
+    clearTimeout(settle);
+    clearInterval(widthCheck);
+    activeShader?.destroy();
+    activeShader = null;
+  };
+
+  const init = () => {
+    teardown();
+    const gen = ++generation;
+    const canvas = document.getElementById('hero-shader') as HTMLCanvasElement | null;
+    if (!canvas || reducedMotion) return;
     const shift = leftShift();
 
     createShader(canvas, {
@@ -81,6 +103,13 @@
       ],
     })
       .then((shader) => {
+        if (gen !== generation) {
+          /* The visitor already navigated on; this instance is orphaned. */
+          shader.destroy();
+          return;
+        }
+        activeShader = shader;
+
         let appliedFor = 0;
         const applyLayout = () => {
           appliedFor = window.innerWidth;
@@ -93,20 +122,22 @@
         // (viewport emulation, orientation changes) never fire the window
         // event. ResizeObserver also fires once on observe, syncing any resize
         // that happened while the shader was still loading.
-        let settle = 0;
-        new ResizeObserver(() => {
+        activeObserver = new ResizeObserver(() => {
           applyLayout();
           clearTimeout(settle);
           settle = window.setTimeout(applyLayout, 150);
-        }).observe(canvas);
+        });
+        activeObserver.observe(canvas);
 
         // Safety net for anything the observer misses (e.g. the library
         // rebuilding after GPU device loss with creation-time props): cheap
         // width check, no-op while the width matches what was last applied.
-        setInterval(() => {
+        widthCheck = window.setInterval(() => {
           if (window.innerWidth !== appliedFor) applyLayout();
         }, 500);
       })
       .catch((err) => console.error('Hero shader failed to load', err));
-  }
+  };
+
+  document.addEventListener('astro:page-load', init);
 </script>

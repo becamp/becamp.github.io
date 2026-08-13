@@ -51,10 +51,11 @@ const VIDEO_EMBED_URL = 'https://www.youtube-nocookie.com/embed/aVMBvWumoF8?auto
 <script>
   const VIDEO_EMBED_URL = 'https://www.youtube-nocookie.com/embed/aVMBvWumoF8?autoplay=1';
 
-  const openBtn = document.getElementById('video-open');
-  const modal = document.getElementById('video-modal');
-  const closeBtn = document.getElementById('video-close');
-  const iframe = document.getElementById('video-iframe') as HTMLIFrameElement | null;
+  /* Module-level refs, refreshed per navigation: the document-wide Escape
+     listener attaches once, while element listeners re-bind to each page's
+     fresh modal (null on pages without the video section). */
+  let modal: HTMLElement | null = null;
+  let iframe: HTMLIFrameElement | null = null;
 
   const setOpen = (open: boolean) => {
     modal?.classList.toggle('hidden', !open);
@@ -63,15 +64,25 @@ const VIDEO_EMBED_URL = 'https://www.youtube-nocookie.com/embed/aVMBvWumoF8?auto
     if (iframe) iframe.src = open ? VIDEO_EMBED_URL : '';
   };
 
-  openBtn?.addEventListener('click', (e) => {
-    e.preventDefault();
-    setOpen(true);
-  });
-  closeBtn?.addEventListener('click', () => setOpen(false));
-  modal?.addEventListener('click', (e) => {
-    if (e.target === modal) setOpen(false);
-  });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal?.classList.contains('hidden')) setOpen(false);
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) setOpen(false);
   });
+
+  const init = () => {
+    modal = document.getElementById('video-modal');
+    iframe = document.getElementById('video-iframe') as HTMLIFrameElement | null;
+    const openBtn = document.getElementById('video-open');
+    const closeBtn = document.getElementById('video-close');
+
+    openBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      setOpen(true);
+    });
+    closeBtn?.addEventListener('click', () => setOpen(false));
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) setOpen(false);
+    });
+  };
+
+  document.addEventListener('astro:page-load', init);
 </script>

@@ -93,17 +93,23 @@ const isActive = (href: string) => currentPath === href;
 </header>
 
 <script>
-  const toggle = document.getElementById('menu-toggle');
-  const closeBtn = document.getElementById('menu-close');
-  const menu = document.getElementById('mobile-menu');
+  /* Re-runs per navigation (astro:page-load): the router swaps in a fresh header,
+     so listeners attach to the new elements each time. */
+  const init = () => {
+    const toggle = document.getElementById('menu-toggle');
+    const closeBtn = document.getElementById('menu-close');
+    const menu = document.getElementById('mobile-menu');
 
-  const setOpen = (open: boolean) => {
-    menu?.classList.toggle('hidden', !open);
-    menu?.classList.toggle('flex', open);
-    document.body.classList.toggle('overflow-hidden', open);
-    toggle?.setAttribute('aria-expanded', String(open));
+    const setOpen = (open: boolean) => {
+      menu?.classList.toggle('hidden', !open);
+      menu?.classList.toggle('flex', open);
+      document.body.classList.toggle('overflow-hidden', open);
+      toggle?.setAttribute('aria-expanded', String(open));
+    };
+
+    toggle?.addEventListener('click', () => setOpen(Boolean(menu?.classList.contains('hidden'))));
+    closeBtn?.addEventListener('click', () => setOpen(false));
   };
 
-  toggle?.addEventListener('click', () => setOpen(Boolean(menu?.classList.contains('hidden'))));
-  closeBtn?.addEventListener('click', () => setOpen(false));
+  document.addEventListener('astro:page-load', init);
 </script>

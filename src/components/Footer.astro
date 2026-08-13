@@ -95,35 +95,45 @@ const secondaryLinks = [
 </footer>
 
 <script>
-  const footer = document.getElementById('site-footer');
-  const layers = footer ? [...footer.querySelectorAll<SVGGElement>('[data-parallax]')] : [];
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (footer && layers.length && !reducedMotion) {
-    let targetMouseX = 0;
-    let mouseX = 0;
-    let raf = 0;
+  /* Window listeners attach once for the whole session; the footer/layer refs
+     refresh on every client-side navigation (astro:page-load) since the router
+     swaps in a fresh footer per page. */
+  let footer: HTMLElement | null = null;
+  let layers: SVGGElement[] = [];
+  let targetMouseX = 0;
+  let mouseX = 0;
+  let raf = 0;
 
-    const apply = () => {
-      const rect = footer.getBoundingClientRect();
-      const progress = Math.min(1, Math.max(0, (window.innerHeight - rect.top) / rect.height));
-      for (const layer of layers) {
-        const y = Number(layer.dataset.parallax) * (1 - progress);
-        const x = Number(layer.dataset.parallaxX ?? 0) * -mouseX;
-        layer.style.transform = `translate(${x}px, ${y}px)`;
-      }
-    };
+  const apply = () => {
+    if (!footer || !layers.length) return;
+    const rect = footer.getBoundingClientRect();
+    const progress = Math.min(1, Math.max(0, (window.innerHeight - rect.top) / rect.height));
+    for (const layer of layers) {
+      const y = Number(layer.dataset.parallax) * (1 - progress);
+      const x = Number(layer.dataset.parallaxX ?? 0) * -mouseX;
+      layer.style.transform = `translate(${x}px, ${y}px)`;
+    }
+  };
 
-    const tick = () => {
-      mouseX += (targetMouseX - mouseX) * 0.08;
-      apply();
-      raf = Math.abs(targetMouseX - mouseX) > 0.002 ? requestAnimationFrame(tick) : 0;
-    };
+  const tick = () => {
+    mouseX += (targetMouseX - mouseX) * 0.08;
+    apply();
+    raf = Math.abs(targetMouseX - mouseX) > 0.002 ? requestAnimationFrame(tick) : 0;
+  };
 
-    const kick = () => {
-      if (!raf) raf = requestAnimationFrame(tick);
-    };
+  const kick = () => {
+    if (!raf) raf = requestAnimationFrame(tick);
+  };
 
+  const init = () => {
+    footer = document.getElementById('site-footer');
+    layers = footer ? [...footer.querySelectorAll<SVGGElement>('[data-parallax]')] : [];
+    apply();
+  };
+
+  if (!reducedMotion) {
     window.addEventListener('scroll', kick, { passive: true });
     window.addEventListener('resize', kick, { passive: true });
     window.addEventListener(
@@ -134,6 +144,6 @@ const secondaryLinks = [
       },
       { passive: true }
     );
-    apply();
+    document.addEventListener('astro:page-load', init);
   }
 </script>

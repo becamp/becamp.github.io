@@ -162,6 +162,8 @@ import Footer from '../components/Footer.astro';
       item.scrollIntoView({ block: 'start', behavior: 'smooth' });
     }
   };
-  openFromHash();
   window.addEventListener('hashchange', openFromHash);
+  /* Fires on initial load and after every client-side navigation; no-ops on
+     pages without a matching FAQ id. */
+  document.addEventListener('astro:page-load', openFromHash);
 </script>

@@ -32,30 +32,39 @@
   const REVEAL_DELAY = 2000;
   const LETTER_STAGGER = 28;
 
-  const bar = document.getElementById('countdown-bar') as HTMLAnchorElement | null;
-  const inner = document.getElementById('countdown-inner');
-  const text = document.getElementById('countdown-text');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pad = (n: number) => String(n).padStart(2, '0');
 
-  if (bar && inner && text) {
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const pad = (n: number) => String(n).padStart(2, '0');
-
-    /* Re-diffs the wall clock every tick — the old site decremented a stored
-       delta instead, which drifted with timer jitter and tab throttling. */
-    const currentState = (): { text: string; href: string } | 'ended' => {
-      const now = Date.now();
-      if (now >= EVENT_END) return 'ended';
-      if (now >= EVENT_START) return { text: 'beCamp is happening now →', href: '/schedule' };
-      const diff = EVENT_START - now;
-      const d = Math.floor(diff / 86_400_000);
-      const h = Math.floor(diff / 3_600_000) % 24;
-      const m = Math.floor(diff / 60_000) % 60;
-      const s = Math.floor(diff / 1_000) % 60;
-      return {
-        text: `beCamp starts in ${d}d ${pad(h)}h ${pad(m)}m ${pad(s)}s — Register now →`,
-        href: '/register',
-      };
+  /* Re-diffs the wall clock every tick — the old site decremented a stored
+     delta instead, which drifted with timer jitter and tab throttling. */
+  const currentState = (): { text: string; href: string } | 'ended' => {
+    const now = Date.now();
+    if (now >= EVENT_END) return 'ended';
+    if (now >= EVENT_START) return { text: 'beCamp is happening now →', href: '/schedule' };
+    const diff = EVENT_START - now;
+    const d = Math.floor(diff / 86_400_000);
+    const h = Math.floor(diff / 3_600_000) % 24;
+    const m = Math.floor(diff / 60_000) % 60;
+    const s = Math.floor(diff / 1_000) % 60;
+    return {
+      text: `beCamp starts in ${d}d ${pad(h)}h ${pad(m)}m ${pad(s)}s — Register now →`,
+      href: '/register',
     };
+  };
+
+  /* Client-side routing swaps the bar element on every navigation, so init runs
+     per page (astro:page-load) against fresh elements, clearing prior timers. */
+  let timer = 0;
+  let revealTimeout = 0;
+
+  const init = () => {
+    clearInterval(timer);
+    clearTimeout(revealTimeout);
+
+    const bar = document.getElementById('countdown-bar') as HTMLAnchorElement | null;
+    const inner = document.getElementById('countdown-inner');
+    const text = document.getElementById('countdown-text');
+    if (!bar || !inner || !text) return; /* the register page opts out */
 
     let revealed = false;
     let animating = false;
@@ -123,7 +132,7 @@
       }, duration);
     };
 
-    const timer = setInterval(render, 1000);
+    timer = window.setInterval(render, 1000);
 
     /* The delayed slide-open + letter entrance plays on the first-ever visit;
        localStorage persists across tabs and sessions, so it only replays after
@@ -140,7 +149,9 @@
     if (seen || reducedMotion) {
       reveal(false);
     } else {
-      setTimeout(() => reveal(true), REVEAL_DELAY);
+      revealTimeout = window.setTimeout(() => reveal(true), REVEAL_DELAY);
     }
-  }
+  };
+
+  document.addEventListener('astro:page-load', init);
 </script>

@@ -80,6 +80,7 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
       id="registration-form"
       method="POST"
       action={formEndpoint}
+      data-astro-reload
       class="relative mx-5 mb-24 flex max-w-[800px] flex-col gap-9 border border-white/15 bg-[#0b0e2d] p-6 drop-shadow-[0px_16px_16px_rgba(0,0,0,0.25)] sm:mx-20 sm:p-12"
     >
       <div class="absolute -left-[9999px] top-0" aria-hidden="true">
@@ -208,26 +209,39 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
   )}
   {recaptchaSiteKey && (
     <script is:inline define:vars={{ recaptchaSiteKey }}>
-      const form = document.getElementById('registration-form');
-      const tokenInput = document.getElementById('recaptcha-token');
-      form?.addEventListener('submit', (e) => {
-        if (tokenInput.value) return;
-        e.preventDefault();
-        grecaptcha.ready(() => {
-          grecaptcha.execute(recaptchaSiteKey, { action: 'register' }).then((token) => {
-            tokenInput.value = token;
-            form.submit();
+      /* Inline scripts don't re-execute on client-side navigation, so binding
+         happens per page via astro:page-load, guarded against double-binding. */
+      const bindRecaptcha = () => {
+        const form = document.getElementById('registration-form');
+        const tokenInput = document.getElementById('recaptcha-token');
+        if (!form || !tokenInput || form.dataset.recaptchaBound) return;
+        form.dataset.recaptchaBound = '1';
+        form.addEventListener('submit', (e) => {
+          if (tokenInput.value) return;
+          e.preventDefault();
+          grecaptcha.ready(() => {
+            grecaptcha.execute(recaptchaSiteKey, { action: 'register' }).then((token) => {
+              tokenInput.value = token;
+              form.submit();
+            });
           });
         });
-      });
+      };
+      bindRecaptcha();
+      document.addEventListener('astro:page-load', bindRecaptcha);
     </script>
   )}
 </Layout>
 
 <script>
-  const status = new URLSearchParams(location.search).get('status');
-  if (status === 'success' || status === 'error') {
-    document.getElementById(`form-status-${status}`)?.classList.remove('hidden');
-    document.getElementById(`form-status-${status}`)?.scrollIntoView({ block: 'center' });
-  }
+  const showStatus = () => {
+    const status = new URLSearchParams(location.search).get('status');
+    if (status !== 'success' && status !== 'error') return;
+    const banner = document.getElementById(`form-status-${status}`);
+    banner?.classList.remove('hidden');
+    banner?.scrollIntoView({ block: 'center' });
+  };
+  /* Fires on initial load and after every client-side navigation; no-ops on
+     pages without a status param or banner. */
+  document.addEventListener('astro:page-load', showStatus);
 </script>

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import CountdownBar from '../components/CountdownBar.astro';
 
 interface Props {
@@ -17,7 +18,10 @@ const {
 } = Astro.props;
 ---
 
-<html lang="en">
+<!-- ClientRouter swaps pages in place so navigation doesn't flash; animate="none"
+     keeps the swap instant rather than crossfading. Component scripts re-init via
+     astro:page-load since module scripts only execute once per session. -->
+<html lang="en" transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -29,6 +33,7 @@ const {
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <ClientRouter />
   </head>
   <body class="bg-bg text-white">
     {countdown && <CountdownBar />}
