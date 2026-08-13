@@ -5,9 +5,16 @@ import CountdownBar from '../components/CountdownBar.astro';
 interface Props {
   title: string;
   description?: string;
+  /* The register page opts out — the bar's CTA points there, so it's noise once
+     the visitor has arrived. */
+  countdown?: boolean;
 }
 
-const { title, description = 'beCamp is a free, community-run un-conference for the Charlottesville tech community.' } = Astro.props;
+const {
+  title,
+  description = 'beCamp is a free, community-run un-conference for the Charlottesville tech community.',
+  countdown = true,
+} = Astro.props;
 ---
 
 <html lang="en">
@@ -24,7 +31,7 @@ const { title, description = 'beCamp is a free, community-run un-conference for 
     <title>{title}</title>
   </head>
   <body class="bg-bg text-white">
-    <CountdownBar />
+    {countdown && <CountdownBar />}
     <slot />
   </body>
 </html>
