@@ -1,9 +1,13 @@
 ---
 import Logo from './Logo.astro';
+import { getRegistrantCount, REGISTRANT_THRESHOLD } from '../lib/airtable';
+
+const showAttendees = (await getRegistrantCount()) >= REGISTRANT_THRESHOLD;
 
 const navLinks = [
   { href: '/schedule', label: 'Schedule' },
   { href: '/sponsors', label: 'Sponsors' },
+  ...(showAttendees ? [{ href: '/attendees', label: 'Attendees' }] : []),
   { href: '/about', label: 'About' },
   { href: '/faqs', label: 'FAQs' },
 ];

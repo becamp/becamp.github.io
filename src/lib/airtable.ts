@@ -2,6 +2,8 @@
    so content changes in Airtable appear after the next rebuild (daily cron or manual).
    Missing credentials or fetch failures degrade to empty data, never a broken build. */
 
+import { createHash } from 'node:crypto';
+
 const { AIRTABLE_TOKEN, AIRTABLE_BASE_ID } = import.meta.env;
 
 interface AirtableRecord {
@@ -104,13 +106,66 @@ export const TIME_SLOTS = [
    be reviewed locally; set back to null so the real Airtable count is used. */
 const FAKE_REGISTRANT_COUNT: number | null = 78;
 
-/* Total rows in the table the registration form writes to. Displayed on the site
-   only once it reaches 20 (threshold ported from the old be.camp). */
-export async function getRegistrantCount(): Promise<number> {
-  if (FAKE_REGISTRANT_COUNT !== null) return FAKE_REGISTRANT_COUNT;
-  const table = import.meta.env.AIRTABLE_TABLE || 'Registrations';
-  const records = await fetchAll(table, 'fields%5B%5D=Guest%20Name');
-  return records.length;
+/* The peer-count line and the attendee directory stay hidden until this many
+   people have registered (threshold ported from the old be.camp). */
+export const REGISTRANT_THRESHOLD = 20;
+
+const REGISTRATIONS_TABLE = import.meta.env.AIRTABLE_TABLE || 'Registrations';
+
+/* Total rows in the table the registration form writes to. Memoized: Header and
+   Footer ask on every page, and the count shouldn't be fetched once per page
+   during a build. */
+let registrantCountPromise: Promise<number> | null = null;
+export function getRegistrantCount(): Promise<number> {
+  registrantCountPromise ??= (async () => {
+    if (FAKE_REGISTRANT_COUNT !== null) return FAKE_REGISTRANT_COUNT;
+    const records = await fetchAll(REGISTRATIONS_TABLE, 'fields%5B%5D=Guest%20Name');
+    return records.length;
+  })();
+  return registrantCountPromise;
+}
+
+export interface Attendee {
+  name: string;
+  /* md5 of the lowercased email — only the hash ever reaches the client,
+     used to look up the Gravatar avatar. */
+  gravatarHash: string;
+}
+
+const md5 = (value: string) => createHash('md5').update(value).digest('hex');
+
+/* Preview override: fakes the directory so the /attendees page can be reviewed
+   before real registrations exist; set to false to use Airtable data. */
+const FAKE_ATTENDEES = true;
+const FAKE_ATTENDEE_NAMES = [
+  'Ada Whitfield', 'Ben Okafor', 'Camille Reyes', 'Devon Marsh', 'Elena Petrov',
+  'Felix Nguyen', 'Grace Aldridge', 'Hank Morrow', 'Imani Clarke', 'Jonas Feld',
+  'Kira Solomon', 'Liam Berger', 'Maya Trent', 'Noah Castillo', 'Opal Freeman',
+  'Priya Raman', 'Quentin Ashe', 'Rosa Delgado', 'Sam Whitaker', 'Tessa Bloom',
+  'Uma Krishnan', 'Victor Hale', 'Wren Palmer', 'Xavier Boone', 'Yara Haddad',
+  'Zeke Lawson',
+];
+
+/* Attendees who opted into the public directory. Names + Gravatar hashes only —
+   emails never leave the build. */
+export async function getAttendees(): Promise<Attendee[]> {
+  if (FAKE_ATTENDEES) {
+    return FAKE_ATTENDEE_NAMES.map((name) => ({
+      name,
+      gravatarHash: md5(`${name.toLowerCase().replace(/\s+/g, '.')}@example.com`),
+    }));
+  }
+  const records = await fetchAll(
+    REGISTRATIONS_TABLE,
+    'fields%5B%5D=Guest%20Name&fields%5B%5D=Email&fields%5B%5D=Directory%20Permission'
+  );
+  return records
+    .filter((r) => r.fields['Directory Permission'] && r.fields['Guest Name'] && r.fields['Email'])
+    .map((r) => ({
+      name: String(r.fields['Guest Name']),
+      gravatarHash: md5(String(r.fields['Email']).trim().toLowerCase()),
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export async function getSaturdaySchedule(): Promise<Session[]> {

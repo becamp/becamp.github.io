@@ -1,49 +1,121 @@
-<!-- Slim countdown bar above the header on every page. Server-renders a stable
-     placeholder (no numbers) to avoid a flash of wrong time; the script swaps in
-     the live countdown, flips to "happening now" during the event, and hides the
-     bar once the event is over. -->
+<!-- Slim countdown bar above the header on every page. Stays collapsed for 2s
+     after load, slides open, then the text locks in letter-by-letter with
+     alternating letters entering from above and below. After the entrance the
+     text ticks normally every second, flips to "happening now" during the
+     event, and the bar removes itself once the event is over. -->
 <a
   id="countdown-bar"
   href="/register"
-  class="block bg-primary px-5 py-2 text-center font-mono text-xs font-semibold text-bg transition-colors duration-150 hover:bg-[#ff8b33] sm:text-sm"
+  class="block overflow-hidden bg-primary transition-[height] duration-500 ease-out hover:bg-[#ff8b33]"
+  style="height: 0px"
 >
-  <span id="countdown-text">beCamp starts October 2&ndash;3 &rarr;</span>
+  <span
+    id="countdown-inner"
+    class="flex h-9 items-center justify-center px-5 text-center font-mono text-xs font-semibold text-bg sm:text-sm"
+  >
+    <span id="countdown-text" style="white-space: pre"></span>
+  </span>
 </a>
+<noscript>
+  <div class="bg-primary px-5 py-2 text-center font-mono text-xs font-semibold text-bg sm:text-sm">
+    beCamp starts October 2&ndash;3 &rarr;
+  </div>
+</noscript>
 
 <script>
   /* Reception starts Fri Oct 2, 2026 4:30pm ET; sessions end Sat Oct 3, 4pm ET. */
   const EVENT_START = new Date('2026-10-02T16:30:00-04:00').getTime();
   const EVENT_END = new Date('2026-10-03T16:00:00-04:00').getTime();
 
+  const REVEAL_DELAY = 2000;
+  const LETTER_STAGGER = 28;
+
   const bar = document.getElementById('countdown-bar') as HTMLAnchorElement | null;
+  const inner = document.getElementById('countdown-inner');
   const text = document.getElementById('countdown-text');
 
-  if (bar && text) {
+  if (bar && inner && text) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const pad = (n: number) => String(n).padStart(2, '0');
 
     /* Re-diffs the wall clock every tick — the old site decremented a stored
        delta instead, which drifted with timer jitter and tab throttling. */
-    const render = () => {
+    const currentState = (): { text: string; href: string } | 'ended' => {
       const now = Date.now();
-      if (now >= EVENT_END) {
-        bar.remove();
-        clearInterval(timer);
-        return;
-      }
-      if (now >= EVENT_START) {
-        text.textContent = 'beCamp is happening now →';
-        bar.href = '/schedule';
-        return;
-      }
+      if (now >= EVENT_END) return 'ended';
+      if (now >= EVENT_START) return { text: 'beCamp is happening now →', href: '/schedule' };
       const diff = EVENT_START - now;
       const d = Math.floor(diff / 86_400_000);
       const h = Math.floor(diff / 3_600_000) % 24;
       const m = Math.floor(diff / 60_000) % 60;
       const s = Math.floor(diff / 1_000) % 60;
-      text.textContent = `beCamp starts in ${d}d ${pad(h)}h ${pad(m)}m ${pad(s)}s`;
+      return { text: `beCamp starts in ${d}d ${pad(h)}h ${pad(m)}m ${pad(s)}s`, href: '/register' };
+    };
+
+    let revealed = false;
+    let animating = false;
+
+    const render = () => {
+      if (!revealed || animating) return;
+      const state = currentState();
+      if (state === 'ended') {
+        bar.remove();
+        clearInterval(timer);
+        return;
+      }
+      text.textContent = state.text;
+      bar.href = state.href;
+    };
+
+    /* One span per character, even letters dropping from above and odd letters
+       rising from below, staggered left to right. Returns the total duration. */
+    const animateLetters = (str: string) => {
+      text.replaceChildren(
+        ...[...str].map((ch, i) => {
+          const span = document.createElement('span');
+          span.textContent = ch;
+          span.style.cssText = [
+            'display:inline-block',
+            'opacity:0',
+            `transform:translateY(${i % 2 ? '' : '-'}120%)`,
+            `transition:transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) ${i * LETTER_STAGGER}ms, opacity 0.25s linear ${i * LETTER_STAGGER}ms`,
+          ].join(';');
+          return span;
+        })
+      );
+      /* Styles must land a frame after insertion or the transition won't fire. */
+      setTimeout(() => {
+        for (const span of text.children as HTMLCollectionOf<HTMLElement>) {
+          span.style.opacity = '1';
+          span.style.transform = 'translateY(0)';
+        }
+      }, 30);
+      return str.length * LETTER_STAGGER + 450;
+    };
+
+    const reveal = () => {
+      const state = currentState();
+      if (state === 'ended') {
+        bar.remove();
+        clearInterval(timer);
+        return;
+      }
+      bar.href = state.href;
+      bar.style.height = `${inner.offsetHeight}px`;
+      revealed = true;
+      if (reducedMotion) {
+        text.textContent = state.text;
+        return;
+      }
+      animating = true;
+      const duration = animateLetters(state.text);
+      setTimeout(() => {
+        animating = false;
+        render();
+      }, duration);
     };
 
     const timer = setInterval(render, 1000);
-    render();
+    setTimeout(reveal, REVEAL_DELAY);
   }
 </script>

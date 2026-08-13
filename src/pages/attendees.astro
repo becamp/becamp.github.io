@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Footer from '../components/Footer.astro';
+import { getAttendees, getRegistrantCount, REGISTRANT_THRESHOLD } from '../lib/airtable';
+
+const [attendees, registrantCount] = await Promise.all([getAttendees(), getRegistrantCount()]);
+
+/* The directory unlocks with the same 20-registrant threshold as the peer count;
+   until then the page shows a check-back-soon note instead of the grid. */
+const unlocked = registrantCount >= REGISTRANT_THRESHOLD;
+---
+
+<Layout
+  title="Attendees — beCamp"
+  description="The people coming to beCamp 2026, Charlottesville's community-run un-conference."
+>
+  <Header />
+  <main>
+    <PageHero label="Attendee Directory" title="Who's coming to beCamp">
+      {unlocked && (
+        <p class="mt-5 text-base text-white/80">
+          {registrantCount} people have registered so far. These are the folks who opted
+          into the public directory — avatars come from{' '}<a
+            href="https://gravatar.com"
+            target="_blank"
+            rel="noopener"
+            class="underline transition-colors duration-150 hover:text-primary">Gravatar</a
+          >, keyed to your registration email.
+        </p>
+      )}
+      <Button href="/register" class="mt-12 w-full">Register now [R]</Button>
+    </PageHero>
+
+    {
+      unlocked ? (
+        <section class="px-5 pb-8 sm:px-20">
+          <ul class="grid grid-cols-3 gap-4 sm:grid-cols-5 sm:gap-5 lg:grid-cols-7 xl:grid-cols-8">
+            {attendees.map((attendee) => (
+              <li class="flex flex-col gap-2.5 border border-white/[0.08] bg-white/[0.03] p-3">
+                <img
+                  src={`https://secure.gravatar.com/avatar/${attendee.gravatarHash}?s=200&rating=pg&d=retro`}
+                  alt=""
+                  width="200"
+                  height="200"
+                  loading="lazy"
+                  class="aspect-square w-full bg-white/5 object-cover"
+                />
+                <p class="font-mono text-xs leading-snug text-white/80">{attendee.name}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : (
+        <section class="px-5 pb-8 sm:px-20">
+          <div class="border border-white/[0.08] bg-white/[0.03] px-6 py-10 text-center">
+            <p class="font-mono text-base text-white/80">
+              The attendee directory unlocks once {REGISTRANT_THRESHOLD} people have
+              registered. Check back soon — or better, be one of them.
+            </p>
+          </div>
+        </section>
+      )
+    }
+
+    <CtaSection />
+  </main>
+  <Footer />
+</Layout>

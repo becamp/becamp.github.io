@@ -2,10 +2,16 @@
 import Logo from './Logo.astro';
 import LogoMark from './LogoMark.astro';
 import Button from './Button.astro';
+import { getRegistrantCount, REGISTRANT_THRESHOLD } from '../lib/airtable';
+
+/* The Attendees link appears alongside the directory once registrations hit the
+   threshold; getRegistrantCount() is memoized, so this costs one fetch per build. */
+const showAttendees = (await getRegistrantCount()) >= REGISTRANT_THRESHOLD;
 
 const navLinks = [
   { href: '/schedule', label: 'Schedule' },
   { href: '/sponsors', label: 'Sponsors' },
+  ...(showAttendees ? [{ href: '/attendees', label: 'Attendees' }] : []),
   { href: '/about', label: 'About' },
   { href: '/faqs', label: 'FAQs' },
 ];
