@@ -1,6 +1,4 @@
 ---
-import FlameBackdrop from './FlameBackdrop.astro';
-
 interface Props {
   label: string;
   title: string;
@@ -10,8 +8,9 @@ interface Props {
 const { label, title, wide = false } = Astro.props;
 ---
 
-<section class="relative overflow-hidden">
-  <FlameBackdrop />
+<!-- The flame shader behind this hero renders once at the Layout level and
+     persists across navigations. -->
+<section class="relative">
 
   <div class="pointer-events-none relative px-5 sm:px-20 pt-24 pb-16">
     <div class={`pointer-events-auto ${wide ? 'max-w-[900px]' : 'max-w-[663px]'}`}>

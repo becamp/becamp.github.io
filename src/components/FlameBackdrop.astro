@@ -1,4 +1,16 @@
-<canvas id="hero-shader" class="absolute inset-0 size-full"></canvas>
+<!-- Rendered once by Layout with identical geometry on every page, and
+     transition:persist carries this exact DOM node (GPU context and all)
+     across client-side navigations — the blob animation runs continuously
+     instead of restarting, so nothing blinks or shifts between pages.
+     pointer-events-none is safe: the shader library tracks the cursor on
+     window, not the canvas. -->
+<div
+  transition:persist="hero-shader"
+  class="pointer-events-none absolute inset-x-0 top-0 h-[600px] overflow-hidden"
+  aria-hidden="true"
+>
+  <canvas id="hero-shader" class="absolute inset-0 size-full"></canvas>
+</div>
 
 <script>
   import { createShader } from 'shaders/js';
@@ -25,30 +37,45 @@
     };
   };
 
-  /* Client-side routing replaces the canvas on every navigation, so each page
-     tears down the previous shader (GPU device, observers, timers) and builds a
-     fresh one. The generation counter discards creations that resolve after the
-     visitor has already navigated again. */
+  /* The canvas normally persists across navigations, so init only builds a
+     shader when it finds a canvas it hasn't seen (first load, hard reload).
+     The generation counter discards creations that resolve after the visitor
+     has already moved on. */
   let generation = 0;
-  let activeShader: { destroy(): void; update(id: string, props: Record<string, any>): void } | null = null;
+  let activeCanvas: HTMLCanvasElement | null = null;
+  let activeShader: {
+    destroy(): void;
+    update(id: string, props: Record<string, any>): void;
+    resize(width?: number, height?: number): void;
+  } | null = null;
   let activeObserver: ResizeObserver | null = null;
+  let activeApplyLayout: (() => void) | null = null;
   let settle = 0;
   let widthCheck = 0;
 
   const teardown = () => {
     activeObserver?.disconnect();
     activeObserver = null;
+    activeApplyLayout = null;
     clearTimeout(settle);
     clearInterval(widthCheck);
     activeShader?.destroy();
     activeShader = null;
+    activeCanvas = null;
   };
 
   const init = () => {
+    const canvas = document.getElementById('hero-shader') as HTMLCanvasElement | null;
+    if (canvas && canvas === activeCanvas && activeShader) {
+      /* Persisted across navigation — keep the running instance, just re-assert
+         geometry in case anything shifted during the swap. */
+      activeApplyLayout?.();
+      return;
+    }
     teardown();
     const gen = ++generation;
-    const canvas = document.getElementById('hero-shader') as HTMLCanvasElement | null;
     if (!canvas || reducedMotion) return;
+    activeCanvas = canvas;
     const shift = leftShift();
 
     createShader(canvas, {
@@ -111,12 +138,25 @@
         activeShader = shader;
 
         let appliedFor = 0;
+        let appliedCanvasW = 0;
         const applyLayout = () => {
+          /* The library sizes the canvas from getBoundingClientRect and writes
+             the result as inline styles; if it measured mid-layout (or mid-swap)
+             those can be stale. Clear them, measure real layout, and resize
+             explicitly. */
+          canvas.style.width = '';
+          canvas.style.height = '';
+          const w = canvas.offsetWidth;
+          const h = canvas.offsetHeight;
+          if (w && h) shader.resize(w, h);
+          appliedCanvasW = canvas.offsetWidth;
           appliedFor = window.innerWidth;
           const s = leftShift();
           shader.update(BLOB_ID, { center: blobCenter(s) });
           shader.update(FLAME_ID, { boundingBox: flameBoundingBox(s) });
         };
+        activeApplyLayout = applyLayout;
+        applyLayout();
 
         // Observe the canvas box rather than window resize: some resize paths
         // (viewport emulation, orientation changes) never fire the window
@@ -133,7 +173,9 @@
         // rebuilding after GPU device loss with creation-time props): cheap
         // width check, no-op while the width matches what was last applied.
         widthCheck = window.setInterval(() => {
-          if (window.innerWidth !== appliedFor) applyLayout();
+          if (window.innerWidth !== appliedFor || canvas.offsetWidth !== appliedCanvasW) {
+            applyLayout();
+          }
         }, 500);
       })
       .catch((err) => console.error('Hero shader failed to load', err));

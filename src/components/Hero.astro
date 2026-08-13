@@ -1,16 +1,15 @@
 ---
 import Button from './Button.astro';
 import EventInfoCard from './EventInfoCard.astro';
-import FlameBackdrop from './FlameBackdrop.astro';
 import { getRegistrantCount } from '../lib/airtable';
 
 /* Shown only once at least 20 people have registered (ported from the old site). */
 const registrantCount = await getRegistrantCount();
 ---
 
-<section class="relative overflow-hidden">
-  <FlameBackdrop />
-
+<!-- The flame shader behind this hero renders once at the Layout level and
+     persists across navigations. -->
+<section class="relative">
   <div class="pointer-events-none relative px-5 sm:px-20 pt-24 pb-16">
     <div class="pointer-events-auto max-w-[660px]">
     <p class="font-mono text-sm text-primary">October 2–3 in Charlottesville, VA</p>
