@@ -8,11 +8,17 @@ import check from '../assets/icons/check.svg';
 /* Submissions post to /api/register, which maps these field names to Airtable columns. */
 const attendanceOptions = [
   {
+    id: 'attend-reception',
+    checked: true,
+    label: "I'll be attending the reception at The Poplar Restaurant on Friday Oct 2nd from 4:30pm -> 5:30pm",
+    detail: 'Appetizers will be served, and there will be a cash bar for drinks.',
+  },
+  {
     id: 'attend-friday',
     checked: true,
     label: "I'll be attending Pitch Night on Friday Oct 2nd from 5:30pm -> 8:30pm",
     detail:
-      'Pitch Night is open to everyone; however, we ask that you only pitch and/or vote on pitches if you are coming to Saturday sessions. Pizza will be provided, and there will be a cash bar for drinks.',
+      'Pitch Night is open to everyone; however, we ask that you only pitch and/or vote on pitches if you are coming to Saturday sessions. Pizza will be provided.',
   },
   {
     id: 'attend-saturday',
@@ -192,9 +198,6 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
         <button type="submit" class="w-full bg-primary px-8 py-4 font-mono text-lg font-semibold text-bg">
           Submit Registration
         </button>
-        <p class="text-center text-xs text-[#858fc6]">
-          Do not submit passwords through Airtable forms. Report malicious form
-        </p>
       </div>
     </form>
   </main>

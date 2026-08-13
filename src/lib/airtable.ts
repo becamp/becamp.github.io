@@ -100,6 +100,19 @@ export const TIME_SLOTS = [
   '5:00pm - 7:00pm',
 ];
 
+/* Preview override: a number here fakes the registrant count so the hero line can
+   be reviewed locally; set back to null so the real Airtable count is used. */
+const FAKE_REGISTRANT_COUNT: number | null = 78;
+
+/* Total rows in the table the registration form writes to. Displayed on the site
+   only once it reaches 20 (threshold ported from the old be.camp). */
+export async function getRegistrantCount(): Promise<number> {
+  if (FAKE_REGISTRANT_COUNT !== null) return FAKE_REGISTRANT_COUNT;
+  const table = import.meta.env.AIRTABLE_TABLE || 'Registrations';
+  const records = await fetchAll(table, 'fields%5B%5D=Guest%20Name');
+  return records.length;
+}
+
 export async function getSaturdaySchedule(): Promise<Session[]> {
   const records = await fetchAll('Saturday Schedule', 'fields%5B%5D=Topic&fields%5B%5D=Speaker&fields%5B%5D=Time&fields%5B%5D=Location&fields%5B%5D=Type');
 

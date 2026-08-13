@@ -44,10 +44,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   }
 
-  /* Field names must match the Airtable column names exactly. */
+  /* Field names must match the Airtable column names exactly. The reception
+     column must exist in the base BEFORE this deploys — Airtable rejects the
+     whole write (422) on any unknown field name. */
   const fields: Record<string, string | boolean> = {
     'Guest Name': name,
     Email: email,
+    "I'll be attending the reception at The Poplar on Friday Oct 2nd from 4:30pm -> 5:30pm":
+      body['attend-reception'] === 'on',
     "I'll be attending Pitch Night on Friday Oct 19th from 5pm -> 10pm": body['attend-friday'] === 'on',
     "I'll be attending Sessions Oct 19th from 9am -> 4pm": body['attend-saturday'] === 'on',
     'Directory Permission': body['attendee-directory'] === 'on',

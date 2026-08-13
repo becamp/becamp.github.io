@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import CountdownBar from '../components/CountdownBar.astro';
 
 interface Props {
   title: string;
@@ -23,6 +24,7 @@ const { title, description = 'beCamp is a free, community-run un-conference for 
     <title>{title}</title>
   </head>
   <body class="bg-bg text-white">
+    <CountdownBar />
     <slot />
   </body>
 </html>
