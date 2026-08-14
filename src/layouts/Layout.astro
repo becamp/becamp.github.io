@@ -53,6 +53,27 @@ const ogImage = new URL('/og-image.png', Astro.site);
     <ClientRouter />
   </head>
   <body class="bg-bg text-white">
+    <script>
+      /* iOS WebKit's back-trapping heuristic skips history entries it considers
+         added without user interaction — which includes entries the ClientRouter
+         pushes after its async page fetch. Result: back button / swipe-back
+         jumps clean out of the site. On iOS, mark internal links
+         data-astro-reload so navigation stays native and history correct;
+         everyone else keeps client-side routing. */
+      const isIOS =
+        /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+        (navigator.userAgent.includes('Mac') && navigator.maxTouchPoints > 1); /* iPadOS masquerades as macOS */
+
+      if (isIOS) {
+        const optOut = () => {
+          document.querySelectorAll('a[href^="/"]:not([data-astro-reload])').forEach((a) => {
+            a.setAttribute('data-astro-reload', '');
+          });
+        };
+        optOut();
+        document.addEventListener('astro:page-load', optOut);
+      }
+    </script>
     {countdown && <CountdownBar />}
     <FlameBackdrop />
     <!-- relative lifts all page content above the absolutely-positioned shader,
