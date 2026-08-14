@@ -18,6 +18,13 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Better line breaks on headlines — avoids orphans and lopsided wraps. */
+h1,
+h2,
+h3 {
+  text-wrap: pretty;
+}
+
 button,
 summary,
 label:has(input) {
