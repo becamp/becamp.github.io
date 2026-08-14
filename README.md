@@ -1,43 +1,84 @@
-# Astro Starter Kit: Minimal
+# be.camp
+
+Website for [beCamp](https://be.camp), Charlottesville's free, community-run
+un-conference. Static site built with [Astro](https://astro.build) and Tailwind,
+with event content pulled from Airtable at build time.
+
+The previous site (Nuxt 3) is preserved on the [`becamp-2025`](../../tree/becamp-2025) branch.
+
+## How it fits together
+
+```
+Airtable (Sponsors, Saturday Schedule, Registrations)
+    │  read at build time
+    ▼
+Astro static build ──► GitHub Pages ──► https://be.camp
+                        (deploys on push to main + daily 10:00 UTC cron)
+
+Registration form ──► Vercel function (api/register.ts) ──► Airtable write
+```
+
+- **The site is fully static.** Content changes in Airtable appear after the
+  next build — the daily cron, a push to `main`, or a manual run of the
+  "Deploy to GitHub Pages" workflow (use that to publish the Saturday schedule
+  on Friday night).
+- **Registration** posts to a serverless function hosted on Vercel
+  (`api/register.ts`), which validates (honeypot + optional reCAPTCHA v3) and
+  writes a row to the Registrations table. Field names in that file must match
+  the Airtable column names exactly — Airtable rejects the whole write on any
+  unknown column.
+- **Gated features:** the "Join your N peers" line, the `/attendees` directory,
+  and its nav links all appear automatically once the Registrations table has
+  20+ rows. Attendee avatars come from Gravatar via an md5 of the registration
+  email — emails never reach the client.
+- **Countdown bar** dates live as constants at the top of
+  `src/components/CountdownBar.astro`. It flips to "happening now" during the
+  event and removes itself afterward.
+
+## Local development
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+cp .env.example .env   # fill in what you have; everything degrades gracefully
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Without Airtable credentials the build uses empty content. Set
+`USE_FAKE_DATA=true` to preview the registrant count and attendee directory
+with sample data.
 
-## 🚀 Project Structure
+| Command           | Action                                     |
+| :---------------- | :----------------------------------------- |
+| `npm run dev`     | Dev server at `localhost:4321`             |
+| `npm run build`   | Production build to `./dist/`              |
+| `npm run preview` | Serve the production build locally         |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Environment
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+See [`.env.example`](.env.example) for the full annotated list. In short:
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+| Variable | Where | Purpose |
+| :-- | :-- | :-- |
+| `AIRTABLE_READ_TOKEN` | CI (Actions secret) | Read-scoped PAT for builds |
+| `AIRTABLE_TOKEN` | Vercel | Write-scoped PAT for the registration function |
+| `AIRTABLE_BASE_ID` | CI + Vercel | The beCamp base |
+| `AIRTABLE_TABLE` | Vercel | Registrations table name |
+| `PUBLIC_RECAPTCHA_SITE_KEY` / `RECAPTCHA_SECRET_KEY` | CI / Vercel | Optional bot protection |
+| `PUBLIC_FORM_ENDPOINT` | CI | Where the form posts (the Vercel function URL) |
+| `USE_FAKE_DATA` | anywhere | `true` fakes registrant count + attendee directory for preview |
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+A build **fails loudly** if credentials are present but an Airtable fetch
+errors — better a red build than the cron silently publishing a site with no
+sponsors or schedule.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Deployment
 
-## 🧞 Commands
+Pushing to `main` (or the daily cron) runs
+[`deploy-pages.yml`](.github/workflows/deploy-pages.yml), which builds and
+deploys to GitHub Pages. Third-party actions are pinned to commit SHAs because
+the job holds the Airtable token. The custom domain is pinned by
+[`public/CNAME`](public/CNAME).
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The registration function deploys separately via the Vercel project connected
+to this repo. Its origin allowlist lives at the top of
+[`api/register.ts`](api/register.ts).
