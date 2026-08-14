@@ -34,7 +34,7 @@ const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, '');
       {premier.length > 0 ? (
         <div class="mt-12 flex flex-col gap-12 pb-12">
           {premier.map((sponsor) => (
-            <div id={sponsor.slug} class="flex scroll-mt-8 flex-col gap-6 lg:flex-row lg:gap-16">
+            <div id={sponsor.slug} class="flex scroll-mt-16 flex-col gap-6 lg:flex-row lg:gap-16">
               <div class="flex h-[185px] w-full max-w-[413px] shrink-0 items-center justify-center border border-white/[0.08] bg-white/[0.03] p-8">
                 {sponsor.logo ? (
                   <Image
@@ -77,7 +77,7 @@ const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, '');
             href={sponsor.url}
             target="_blank"
             rel="noopener"
-            class="flex h-32 scroll-mt-8 items-center justify-center border border-white/[0.08] bg-white/[0.03] p-6 transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08]"
+            class="flex h-32 scroll-mt-16 items-center justify-center border border-white/[0.08] bg-white/[0.03] p-6 transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08]"
           >
             {sponsor.logo ? (
               <Image
