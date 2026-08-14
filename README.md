@@ -85,4 +85,4 @@ to this repo. Its origin allowlist lives at the top of
 
 ---
 
-Made in C'ville by [Scale](https://scale.agency).
+Made in CVille | Designed by [Scale](https://scale.agency), co-built with [Claude Code](https://claude.com/claude-code)
