@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Page not found — beCamp"
+  description="That page doesn't exist. beCamp is a free, community-run un-conference for the Charlottesville tech community."
+>
+  <Header />
+  <main>
+    <PageHero label="404" title="This page pitched, but didn't get picked">
+      <p class="mt-5 max-w-[567px] text-base leading-relaxed text-white/80">
+        The page you're looking for doesn't exist — maybe it never did, or maybe it
+        moved. The schedule gets rebuilt every year; apparently so do our URLs.
+      </p>
+      <div class="mt-12 flex flex-col gap-4 sm:flex-row">
+        <Button href="/" class="w-full sm:w-auto sm:px-12">Back to the homepage</Button>
+        <Button href="/register" variant="secondary" class="w-full sm:w-auto sm:px-12">Register for beCamp</Button>
+      </div>
+    </PageHero>
+  </main>
+  <Footer />
+</Layout>
