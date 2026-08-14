@@ -110,7 +110,8 @@ const FAKE_REGISTRANT_COUNT = 78;
    people have registered (threshold ported from the old be.camp). */
 export const REGISTRANT_THRESHOLD = 20;
 
-const REGISTRATIONS_TABLE = import.meta.env.AIRTABLE_TABLE || 'Registrations';
+/* The live base's table is named Guests (verified against an export). */
+const REGISTRATIONS_TABLE = import.meta.env.AIRTABLE_TABLE || 'Guests';
 
 /* Total rows in the table the registration form writes to. Memoized: Header and
    Footer ask on every page, and the count shouldn't be fetched once per page
