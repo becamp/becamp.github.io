@@ -82,3 +82,7 @@ the job holds the Airtable token. The custom domain is pinned by
 The registration function deploys separately via the Vercel project connected
 to this repo. Its origin allowlist lives at the top of
 [`api/register.ts`](api/register.ts).
+
+---
+
+Made in C'ville by [Scale](https://scale.agency).
