@@ -53,7 +53,9 @@ const { premier, regular } = await getSponsors();
   <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
     {regular.map((sponsor) => (
       <a
-        href={`/sponsors#${sponsor.slug}`}
+        href={sponsor.url ?? `/sponsors#${sponsor.slug}`}
+        target={sponsor.url ? '_blank' : undefined}
+        rel={sponsor.url ? 'noopener' : undefined}
         class="flex h-32 items-center justify-center border border-white/[0.08] bg-white/[0.03] p-6 transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08]"
       >
         {sponsor.logo ? (

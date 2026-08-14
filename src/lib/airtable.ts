@@ -59,16 +59,19 @@ export async function getSponsors(): Promise<{ premier: Sponsor[]; regular: Spon
     .filter((r) => r.fields['Sponsor'])
     .map((r) => {
       const logo = r.fields['Logo']?.[0];
+      /* Trimmed: stray whitespace in the Airtable cell (" SpiffWorks") would
+         otherwise break the alphabetical sort. */
+      const name = String(r.fields['Sponsor']).trim();
       return {
-        name: r.fields['Sponsor'],
-        slug: slugify(r.fields['Sponsor']),
+        name,
+        slug: slugify(name),
         level: r.fields['Level'] ?? 'Sponsor',
         url: r.fields['Url'],
         writeup: r.fields['Write up'],
         logo: logo ? { url: logo.url, width: logo.width, height: logo.height } : undefined,
       };
     })
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
 
   return {
     premier: sponsors.filter((s) => s.level === 'Premier Sponsor'),
