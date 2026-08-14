@@ -213,12 +213,29 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
         form.dataset.recaptchaBound = '1';
         form.addEventListener('submit', (e) => {
           if (tokenInput.value) return;
+          /* Content blockers can keep the reCAPTCHA script from loading or its
+             token fetch from resolving. Never leave the button silently dead:
+             fall through to a plain submit so the visitor at least gets the
+             server's error banner. */
+          if (typeof grecaptcha === 'undefined') return;
           e.preventDefault();
+          const proceed = () => {
+            if (!tokenInput.value) tokenInput.value = 'unavailable';
+            form.submit();
+          };
+          const fallback = setTimeout(proceed, 5000);
           grecaptcha.ready(() => {
-            grecaptcha.execute(recaptchaSiteKey, { action: 'register' }).then((token) => {
-              tokenInput.value = token;
-              form.submit();
-            });
+            grecaptcha
+              .execute(recaptchaSiteKey, { action: 'register' })
+              .then((token) => {
+                clearTimeout(fallback);
+                tokenInput.value = token;
+                form.submit();
+              })
+              .catch(() => {
+                clearTimeout(fallback);
+                proceed();
+              });
           });
         });
       };
