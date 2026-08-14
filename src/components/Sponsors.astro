@@ -31,7 +31,7 @@ const { premier, regular } = await getSponsors();
     {premier.map((sponsor) => (
       <a
         href={`/sponsors#${sponsor.slug}`}
-        class="flex aspect-square items-center justify-center border border-white/[0.08] bg-white/[0.03] p-10 transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08] lg:p-25"
+        class="flex aspect-square items-center justify-center border border-white/[0.08] bg-white/[0.03] p-10 transition-colors duration-150 hover:border-primary/60 hover:bg-white/[0.08] lg:p-16"
       >
         {sponsor.logo ? (
           <Image
@@ -39,7 +39,7 @@ const { premier, regular } = await getSponsors();
             width={sponsor.logo.width}
             height={sponsor.logo.height}
             alt={sponsor.name}
-            class="max-h-full w-full object-contain brightness-0 invert"
+            class="h-18 w-56 max-w-full object-contain brightness-0 invert"
           />
         ) : (
           <span class="text-center text-xl font-medium text-white">{sponsor.name}</span>
@@ -62,7 +62,7 @@ const { premier, regular } = await getSponsors();
             width={sponsor.logo.width}
             height={sponsor.logo.height}
             alt={sponsor.name}
-            class="max-h-full w-auto object-contain brightness-0 invert"
+            class="h-14 w-44 max-w-full object-contain brightness-0 invert"
           />
         ) : (
           <span class="text-center text-lg font-medium text-white">{sponsor.name}</span>
