@@ -99,10 +99,11 @@ export const TIME_SLOTS = [
   '5:00pm - 7:00pm',
 ];
 
-/* LAUNCH FLIP: one switch for all preview data. While true, the registrant count
-   and the attendee directory are faked so the team can review the gated UI before
-   real registrations exist. Set to false at launch to use Airtable. */
-const USE_FAKE_DATA = true;
+/* One switch for all preview data: set the USE_FAKE_DATA env var to "true" to
+   fake the registrant count and attendee directory so the gated UI can be
+   reviewed before real registrations exist. Unset (the default, and what
+   production builds use) reads real Airtable data. */
+const USE_FAKE_DATA = import.meta.env.USE_FAKE_DATA === 'true';
 const FAKE_REGISTRANT_COUNT = 78;
 
 /* The peer-count line and the attendee directory stay hidden until this many
