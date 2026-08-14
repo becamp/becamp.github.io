@@ -7,9 +7,11 @@
 <!-- Geometry mirrors the homepage hero's original box (below the countdown bar
      and header) so the composition sits exactly where the design placed it,
      on every page. -->
+<!-- hidden sm:block: no shader (or fallback) on phones — it sat behind the text
+     and hurt readability. -->
 <div
   transition:persist="hero-shader"
-  class="pointer-events-none absolute inset-x-0 top-[128px] h-[869px] overflow-hidden sm:top-[156px] sm:h-[645px]"
+  class="pointer-events-none absolute inset-x-0 top-[128px] hidden h-[869px] overflow-hidden sm:top-[156px] sm:block sm:h-[645px]"
   aria-hidden="true"
 >
   <canvas id="hero-shader" class="absolute inset-0 size-full"></canvas>
@@ -88,7 +90,15 @@
     document.getElementById('hero-shader-fallback')?.classList.remove('hidden');
   };
 
+  /* The backdrop is display:none below sm — don't burn a GPU context for a
+     canvas nobody sees. Re-inits if the viewport later crosses the breakpoint. */
+  const desktopViewport = window.matchMedia('(min-width: 640px)');
+
   const init = () => {
+    if (!desktopViewport.matches) {
+      teardown();
+      return;
+    }
     const canvas = document.getElementById('hero-shader') as HTMLCanvasElement | null;
     if (canvas && canvas === activeCanvas && activeShader) {
       /* Persisted across navigation — keep the running instance, just re-assert
@@ -217,4 +227,5 @@
   };
 
   document.addEventListener('astro:page-load', init);
+  desktopViewport.addEventListener('change', init);
 </script>
