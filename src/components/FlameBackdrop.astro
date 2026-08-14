@@ -13,6 +13,15 @@
   aria-hidden="true"
 >
   <canvas id="hero-shader" class="absolute inset-0 size-full"></canvas>
+  <!-- Static impression of the shader — the flame mark under a soft glow —
+       revealed when WebGPU is unavailable (older Safari), the GPU fails
+       terminally, or the visitor prefers reduced motion. -->
+  <div id="hero-shader-fallback" class="absolute inset-0 hidden">
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:left-[70%]">
+      <div class="absolute inset-0 scale-[1.7] rounded-full bg-[#FF750F] opacity-25 blur-[90px]"></div>
+      <img src="/shader-flame.svg" alt="" width="480" height="479" class="relative w-[min(480px,85vw)]" />
+    </div>
+  </div>
 </div>
 
 <script>
@@ -67,6 +76,18 @@
     activeCanvas = null;
   };
 
+  /* Reasons the library reports exactly once when the shader will never draw —
+     the cue to show the static fallback (docs: ShaderOptions.onError). */
+  const TERMINAL_REASONS = new Set([
+    'unsupported', 'no-adapter', 'no-device', 'init-failed', 'device-lost',
+    'out-of-memory', 'gpu-error', 'render-failed', 'limit-exceeded',
+    'unrecoverable', 'rebuild_failed',
+  ]);
+
+  const showFallback = () => {
+    document.getElementById('hero-shader-fallback')?.classList.remove('hidden');
+  };
+
   const init = () => {
     const canvas = document.getElementById('hero-shader') as HTMLCanvasElement | null;
     if (canvas && canvas === activeCanvas && activeShader) {
@@ -77,7 +98,11 @@
     }
     teardown();
     const gen = ++generation;
-    if (!canvas || reducedMotion) return;
+    if (!canvas) return;
+    if (reducedMotion) {
+      showFallback();
+      return;
+    }
     activeCanvas = canvas;
     const shift = leftShift();
 
@@ -131,6 +156,10 @@
           },
         },
       ],
+    }, {
+      onError: (reason: string) => {
+        if (TERMINAL_REASONS.has(reason)) showFallback();
+      },
     })
       .then((shader) => {
         if (gen !== generation) {
@@ -181,7 +210,10 @@
           }
         }, 500);
       })
-      .catch((err) => console.error('Hero shader failed to load', err));
+      .catch((err) => {
+        console.error('Hero shader failed to load', err);
+        showFallback();
+      });
   };
 
   document.addEventListener('astro:page-load', init);
