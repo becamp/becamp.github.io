@@ -34,7 +34,10 @@ const photos = [
 ];
 ---
 
-<div class="relative left-1/2 mt-16 w-screen -translate-x-1/2 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_2%,black_98%,transparent)]">
+<!-- w-full, not w-screen: 100vw includes the scrollbar width on systems with
+     classic scrollbars, which caused a page-wide horizontal scroll. The parent
+     has no horizontal padding, so w-full is already full-bleed. -->
+<div class="relative mt-16 w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_2%,black_98%,transparent)]">
   <div class="flex w-max animate-marquee items-center gap-5 hover:[animation-play-state:paused] motion-reduce:animate-none">
     {[...photos, ...photos].map((photo) => (
       <Image
