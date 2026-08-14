@@ -24,11 +24,11 @@ Registration form ──► Vercel function (api/register.ts) ──► Airtable
   on Friday night).
 - **Registration** posts to a serverless function hosted on Vercel
   (`api/register.ts`), which validates (honeypot + optional reCAPTCHA v3) and
-  writes a row to the Registrations table. Field names in that file must match
-  the Airtable column names exactly — Airtable rejects the whole write on any
+  writes a row to the Guests table. Field names in that file must match the
+  Airtable column names exactly — Airtable rejects the whole write on any
   unknown column.
 - **Gated features:** the "Join your N peers" line, the `/attendees` directory,
-  and its nav links all appear automatically once the Registrations table has
+  and its nav links all appear automatically once the Guests table has
   20+ rows. Attendee avatars come from Gravatar via an md5 of the registration
   email — emails never reach the client.
 - **Countdown bar** dates live as constants at the top of
@@ -62,14 +62,31 @@ See [`.env.example`](.env.example) for the full annotated list. In short:
 | `AIRTABLE_READ_TOKEN` | CI (Actions secret) | Read-scoped PAT for builds |
 | `AIRTABLE_TOKEN` | Vercel | Write-scoped PAT for the registration function |
 | `AIRTABLE_BASE_ID` | CI + Vercel | The beCamp base |
-| `AIRTABLE_TABLE` | Vercel | Registrations table name |
+| `AIRTABLE_TABLE` | Vercel | Registrations table name (`Guests`) |
 | `PUBLIC_RECAPTCHA_SITE_KEY` / `RECAPTCHA_SECRET_KEY` | CI / Vercel | Optional bot protection |
 | `PUBLIC_FORM_ENDPOINT` | CI | Where the form posts (the Vercel function URL) |
-| `USE_FAKE_DATA` | anywhere | `true` fakes registrant count + attendee directory for preview |
+| `USE_FAKE_DATA` | `.env` / Actions **variable** | `true` fakes registrant count + attendee directory for preview |
 
 A build **fails loudly** if credentials are present but an Airtable fetch
 errors — better a red build than the cron silently publishing a site with no
 sponsors or schedule.
+
+### Fake data on the live site
+
+Until real registrations pass 20, the gated features can be previewed publicly
+with sample data (78 registrants, 26 invented attendees). The switch is the
+`USE_FAKE_DATA` **repository variable** — repo Settings → Secrets and
+variables → Actions → Variables — read by the deploy workflow. No code change
+involved:
+
+```sh
+gh variable set USE_FAKE_DATA --body false   # or true
+gh workflow run "Deploy to GitHub Pages"     # or wait for the daily cron
+```
+
+Anything other than `true` (including the variable not existing) means real
+Airtable data, so the site fails safe to honest numbers. **Set it to `false`
+at launch.**
 
 ## Deployment
 
