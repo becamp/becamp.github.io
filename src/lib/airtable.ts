@@ -27,6 +27,19 @@ async function fetchAll(table: string, params: string): Promise<AirtableRecord[]
     console.warn(`[airtable] credentials missing, skipping ${table}`);
     return [];
   }
+  /* Content-independent deploys (copy tweaks, styling) can skip the API
+     entirely and build from the last snapshot: commit with "[skip airtable]"
+     or check the box on a manual workflow run. Falls through to a live fetch
+     when no snapshot exists. */
+  if (import.meta.env.AIRTABLE_USE_SNAPSHOT === 'true') {
+    try {
+      const cached: AirtableRecord[] = JSON.parse(readFileSync(snapshotPath(table, params), 'utf8'));
+      console.log(`[airtable] ${table}: using snapshot (${cached.length} records), API not queried`);
+      return cached;
+    } catch {
+      console.warn(`[airtable] ${table}: snapshot requested but none found — fetching live`);
+    }
+  }
   try {
     const records: AirtableRecord[] = [];
     let offset = '';

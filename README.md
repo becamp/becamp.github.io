@@ -67,6 +67,11 @@ See [`.env.example`](.env.example) for the full annotated list. In short:
 | `PUBLIC_FORM_ENDPOINT` | CI | Where the form posts (the Vercel function URL) |
 | `USE_FAKE_DATA` | `.env` / Actions **variable** | `true` fakes registrant count + attendee directory for preview |
 
+Deploys that don't touch event content (copy, styling, layout) can **skip the
+Airtable API entirely** and build from the last snapshot: put `[skip airtable]`
+in the commit message, or tick the checkbox on a manual workflow run. The daily
+cron always fetches fresh, so content is never more than a day stale.
+
 If an Airtable fetch fails (outage, API quota exhausted), the build falls back
 to the **snapshot from the last successful build** — republishing
 stale-but-real content with a warning annotation on the Actions run — kept
