@@ -13,19 +13,10 @@ const registrantCount = await getRegistrantCount();
   <div class="pointer-events-none relative px-5 pt-12 pb-16 sm:px-20 sm:pt-24">
     <div class="pointer-events-auto max-w-[660px]">
     <p class="font-mono text-sm text-primary">October 2–3 in Charlottesville, VA</p>
-    <div class="relative">
-      <!-- Stamp above the headline on phones (no room beside it); pinned to the
-           headline's top right from sm up. -->
-      <span
-        class="mt-4 -mb-1 ml-auto block w-fit rotate-6 border border-primary bg-bg/80 px-3 py-1.5 font-mono text-xs uppercase tracking-widest text-primary sm:absolute sm:-top-2 sm:right-0 sm:m-0"
-      >
-        20 years running
-      </span>
-      <h1 class="mt-3 text-4xl font-medium leading-none tracking-[-0.64px] text-white sm:text-[64px]">
-        Charlottesville's<br />
-        <span class="whitespace-nowrap">un-conference</span>
-      </h1>
-    </div>
+    <h1 class="mt-3 text-4xl font-medium leading-none tracking-[-0.64px] text-white sm:text-[64px]">
+      Charlottesville's<br />
+      <span class="whitespace-nowrap">un-conference</span>
+    </h1>
     <p class="mt-4 text-base text-white/80">The tech conference planned by the people who show up.</p>
     {registrantCount >= 20 && (
       <p class="mt-2 font-mono text-sm text-primary">Join your {registrantCount} peers at beCamp!</p>
