@@ -79,6 +79,7 @@ export interface Sponsor {
   name: string;
   slug: string;
   level: string;
+  cash: number;
   url?: string;
   writeup?: string;
   logo?: { url: string; width: number; height: number };
@@ -106,12 +107,14 @@ export async function getSponsors(): Promise<{ premier: Sponsor[]; regular: Spon
         name,
         slug: slugify(name),
         level: r.fields['Level'] ?? 'Sponsor',
+        cash: Number(r.fields['Cash budget']) || 0,
         url: r.fields['Url'],
         writeup: r.fields['Write up'],
         logo: logo ? { url: logo.url, width: logo.width, height: logo.height } : undefined,
       };
     })
-    .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
+    /* Biggest contribution first; alphabetical between equal contributions. */
+    .sort((a, b) => b.cash - a.cash || a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
 
   return {
     premier: sponsors.filter((s) => s.level === 'Premier Sponsor'),
