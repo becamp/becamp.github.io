@@ -99,7 +99,6 @@ export const TIME_SLOTS = [
   '2:50pm - 3:35pm',
   '3:40pm - 4:05pm',
   '4:05pm - Whenever',
-  '5:00pm - 7:00pm',
 ];
 
 /* One switch for all preview data: set the USE_FAKE_DATA env var to "true" to
