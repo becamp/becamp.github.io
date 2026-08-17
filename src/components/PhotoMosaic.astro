@@ -1,7 +1,10 @@
 ---
 import { Image } from 'astro:assets';
-import eventPhotoA from '../assets/images/event-photo-a.jpg';
-import eventPhotoB from '../assets/images/event-photo-b.jpg';
+import pitchNightBrickLoft from '../assets/images/becamp-pitch-night-brick-loft.webp';
+import pitchBoardStickyNotes from '../assets/images/becamp-pitch-board-sticky-notes.webp';
+import womenInTech from '../assets/images/becamp-charlottesville-women-in-tech.webp';
+import crowdTimberLoft from '../assets/images/becamp-crowd-gathered-timber-loft.webp';
+import lightningTalk from '../assets/images/becamp-lightning-talk-presentation.webp';
 import speakerPresenting from '../assets/images/becamp-speaker-presenting-charlottesville.webp';
 import panelDiscussion from '../assets/images/becamp-panel-discussion-organizers.webp';
 import glassConferenceRoom from '../assets/images/becamp-session-glass-conference-room.webp';
@@ -17,8 +20,8 @@ import conversationBrickLoft from '../assets/images/becamp-attendees-conversatio
 /* Strict landscape/portrait alternation; the marquee loops, so the count stays even
    (one portrait repeats) to keep the cadence unbroken across the seam. */
 const photos = [
-  { src: eventPhotoA, alt: 'Attendees networking at beCamp', orientation: 'landscape' },
-  { src: eventPhotoB, alt: "A beCamp session's sticky-note pitch board", orientation: 'portrait' },
+  { src: pitchNightBrickLoft, alt: "An attendee pitches a session topic at beCamp's Pitch Night", orientation: 'landscape' },
+  { src: pitchBoardStickyNotes, alt: 'A presenter walks through the sticky-note pitch board at beCamp', orientation: 'portrait' },
   { src: speakerPresenting, alt: 'A speaker presenting to beCamp attendees in Charlottesville', orientation: 'landscape' },
   { src: panelDiscussion, alt: 'beCamp organizers leading a panel discussion', orientation: 'portrait' },
   { src: glassConferenceRoom, alt: 'A beCamp session underway in a glass conference room', orientation: 'landscape' },
@@ -30,7 +33,9 @@ const photos = [
   { src: coworkingSpace, alt: 'The beCamp venue buzzing between sessions', orientation: 'landscape' },
   { src: discussionCircle, alt: 'An unconference discussion circle at beCamp', orientation: 'portrait' },
   { src: conversationBrickLoft, alt: 'beCamp attendees in conversation at the venue', orientation: 'landscape' },
-  { src: eventPhotoB, alt: 'A packed schedule board at beCamp', orientation: 'portrait' },
+  { src: womenInTech, alt: 'Charlottesville Women in Tech members at beCamp', orientation: 'portrait' },
+  { src: crowdTimberLoft, alt: 'The beCamp crowd gathered beneath the timber rafters', orientation: 'landscape' },
+  { src: lightningTalk, alt: 'A lightning talk presentation at beCamp', orientation: 'portrait' },
 ];
 ---
 
