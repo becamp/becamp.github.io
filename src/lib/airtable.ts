@@ -201,10 +201,11 @@ export async function getSaturdaySchedule(): Promise<Session[]> {
   return records
     .filter((r) => r.fields['Topic'] && r.fields['Time'])
     .map((r) => ({
-      topic: r.fields['Topic'],
-      speaker: r.fields['Speaker'],
+      topic: String(r.fields['Topic']).trim(),
+      speaker: r.fields['Speaker']?.trim(),
       time: r.fields['Time'],
-      location: r.fields['Location'],
+      /* Airtable room names arrive like "Breakout_Room_1" — display with spaces. */
+      location: r.fields['Location']?.replace(/_/g, ' ').trim(),
       type: r.fields['Type'],
     }));
 }
