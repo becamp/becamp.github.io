@@ -8,6 +8,10 @@ interface Props {
 const { class: className = '' } = Astro.props;
 ---
 
-<a href="/" class={`block size-10 shrink-0 ${className}`} aria-label="beCamp home">
-  <img src={logoMark.src} alt="" width="40" height="40" />
+<a href="/" class={`flex w-fit shrink-0 items-center gap-2.5 ${className}`} aria-label="beCamp home">
+  <img src={logoMark.src} alt="" width="40" height="40" class="size-10 max-w-none" />
+  <span class="h-[35px] w-px bg-white/20 max-[359px]:hidden" aria-hidden="true"></span>
+  <span class="text-base font-medium tracking-[-0.07em] whitespace-nowrap text-white max-[359px]:hidden"
+    >20<sup class="text-[0.5em] tracking-[-0.04em]">th</sup> anniversary</span
+  >
 </a>
