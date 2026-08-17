@@ -21,6 +21,16 @@ jobs:
       # Third-party actions pinned to commit SHAs: this job holds the Airtable
       # token, and a mutable tag could be repointed at attacker code.
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # Airtable snapshot from the last successful build: if Airtable is down or
+      # the API quota is exhausted, the build republishes this stale-but-real
+      # data instead of failing. Each run restores the newest snapshot and saves
+      # its own under a unique key.
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .airtable-cache
+          key: airtable-snapshot-${{ github.run_id }}
+          restore-keys: |
+            airtable-snapshot-
       - uses: withastro/action@56781b97402ce0487b7e61ce2cb960c0e2cc5289 # v3
         with:
           node-version: 22

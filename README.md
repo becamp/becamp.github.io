@@ -67,9 +67,12 @@ See [`.env.example`](.env.example) for the full annotated list. In short:
 | `PUBLIC_FORM_ENDPOINT` | CI | Where the form posts (the Vercel function URL) |
 | `USE_FAKE_DATA` | `.env` / Actions **variable** | `true` fakes registrant count + attendee directory for preview |
 
-A build **fails loudly** if credentials are present but an Airtable fetch
-errors — better a red build than the cron silently publishing a site with no
-sponsors or schedule.
+If an Airtable fetch fails (outage, API quota exhausted), the build falls back
+to the **snapshot from the last successful build** — republishing
+stale-but-real content with a warning annotation on the Actions run — kept
+warm across CI runs by `actions/cache`. Only when there's no snapshot to fall
+back on does the build **fail loudly**; it never silently publishes a hollow
+site.
 
 ### Fake data on the live site
 

@@ -1,10 +1,13 @@
 /* Build-time Airtable fetches. The site is static: this runs during `astro build`,
    so content changes in Airtable appear after the next rebuild (daily cron or manual).
-   Missing credentials degrade to empty data so local dev works; a FAILED fetch with
-   credentials present throws and fails the build — better a red build than the cron
-   silently publishing a site with no sponsors or schedule. */
+   Missing credentials degrade to empty data so local dev works. A FAILED fetch with
+   credentials present falls back to the snapshot saved by the last successful fetch
+   (kept warm in CI by actions/cache) so an Airtable outage or API-quota exhaustion
+   republishes stale-but-real content; with no snapshot to fall back on, the build
+   fails loudly — never a silently hollow site. */
 
 import { createHash } from 'node:crypto';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const { AIRTABLE_TOKEN, AIRTABLE_BASE_ID } = import.meta.env;
 
@@ -13,24 +16,48 @@ interface AirtableRecord {
   fields: Record<string, any>;
 }
 
+const SNAPSHOT_DIR = '.airtable-cache';
+/* Keyed by table AND query params — the Guests table is fetched with different
+   field sets for the count and the directory. */
+const snapshotPath = (table: string, params: string) =>
+  `${SNAPSHOT_DIR}/${table.replace(/[^a-z0-9]+/gi, '-')}-${createHash('md5').update(params).digest('hex').slice(0, 8)}.json`;
+
 async function fetchAll(table: string, params: string): Promise<AirtableRecord[]> {
   if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID) {
     console.warn(`[airtable] credentials missing, skipping ${table}`);
     return [];
   }
-  const records: AirtableRecord[] = [];
-  let offset = '';
-  do {
-    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}?${params}${offset ? `&offset=${offset}` : ''}`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` } });
-    if (!res.ok) {
-      throw new Error(`[airtable] ${table} fetch failed: ${res.status} ${await res.text()}`);
+  try {
+    const records: AirtableRecord[] = [];
+    let offset = '';
+    do {
+      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}?${params}${offset ? `&offset=${offset}` : ''}`;
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` } });
+      if (!res.ok) {
+        throw new Error(`[airtable] ${table} fetch failed: ${res.status} ${await res.text()}`);
+      }
+      const data = await res.json();
+      records.push(...data.records);
+      offset = data.offset ?? '';
+    } while (offset);
+    try {
+      mkdirSync(SNAPSHOT_DIR, { recursive: true });
+      writeFileSync(snapshotPath(table, params), JSON.stringify(records));
+    } catch {
+      /* snapshot write is best-effort */
     }
-    const data = await res.json();
-    records.push(...data.records);
-    offset = data.offset ?? '';
-  } while (offset);
-  return records;
+    return records;
+  } catch (err) {
+    let stale: AirtableRecord[];
+    try {
+      stale = JSON.parse(readFileSync(snapshotPath(table, params), 'utf8'));
+    } catch {
+      throw err; /* no snapshot — fail loudly rather than publish a hollow site */
+    }
+    /* ::warning:: surfaces as an annotation on the GitHub Actions run. */
+    console.warn(`::warning::[airtable] ${table} fetch failed — using stale snapshot (${stale.length} records). ${err}`);
+    return stale;
+  }
 }
 
 const slugify = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
