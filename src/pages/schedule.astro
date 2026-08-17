@@ -21,6 +21,12 @@ const pitchNightRows = [
 /* Sessions come from the Airtable "Saturday Schedule" table at build time. Slots
    without sessions stay visible as open placeholders — empty slots are the point. */
 const sessions = await getSaturdaySchedule();
+
+/* Until the schedule is real, the grid renders as a magazine-style teaser:
+   blurred, faded, and cut off after a few rows. Any build after Pitch Night
+   wraps shows the full schedule, so the Friday-night publish rebuild reveals
+   it automatically. */
+const schedulePreview = Date.now() < new Date('2026-10-02T20:30:00-04:00').getTime();
 const scheduleRows = TIME_SLOTS.map((slot) => ({
   time: slot,
   sessions: sessions.filter((s) => s.time === slot),
@@ -116,7 +122,18 @@ const placeholderRows = [
         <TextLink href="https://www.google.com/maps/place/School+of+Data+Science/data=!4m2!3m1!1s0x0:0x4105c4fd4e527c99?sa=X&ved=1t:2428&ictx=111" external class="text-base">Get Directions →</TextLink>
       </div>
 
-      <div class="mt-12 divide-y divide-divider border-y border-divider">
+      <!-- Magazine-teaser treatment while the schedule is preliminary: the grid
+           is blurred, cut off after the first two time slots, and faded out,
+           with a caption naming the reveal. Builds after Pitch Night render
+           the full grid untouched. -->
+      <div class={schedulePreview ? 'relative' : ''}>
+      <!-- The mask lives on the clipping window (not the grid) so the fade
+           always completes before the cutoff — no hard edge. -->
+      <div class={schedulePreview ? 'max-h-[400px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_40%,transparent_97%)] sm:max-h-[320px]' : ''}>
+      <div
+        class={`mt-12 divide-y divide-divider border-y border-divider ${schedulePreview ? 'pointer-events-none select-none blur-[3px]' : ''}`}
+        aria-hidden={schedulePreview ? 'true' : undefined}
+      >
         {sessions.length > 0
           ? scheduleRows.map((row) => (
               <div class="flex flex-col gap-3 py-5 sm:flex-row sm:gap-0">
@@ -157,6 +174,13 @@ const placeholderRows = [
                 )}
               </div>
             ))}
+      </div>
+      </div>
+      {schedulePreview && (
+        <p class="absolute inset-x-0 top-[160px] px-5 text-center font-mono text-base text-white sm:top-1/2 sm:-translate-y-1/2">
+          Schedule to be determined Friday night, October 2nd
+        </p>
+      )}
       </div>
     </section>
 
