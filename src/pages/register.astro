@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import check from '../assets/icons/check.svg';
+import { SPONSOR_EMAIL } from '../lib/sponsorship';
 
 /* Submissions post to /api/register, which maps these field names to Airtable columns. */
 const attendanceOptions = [
@@ -43,6 +44,22 @@ const volunteerOptions = [
 /* reCAPTCHA v3 activates when PUBLIC_RECAPTCHA_SITE_KEY is set; the honeypot works regardless. */
 const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 
+/* Must match HONEYPOT_FIELD in api/register.ts. Deliberately meaningless — a
+   field named "website" gets autofilled by password managers, which silently
+   threw real registrations away behind a success banner. */
+const honeypotField = 'bc-hp';
+
+/* The endpoint reports why it failed via ?reason=; each gets copy the visitor
+   can act on instead of one undifferentiated "try again". */
+const errorCopy: Record<string, string> = {
+  missing: 'We need both a name and an email address to register you. Please fill those in and submit again.',
+  captcha: "Our spam check flagged this submission. If you're a human — and you almost certainly are — email us and we'll register you by hand.",
+  airtable: "We couldn't save your registration just now. Please try again in a minute.",
+  config: "The registration system is misconfigured on our end. Please email us and we'll sort it out.",
+  server: 'Something went wrong on our end. Please try again.',
+};
+const DEFAULT_ERROR = 'Something went wrong submitting your registration. Please try again.';
+
 /* The site is static; submissions go to the registration function hosted on Vercel. */
 const formEndpoint = import.meta.env.PUBLIC_FORM_ENDPOINT || '/api/register';
 
@@ -67,8 +84,17 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
     <div id="form-status-success" class="mx-5 mb-6 hidden max-w-[800px] border border-primary bg-primary/10 px-5 py-4 text-base text-white sm:mx-20">
       You're registered! See you in October.
     </div>
-    <div id="form-status-error" class="mx-5 mb-6 hidden max-w-[800px] border border-red-400 bg-red-400/10 px-5 py-4 text-base text-white sm:mx-20">
-      Something went wrong submitting your registration. Please try again.
+    <div
+      id="form-status-error"
+      data-error-copy={JSON.stringify(errorCopy)}
+      class="mx-5 mb-6 hidden max-w-[800px] border border-red-400 bg-red-400/10 px-5 py-4 text-base text-white sm:mx-20"
+    >
+      <p id="form-status-error-message">{DEFAULT_ERROR}</p>
+      <p class="mt-2 text-sm text-[#a3adc6]">
+        Still stuck? Email{' '}
+        <a href={`mailto:${SPONSOR_EMAIL}?subject=${encodeURIComponent('beCamp: registration trouble')}`} class="text-primary underline">{SPONSOR_EMAIL}</a>{' '}
+        and we'll register you directly. Your details are kept below so you don't have to retype them.
+      </p>
     </div>
 
     <form
@@ -76,11 +102,12 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
       method="POST"
       action={formEndpoint}
       data-astro-reload
+      data-honeypot={honeypotField}
       class="relative mx-5 mb-24 flex max-w-[800px] flex-col gap-9 border border-white/15 bg-[#0b0e2d] p-6 drop-shadow-[0px_16px_16px_rgba(0,0,0,0.25)] sm:mx-20 sm:p-12"
     >
       <div class="absolute -left-[9999px] top-0" aria-hidden="true">
-        <label for="website">Leave this field empty</label>
-        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        <label for={honeypotField}>Leave this field empty</label>
+        <input id={honeypotField} name={honeypotField} type="text" tabindex="-1" autocomplete="off" />
       </div>
       <input type="hidden" name="recaptcha-token" id="recaptcha-token" />
       <fieldset class="flex flex-col gap-6">
@@ -191,7 +218,7 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
       </fieldset>
 
       <div class="flex flex-col gap-5 pt-3">
-        <button type="submit" class="w-full bg-primary px-8 py-4 font-mono text-lg font-semibold text-bg">
+        <button id="registration-submit" type="submit" class="w-full bg-primary px-8 py-4 font-mono text-lg font-semibold text-bg disabled:opacity-60">
           Submit Registration
         </button>
       </div>
@@ -213,15 +240,26 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
         form.dataset.recaptchaBound = '1';
         form.addEventListener('submit', (e) => {
           if (tokenInput.value) return;
-          /* Content blockers can keep the reCAPTCHA script from loading or its
-             token fetch from resolving. Never leave the button silently dead:
-             fall through to a plain submit so the visitor at least gets the
-             server's error banner. */
+          /* Content blockers can keep the reCAPTCHA script from loading at all.
+             Fall through to a plain submit — the server treats a missing token
+             as "unverified", not as "bot", so the registration still lands. */
           if (typeof grecaptcha === 'undefined') return;
           e.preventDefault();
+          /* Both the timeout and the promise can reach the finish line; without
+             this the form POSTs twice and Airtable gets a duplicate row. */
+          let submitted = false;
+          const go = () => {
+            if (submitted) return;
+            submitted = true;
+            form.submit();
+          };
+          /* "unavailable" tells the server the script never answered, so it
+             accepts the registration unverified rather than spending a round
+             trip on a token Google is certain to reject. A cold first load can
+             genuinely take this long, and that used to cost a registration. */
           const proceed = () => {
             if (!tokenInput.value) tokenInput.value = 'unavailable';
-            form.submit();
+            go();
           };
           const fallback = setTimeout(proceed, 5000);
           grecaptcha.ready(() => {
@@ -229,8 +267,9 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
               .execute(recaptchaSiteKey, { action: 'register' })
               .then((token) => {
                 clearTimeout(fallback);
+                if (submitted) return;
                 tokenInput.value = token;
-                form.submit();
+                go();
               })
               .catch(() => {
                 clearTimeout(fallback);
@@ -246,14 +285,100 @@ const shirtSizes = ['no thanks', 'small', 'medium', 'large', 'x-large'];
 </Layout>
 
 <script>
+  /* A failed submit used to redirect back to an empty form, so anyone who hit
+     an error had to retype their name, email and eight checkboxes — which is
+     how people end up double-submitting or giving up. Values are held in
+     sessionStorage across the round trip and dropped once registration lands. */
+  const STASH_KEY = 'becamp:registration';
+  /* Never persist the single-use captcha token or the honeypot. */
+  const skipField = (form: HTMLFormElement, name: string) =>
+    !name || name === 'recaptcha-token' || name === form.dataset.honeypot;
+
+  type Field = HTMLInputElement | HTMLSelectElement;
+  const fieldsOf = (form: HTMLFormElement) =>
+    Array.from(form.elements).filter(
+      (el): el is Field =>
+        (el instanceof HTMLInputElement || el instanceof HTMLSelectElement) &&
+        !skipField(form, el.name)
+    );
+
+  const stash = (form: HTMLFormElement) => {
+    const data: Record<string, string | boolean> = {};
+    for (const el of fieldsOf(form)) {
+      data[el.name] = el instanceof HTMLInputElement && el.type === 'checkbox' ? el.checked : el.value;
+    }
+    try {
+      sessionStorage.setItem(STASH_KEY, JSON.stringify(data));
+    } catch {
+      /* private mode or a full quota — worth losing the convenience, not the submit */
+    }
+  };
+
+  const restore = (form: HTMLFormElement) => {
+    let data: Record<string, string | boolean> | null = null;
+    try {
+      data = JSON.parse(sessionStorage.getItem(STASH_KEY) ?? 'null');
+    } catch {
+      /* unreadable stash is the same as no stash */
+    }
+    if (!data) return;
+    for (const el of fieldsOf(form)) {
+      if (!(el.name in data)) continue;
+      const value = data[el.name];
+      if (el instanceof HTMLInputElement && el.type === 'checkbox') el.checked = Boolean(value);
+      else el.value = String(value);
+    }
+  };
+
+  const clearStash = () => {
+    try {
+      sessionStorage.removeItem(STASH_KEY);
+    } catch {
+      /* nothing to do */
+    }
+  };
+
+  const bindForm = () => {
+    const form = document.getElementById('registration-form') as HTMLFormElement | null;
+    if (!form || form.dataset.stashBound) return;
+    form.dataset.stashBound = '1';
+    form.addEventListener('submit', () => {
+      stash(form);
+      /* The reCAPTCHA path holds the POST for up to five seconds; an impatient
+         second click in that window would post the form twice. */
+      const button = document.getElementById('registration-submit') as HTMLButtonElement | null;
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Submitting…';
+      }
+    });
+  };
+
   const showStatus = () => {
-    const status = new URLSearchParams(location.search).get('status');
+    const params = new URLSearchParams(location.search);
+    const status = params.get('status');
     if (status !== 'success' && status !== 'error') return;
     const banner = document.getElementById(`form-status-${status}`);
+    if (status === 'error') {
+      /* The endpoint names the failure via ?reason=; anything unrecognised
+         keeps the generic copy already in the markup. */
+      const message = document.getElementById('form-status-error-message');
+      const copy = JSON.parse(banner?.dataset.errorCopy ?? '{}');
+      const reason = params.get('reason') ?? '';
+      if (message && copy[reason]) message.textContent = copy[reason];
+      const form = document.getElementById('registration-form') as HTMLFormElement | null;
+      if (form) restore(form);
+    } else {
+      clearStash();
+    }
     banner?.classList.remove('hidden');
     banner?.scrollIntoView({ block: 'center' });
   };
+
   /* Fires on initial load and after every client-side navigation; no-ops on
      pages without a status param or banner. */
-  document.addEventListener('astro:page-load', showStatus);
+  document.addEventListener('astro:page-load', () => {
+    bindForm();
+    showStatus();
+  });
 </script>
