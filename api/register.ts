@@ -131,23 +131,32 @@ async function submit(req: VercelRequest, back: Back) {
     }
   }
 
-  /* Field names must match the Airtable column names exactly. The reception
-     column must exist in the base BEFORE this deploys — Airtable rejects the
-     whole write (422) on any unknown field name. */
+  /* Keyed by Airtable FIELD ID, not field name.
+     Airtable accepts either, but names are what a human edits: these columns
+     are worded as full sentences with dates in them ("...Pitch Night on Friday
+     Oct 2nd..."), so tidying the wording in the base is a thing someone will
+     reasonably do. Under name keys that silently 422s EVERY registration —
+     one unrecognised name rejects the whole record, with no deploy and nothing
+     in the repo to explain it. Field IDs are immutable, so the base is now free
+     to be reworded at will. Look one up in the base's API docs, or:
+       GET https://api.airtable.com/v0/meta/bases/{baseId}/tables
+     The trailing comment on each line is the column it points at — keep those
+     honest, they're the only thing making this readable. */
   const fields: Record<string, string | boolean> = {
-    'Guest Name': name,
-    Email: email,
-    "I'll be attending the reception at The Poplar on Friday Oct 2nd from 4:30pm -> 5:30pm":
-      body['attend-reception'] === 'on',
-    "I'll be attending Pitch Night on Friday Oct 19th from 5pm -> 10pm": body['attend-friday'] === 'on',
-    "I'll be attending Sessions Oct 19th from 9am -> 4pm": body['attend-saturday'] === 'on',
-    'Directory Permission': body['attendee-directory'] === 'on',
-    'Yes, I can help out on Friday!': body['volunteer-friday'] === 'on',
-    'Yes, I can help out on Saturday!': body['volunteer-saturday'] === 'on',
+    fldojBhhSjxaBuZfR: name,  /* Guest Name */
+    fldJL5gVTtMNkCo9J: email, /* Email */
+    fldeajWts1m6Ye5XJ: body['attend-reception'] === 'on',   /* ...reception at The Poplar, Friday */
+    fldUkjgZIRmtDKb44: body['attend-friday'] === 'on',      /* ...Pitch Night, Friday */
+    fldddGhk851IyFeSd: body['attend-saturday'] === 'on',    /* ...Sessions, Saturday */
+    fldDwMDhMx5U0IYzq: body['attendee-directory'] === 'on', /* Directory Permission */
+    fld1s3EixWDgnVVmU: body['volunteer-friday'] === 'on',   /* Yes, I can help out on Friday! */
+    fldDEEDbEBhOZlxfq: body['volunteer-saturday'] === 'on', /* Yes, I can help out on Saturday! */
   };
 
-  /* Only sent while the form shows the field; value must match a single-select option. */
-  if (body['shirt-size']) fields['T-shirt Size'] = body['shirt-size'].toString();
+  /* T-shirt Size. Only sent while the form shows the field, and the value must
+     still match a single-select OPTION exactly — option names are not IDs here,
+     so src/pages/register.astro's shirtSizes list stays coupled to the base. */
+  if (body['shirt-size']) fields['fldiR5qR1YsLJjOU3'] = body['shirt-size'].toString();
 
   const { AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE } = process.env;
   /* Without this the URL silently degrades to a base-only path that Airtable
