@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import TextLink from '../components/TextLink.astro';
 import Button from '../components/Button.astro';
 import Footer from '../components/Footer.astro';
+import { earliestYear, latestYear, totalSessions } from '../lib/sessionHistory';
 import slackIcon from '../assets/icons/slack.svg';
 import dataScienceToPoplar from '../assets/images/guide/data-science-to-poplar.webp';
 import culbrethToDataScience from '../assets/images/guide/culbreth-to-data-science.webp';
@@ -306,6 +307,19 @@ const rule = 'border-t border-divider';
                 That is a perfectly good beCamp pitch.
               </footer>
             </blockquote>
+
+            <div class={`mt-7 max-w-[760px] px-5 py-4 ${panel}`}>
+              <h4 class="text-[1.1rem] font-medium text-white">Stuck for an idea?</h4>
+              <p class="mt-1.5 text-[0.96rem] leading-relaxed text-white/80">
+                {totalSessions} sessions from {earliestYear} to {latestYear} are on
+                record — Kubernetes and quantum computing, but also gardening, rock
+                tumbling, and how to breakdance in 45 minutes. If you are wondering
+                whether your idea counts, it does.
+              </p>
+              <TextLink href="/history" class="mt-3 inline-block text-base">
+                Browse the session archive →
+              </TextLink>
+            </div>
 
             <details class="group mt-7 max-w-[760px] border-y border-divider">
               <summary class="flex cursor-pointer list-none items-center justify-between py-4 font-mono text-[0.95rem] text-white [&::-webkit-details-marker]:hidden">
