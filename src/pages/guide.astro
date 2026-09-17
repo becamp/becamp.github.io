@@ -2,52 +2,68 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import PageHero from '../components/PageHero.astro';
-import SectionLabel from '../components/SectionLabel.astro';
-import Button from '../components/Button.astro';
 import TextLink from '../components/TextLink.astro';
-import CtaSection from '../components/CtaSection.astro';
+import Button from '../components/Button.astro';
 import Footer from '../components/Footer.astro';
-import infoIcon from '../assets/icons/info.svg';
+import slackIcon from '../assets/icons/slack.svg';
 import dataScienceToPoplar from '../assets/images/guide/data-science-to-poplar.webp';
 import culbrethToDataScience from '../assets/images/guide/culbreth-to-data-science.webp';
 import emmetIvyToDataScience from '../assets/images/guide/emmet-ivy-to-data-science.webp';
+
+const mapSearch = (query: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+const POPLAR_MAP = mapSearch('The Poplar 2017 Ivy Rd Charlottesville VA 22903');
+const DATA_SCIENCE_MAP = mapSearch('UVA School of Data Science 1919 Ivy Rd Charlottesville VA 22903');
+const CULBRETH_MAP = mapSearch('Culbreth Parking Garage 130 Culbreth Rd Charlottesville VA 22903');
+const EMMET_IVY_MAP = mapSearch('Emmet Ivy Garage 123 Emmet St N Charlottesville VA 22903');
 
 const quickFacts = [
   { label: 'Friday', value: 'Oct 2 · 4:30–8:30pm' },
   { label: 'Saturday', value: 'Oct 3 · 9am–4pm' },
   { label: 'Main venue', value: 'UVA School of Data Science' },
-  { label: 'Cost', value: 'Free, including food' },
+  { label: 'Cost', value: 'Free, food included' },
 ];
 
-/* Drives both the sticky sidebar and the scroll-spy script below; the href
-   hashes match each section's id. */
-const guideSections = [
-  { href: '#quick-start', label: 'Start here' },
-  { href: '#how-it-works', label: 'How it works' },
-  { href: '#friday', label: 'Friday' },
-  { href: '#pitch', label: 'How to pitch' },
-  { href: '#parking', label: 'Parking' },
-  { href: '#saturday', label: 'Saturday' },
-  { href: '#food', label: 'Food & drinks' },
-  { href: '#bring', label: 'What to bring' },
-  { href: '#accessibility', label: 'Accessibility' },
-  { href: '#share', label: 'Photos & social' },
-  { href: '#organizers', label: 'Organizers' },
-  { href: '#conduct', label: 'Code of Conduct' },
+const quickMaps = [
+  { label: 'The Poplar', href: POPLAR_MAP },
+  { label: 'School of Data Science', href: DATA_SCIENCE_MAP },
+  { label: 'Culbreth Garage', href: CULBRETH_MAP },
+  { label: 'Emmet/Ivy Garage', href: EMMET_IVY_MAP },
 ];
 
-const howItWorks = [
-  { step: '01', title: 'Think', body: 'Bring something you want to present, learn, share, demonstrate, discuss, or understand better.' },
-  { step: '02', title: 'Pitch', body: 'Give the room a short explanation of your idea. You do not need slides or a polished talk.' },
+/* Drives the sidebar and the scroll-spy script below; `sub` entries indent under
+   the major section above them, and the spy lights that major up alongside. */
+const guideNav = [
+  { href: '#schedule', label: 'Event Agenda' },
+  { href: '#friday', label: 'Friday', sub: true },
+  { href: '#saturday', label: 'Saturday', sub: true },
+  { href: '#logistics', label: 'What to Know' },
+  { href: '#food', label: 'Food & drinks', sub: true },
+  { href: '#bring', label: 'What to bring', sub: true },
+  { href: '#accessibility', label: 'Accessibility', sub: true },
+  { href: '#photos', label: 'Photos & social', sub: true },
+  { href: '#organizers', label: 'Organizers', sub: true },
+  { href: '#slack', label: 'Cville Slack', sub: true },
+  { href: '#sessions', label: 'Sessions', sub: true },
+  { href: '#conduct', label: 'Code of Conduct', sub: true },
+  { href: '#venue', label: 'Venue & parking' },
+  { href: '#venues', label: 'Venues', sub: true },
+  { href: '#parking', label: 'Parking', sub: true },
+  { href: '#maps', label: 'Walking maps', sub: true },
+];
+
+const pitchProcess = [
+  { step: '01', title: 'Think', body: 'Bring something you want to present, learn, share, demo, or discuss.' },
+  { step: '02', title: 'Pitch', body: 'Give the room a 30-second explanation of your idea. No slides required.' },
   { step: '03', title: 'Vote', body: 'Everyone votes for the topics they most want to attend.' },
-  { step: '04', title: 'Build Saturday', body: 'Volunteers arrange the highest-interest topics into five parallel tracks.' },
+  { step: '04', title: 'Build Saturday', body: 'Volunteers arrange the top topics into five parallel tracks.' },
 ];
 
 const pitchTypes = [
   { letter: 'P', title: 'Present', body: 'Something you know and want to teach, demo, or explain.' },
-  { letter: 'L', title: 'Learn', body: 'Something you want to understand and hope others can help explore.' },
-  { letter: 'S', title: 'Share', body: 'A question, experience, problem, or idea that deserves a group conversation.' },
+  { letter: 'L', title: 'Learn', body: 'Something you want to understand, with help from the room.' },
+  { letter: 'S', title: 'Share', body: 'A question, experience, or problem worth a group conversation.' },
 ];
 
 const saturdayFlow = [
@@ -64,601 +80,645 @@ const saturdayFlow = [
   { time: '4:05', item: 'Cleanup' },
 ];
 
-const sectionClass = 'scroll-mt-24 py-16 first:pt-0';
-const h2Class = 'mt-3 text-4xl font-medium tracking-[-0.36px] text-white';
-const h3Class = 'text-xl font-medium tracking-[-0.2px] text-white';
-const leadClass = 'mt-4 max-w-[720px] text-lg leading-relaxed text-white/80';
-const bodyClass = 'text-base leading-relaxed text-white/80';
-const metaClass = 'font-mono text-xs text-white/50';
-const panelClass = 'border border-white/[0.08] bg-white/[0.03] backdrop-blur-md';
+const sessionCallouts = [
+  {
+    title: 'Lightning talks',
+    body: "Ten minutes each, first come first served. If your Friday pitch didn't make the schedule, sign up in the morning and share what's on your mind.",
+    accent: false,
+  },
+  {
+    title: 'The Law of Two Feet',
+    body: "Not learning or contributing where you are? Move to another session. That's the unconference working as intended — not rudeness.",
+    accent: true,
+  },
+  {
+    title: 'Stay for the retrospective',
+    body: 'beCamp has evolved through attendee feedback for 20 years. The 3:40 retrospective is where we decide what to keep, change, and try next.',
+    accent: false,
+  },
+];
+
+const walkingMaps = [
+  {
+    image: dataScienceToPoplar,
+    alt: 'Walking route between the School of Data Science and The Poplar.',
+    caption: 'Venue ↔ venue · 3–4 min',
+    full: 'School of Data Science ↔ The Poplar · 3–4 min · 0.1 mi',
+  },
+  {
+    image: culbrethToDataScience,
+    alt: 'Walking route from Culbreth Garage to the School of Data Science.',
+    caption: 'Culbreth Garage → venue · 6 min',
+    full: 'Culbreth Garage → School of Data Science · 6 min · 0.3 mi',
+  },
+  {
+    image: emmetIvyToDataScience,
+    alt: 'Walking route from Emmet/Ivy Garage to the School of Data Science.',
+    caption: 'Emmet/Ivy Garage → venue · 2 min',
+    full: 'Emmet/Ivy Garage → School of Data Science · 2 min · 0.1 mi',
+  },
+];
+
+/* One place each for the repeated type and chrome, so a section reads as
+   structure rather than as a wall of utility classes. */
+const major = 'mt-13 scroll-mt-16 border-t border-divider pt-12';
+const majorNum = 'font-mono text-sm text-primary';
+const majorTitle = 'text-[clamp(1.7rem,1.2rem+1.9vw,2.25rem)] font-medium leading-[1.1] tracking-[-0.025em] text-white';
+const sub = 'mt-11 scroll-mt-16';
+const subTitle = 'text-[1.6rem] font-medium tracking-[-0.015em] text-white';
+const itemTitle = 'mt-8 text-[1.02rem] font-semibold text-white';
+const lead = 'mt-2 max-w-[66ch] text-[1.02rem] leading-relaxed text-white/80';
+const body = 'max-w-[66ch] text-base leading-relaxed text-white/80';
+const meta = 'font-mono text-[13px] text-[#858fc6]';
+const panel = 'border border-white/[0.08] bg-white/[0.03]';
+const sponsorNote = 'mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50';
+const rule = 'border-t border-divider';
 ---
 
 <Layout
   title="Attendee Guide — beCamp"
-  description="How Friday works, what happens Saturday, where to park, what to bring, and how to get the most out of beCamp 2026."
+  description="Attendee guide for beCamp 2026 — the agenda, what to know, and the venue and parking details."
 >
   <Header />
   <main>
-    <PageHero wide label="Attendee Guide" title="Everything you need to know before you show up">
-      <p class="mt-6 max-w-[663px] text-lg leading-relaxed text-white/80">
-        beCamp is built by the people in the room. Here's how Friday works, what happens
-        Saturday, where to park, what to bring, and how to get the most out of the weekend.
-      </p>
+    <div class="mx-auto grid max-w-[1120px] grid-cols-1 gap-x-16 px-5 pb-20 sm:px-10 lg:grid-cols-[210px_minmax(0,1fr)]">
+      <!-- Sticky on-page nav; top-14 clears the sticky countdown bar. -->
+      <aside class="hidden lg:block" aria-label="On this page">
+        <div class="sticky top-14 pt-13">
+          <p class="font-mono text-[13px] text-primary">On this page</p>
+          <nav class="mt-4 flex flex-col">
+            {guideNav.map((entry) => (
+              <a
+                href={entry.href}
+                data-guide-link
+                class={`group relative block py-1.5 font-mono text-white/60 transition-colors duration-150 hover:text-white aria-[current=true]:text-white data-[parent]:text-white ${entry.sub ? 'pl-7 text-[12px]' : 'pl-4 text-[13px]'}`}
+              >
+                <span
+                  class={`absolute top-1/2 size-[5px] -translate-y-1/2 rotate-45 bg-divider transition-colors duration-150 group-aria-[current=true]:bg-primary group-data-[parent]:bg-primary ${entry.sub ? 'left-3.5' : 'left-0'}`}
+                  aria-hidden="true"
+                ></span>
+                {entry.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </aside>
 
-      <div class="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-10">
-        <Button href="#quick-start" class="w-full sm:w-auto sm:px-8">Start here</Button>
-        <TextLink href="/schedule" class="text-base">See the schedule →</TextLink>
-      </div>
+      <div class="min-w-0">
+        <section id="summary" class="pt-13">
+          <h1 class="max-w-[20ch] text-[clamp(2.1rem,1.4rem+2.6vw,3rem)] font-medium leading-[1.06] tracking-[-0.03em] text-white">
+            beCamp 2026 attendee guide
+          </h1>
+          <p class="mt-4 max-w-[62ch] text-[1.05rem] leading-relaxed text-white/80">
+            beCamp is Charlottesville's community-run tech unconference. Come Friday to
+            pitch and vote; the room builds Saturday's schedule together. Here's what you
+            need before you show up.
+          </p>
 
-      <div class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4" aria-label="Event quick facts">
-        {quickFacts.map((fact) => (
-          <div class={`flex flex-col gap-1.5 px-5 py-5 ${panelClass}`}>
-            <p class={metaClass}>{fact.label}</p>
-            <p class="text-base font-medium text-white">{fact.value}</p>
+          <div class="mt-7 grid grid-cols-[repeat(auto-fit,minmax(155px,1fr))] gap-px border border-divider bg-divider">
+            {quickFacts.map((fact) => (
+              <div class="bg-bg px-4 py-3">
+                <p class="font-mono text-xs tracking-[0.04em] text-[#858fc6]">{fact.label}</p>
+                <p class="mt-0.5 text-[0.96rem] font-medium text-white">{fact.value}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </PageHero>
 
-    <div class="px-5 sm:px-20">
-      <div class="grid grid-cols-1 gap-12 lg:grid-cols-[180px_1fr] lg:gap-20">
-        <!-- Sticky on-page nav; top-14 clears the sticky countdown bar. -->
-        <aside class="hidden lg:block" aria-label="On this page">
-          <div class="sticky top-14">
-            <p class={metaClass}>On this page</p>
-            <nav class="mt-4 flex flex-col gap-3 font-mono text-[13px]">
-              {guideSections.map((section) => (
-                <a
-                  href={section.href}
-                  data-guide-link
-                  class="text-white/50 transition-colors duration-150 hover:text-primary aria-[current=true]:text-primary"
-                >
-                  {section.label}
-                </a>
-              ))}
-            </nav>
+          <div class="mt-7 flex flex-wrap items-center gap-2 sm:gap-3">
+            {quickMaps.map((link) => (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener"
+                class={`group inline-flex items-center gap-1.5 px-3 py-2 font-mono text-[13px] text-white transition-colors duration-150 hover:border-primary hover:text-primary ${panel}`}
+              >
+                {link.label}
+                <span class="text-[#858fc6] transition-colors duration-150 group-hover:text-primary" aria-hidden="true">↗</span>
+              </a>
+            ))}
           </div>
-        </aside>
+        </section>
 
-        <div class="min-w-0 divide-y divide-divider">
-          <section id="quick-start" class={sectionClass}>
-            <SectionLabel class="text-sm">The 60-second version</SectionLabel>
-            <h2 class={h2Class}>Come Friday. Help build Saturday.</h2>
-            <p class={leadClass}>
-              Friday night is when beCamp becomes your conference. We socialize, pitch
-              ideas, vote, and turn the room's interests into Saturday's five-track
-              schedule.
-            </p>
+        <!-- ── 01 Event Agenda ─────────────────────────────────────────────── -->
+        <section id="schedule" class={major}>
+          <div class="flex items-baseline gap-3.5">
+            <span class={majorNum}>01</span>
+            <h2 class={majorTitle}>Event Agenda</h2>
+          </div>
+          <p class={lead}>
+            No pre-selected speakers — attendees build Saturday's five-track agenda on
+            Friday night. Even if you can only make Saturday, come Friday to pitch and
+            vote if you can.
+          </p>
 
-            <div class={`mt-8 flex w-full items-center gap-5 px-5 py-6 ${panelClass}`}>
-              <img src={infoIcon.src} alt="" class="size-8 shrink-0 opacity-80" />
-              <p class={bodyClass}>
-                If you're coming Saturday, please come Friday if you can. Your pitches and
-                votes directly shape the next day.
+          <div id="friday" class={sub}>
+            <h3 class={subTitle}>Friday — Reception &amp; Pitch Night</h3>
+
+            <div class={`mt-6 ${rule}`}>
+              <div class="grid grid-cols-1 gap-2 border-b border-divider py-6 sm:grid-cols-[150px_1fr] sm:gap-6">
+                <p class={meta}>4:30–5:30pm</p>
+                <div>
+                  <h4 class="text-[1.1rem] font-medium text-white">Reception at The Poplar</h4>
+                  <p class={`mt-1.5 ${body}`}>
+                    Appetizers, a cash bar, and time to reconnect with Charlottesville's
+                    tech community. At 5:30 we walk 3–4 minutes to the School of Data
+                    Science.
+                  </p>
+                  <p class={`mt-3 ${body}`}>
+                    The reception is held inside the Parlor, The Poplar's reception space.
+                    The front-of-house staff will point you there when you arrive.
+                  </p>
+                  <p class={sponsorNote}>
+                    <span>Reception sponsors</span>
+                    <TextLink href="https://www.434.co/startup" external class="text-[13px]">434.co</TextLink>
+                    <TextLink href="https://vistaly.com/" external class="text-[13px]">Vistaly</TextLink>
+                  </p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-2 border-b border-divider py-6 sm:grid-cols-[150px_1fr] sm:gap-6">
+                <p class={meta}>5:30–8:30pm</p>
+                <div>
+                  <h4 class="text-[1.1rem] font-medium text-white">
+                    Pitch Night at the School of Data Science
+                  </h4>
+                  <p class={`mt-1.5 ${body}`}>
+                    Pizza, a quick format walkthrough, sponsor thank-yous, pitches, voting,
+                    and building the Saturday schedule.
+                  </p>
+                  <p class={sponsorNote}>
+                    <span>Friday pizza sponsor</span>
+                    <TextLink href="https://hardshell.ai/" external class="text-[13px]">Hardshell AI</TextLink>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <h4 class={itemTitle}>How Pitch Night works</h4>
+
+            <div class={`mt-5 flex max-w-[760px] items-center gap-4 px-5 py-4 ${panel}`}>
+              <span
+                class="grid size-8 shrink-0 rotate-45 place-items-center border border-primary font-mono text-[15px] text-primary"
+                aria-hidden="true"
+              >
+                <span class="-rotate-45">i</span>
+              </span>
+              <p class="text-[0.96rem] leading-relaxed text-white/80">
+                Coming only Saturday? Come Friday if you can — your pitches and votes
+                decide the day.
               </p>
             </div>
 
-            <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <article class={`flex flex-col gap-1.5 px-5 py-5 ${panelClass}`}>
-                <p class={metaClass}>Friday, October 2</p>
-                <h3 class={h3Class}>Reception + Pitch Night</h3>
-                <p class={`mt-1 ${bodyClass}`}>
-                  4:30–5:30pm at The Poplar, then 5:30–8:30pm at the UVA School of Data
-                  Science.
-                </p>
-              </article>
-              <article class={`flex flex-col gap-1.5 px-5 py-5 ${panelClass}`}>
-                <p class={metaClass}>Saturday, October 3</p>
-                <h3 class={h3Class}>Sessions</h3>
-                <p class={`mt-1 ${bodyClass}`}>
-                  9am–4pm at the UVA School of Data Science. Breakfast, five session
-                  blocks, lightning talks, lunch, and the retrospective.
-                </p>
-              </article>
-            </div>
-          </section>
-
-          <section id="how-it-works" class={sectionClass}>
-            <SectionLabel class="text-sm">How it works</SectionLabel>
-            <h2 class={h2Class}>Planned by the people who show up</h2>
-            <p class={leadClass}>
-              There are no pre-selected Saturday speakers. The agenda is created by
-              attendees on Friday night.
-            </p>
-
-            <ol class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2">
-              {howItWorks.map((entry) => (
-                <li class="flex gap-5">
-                  <span class="font-mono text-sm text-primary">{entry.step}</span>
-                  <div class="max-w-[420px]">
-                    <h3 class={h3Class}>{entry.title}</h3>
-                    <p class={`mt-2 ${bodyClass}`}>{entry.body}</p>
+            <ol class={`mt-5 ${rule}`}>
+              {pitchProcess.map((entry) => (
+                <li class="grid grid-cols-[70px_1fr] gap-5 border-b border-divider py-4">
+                  <span class="font-mono text-[0.95rem] text-[#858fc6]">{entry.step}</span>
+                  <div>
+                    <h4 class="text-[1.05rem] font-medium text-white">{entry.title}</h4>
+                    <p class="mt-0.5 text-[0.96rem] leading-relaxed text-white/80">{entry.body}</p>
                   </div>
                 </li>
               ))}
             </ol>
-          </section>
 
-          <section id="friday" class={sectionClass}>
-            <SectionLabel class="text-sm">Friday, October 2</SectionLabel>
-            <h2 class={h2Class}>Reception + Pitch Night</h2>
-
-            <div class="mt-10 divide-y divide-divider border-y border-divider">
-              <div class="flex flex-col gap-3 py-8 sm:flex-row sm:gap-0">
-                <p class="w-44 shrink-0 whitespace-nowrap font-mono text-base text-[#858fc6]">
-                  4:30–5:30pm
-                </p>
-                <div class="max-w-[720px]">
-                  <h3 class="text-2xl font-medium tracking-[-0.24px] text-white">
-                    Reception at The Poplar
-                  </h3>
-                  <p class={`mt-2 ${metaClass}`}>2017 Ivy Road · Charlottesville, VA 22903</p>
-                  <p class={`mt-4 ${bodyClass}`}>
-                    Start the weekend with appetizers, a cash bar, and a chance to
-                    reconnect with Charlottesville's tech community. At 5:30, we'll take
-                    the 0.1-mile, 3–4 minute walk to the School of Data Science.
-                  </p>
-                  <p class={`mt-4 ${bodyClass}`}>
-                    The reception is held inside the Parlor, The Poplar's reception space.
-                    The front-of-house staff will point you there when you arrive.
-                  </p>
-                  <div class="mt-4 flex flex-col gap-2">
-                    <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                      <span>Reception venue sponsor</span>
-                      <TextLink href="https://www.virginiaguesthouse.com/dining/poplar/" external class="text-[13px]">The Poplar Restaurant</TextLink>
-                    </p>
-                    <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                      <span>Reception sponsors</span>
-                      <TextLink href="https://www.434.co/startup" external class="text-[13px]">434.co</TextLink>
-                      <TextLink href="https://vistaly.com/" external class="text-[13px]">Vistaly</TextLink>
-                    </p>
-                  </div>
-                  <TextLink href="https://maps.app.goo.gl/arMW3qLrMYmKu4GS8" external class="mt-4 inline-block text-base">
-                    Walking route between venues →
-                  </TextLink>
-                  <p class="mt-3 text-sm leading-relaxed text-white/50">
-                    Google Maps imagery is out of date and may show a construction site.
-                    The Virginia Guest House is now complete.
-                  </p>
-                </div>
-              </div>
-
-              <div class="flex flex-col gap-3 py-8 sm:flex-row sm:gap-0">
-                <p class="w-44 shrink-0 whitespace-nowrap font-mono text-base text-[#858fc6]">
-                  5:30–8:30pm
-                </p>
-                <div class="max-w-[720px]">
-                  <h3 class="text-2xl font-medium tracking-[-0.24px] text-white">
-                    Pitch Night at UVA School of Data Science
-                  </h3>
-                  <p class={`mt-2 ${metaClass}`}>1919 Ivy Road · Charlottesville, VA 22903</p>
-                  <p class={`mt-4 ${bodyClass}`}>
-                    We'll have pizza, explain the format, recognize sponsors, hear pitches,
-                    vote, and build the Saturday schedule.
-                  </p>
-                  <div class="mt-4 flex flex-col gap-2">
-                    <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                      <span>Main venue sponsor</span>
-                      <TextLink href="https://datascience.virginia.edu/" external class="text-[13px]">UVA School of Data Science</TextLink>
-                    </p>
-                    <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                      <span>Friday pizza sponsor</span>
-                      <TextLink href="https://hardshell.ai/" external class="text-[13px]">Hardshell AI</TextLink>
-                    </p>
-                  </div>
-                  <TextLink href="https://maps.app.goo.gl/XaM9ioERfqeSDY8o9" external class="mt-4 inline-block text-base">
-                    Get directions →
-                  </TextLink>
-                </div>
-              </div>
-            </div>
-
-            <div class={`mt-10 ${panelClass}`}>
-              <div class="flex flex-col gap-2 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <p class="text-sm text-white/80">UVA School of Data Science · 1919 Ivy Road</p>
-                <TextLink href="https://maps.app.goo.gl/8tfq8ahm2BpZo4Sk8" external class="text-[13px]">
-                  Open in Google Maps →
-                </TextLink>
-              </div>
-              <iframe
-                title="Map showing the UVA School of Data Science"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3056.351033406566!2d-78.51032112435502!3d38.040735296795575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b387006a4c9295%3A0x4105c4fd4e527c99!2sSchool%20of%20Data%20Science!5e1!3m2!1sen!2sus!4v1789578718064!5m2!1sen!2sus"
-                width="600"
-                height="450"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen
-                class="block h-[320px] w-full border-0 border-t border-white/[0.08] sm:h-[420px]"
-              ></iframe>
-            </div>
-
-            <figure class="mt-10 flex flex-col gap-3">
-              <Image
-                src={dataScienceToPoplar}
-                alt="Satellite walking route between the UVA School of Data Science and The Poplar at the Virginia Guest House."
-                class="w-full border border-white/[0.08] object-cover"
-              />
-              <figcaption class="flex flex-col gap-1 font-mono text-[13px] text-white/50 sm:flex-row sm:gap-3">
-                <strong class="font-medium text-white">3–4 min · 0.1 mi</strong>
-                <span>School of Data Science ↔ The Poplar at the Virginia Guest House</span>
-              </figcaption>
-            </figure>
-          </section>
-
-          <section id="pitch" class={sectionClass}>
-            <SectionLabel class="text-sm">How to pitch</SectionLabel>
-            <h2 class={h2Class}>You do not need to be an expert</h2>
-            <p class={leadClass}>
-              A pitch is simply an invitation to spend 45 minutes exploring something
-              together.
+            <h4 class={itemTitle}>How to pitch</h4>
+            <p class={meta}>
+              A pitch is just an invitation to spend 45 minutes exploring something
+              together — pick the kind that fits.
             </p>
 
-            <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
               {pitchTypes.map((type) => (
-                <article class={`flex flex-col gap-1.5 px-5 py-5 ${panelClass}`}>
-                  <p class="font-mono text-2xl text-primary">{type.letter}</p>
-                  <h3 class={h3Class}>{type.title}</h3>
-                  <p class={`mt-1 ${bodyClass}`}>{type.body}</p>
+                <article class={`p-5 ${panel}`}>
+                  <p class="font-mono text-[1.7rem] leading-none text-primary">{type.letter}</p>
+                  <h4 class="mt-4 text-[1.05rem] font-medium text-white">{type.title}</h4>
+                  <p class="mt-1.5 text-[0.95rem] leading-relaxed text-white/80">{type.body}</p>
                 </article>
               ))}
             </div>
 
-            <blockquote class="mt-10 flex max-w-[720px] flex-col gap-3 border-l-[3px] border-primary pl-6">
-              <p class="text-2xl font-medium leading-snug tracking-[-0.24px] text-white">
-                “I don’t know much about this, but I’d really like to get people
-                together who do.”
+            <blockquote class="mt-7 border-l-2 border-primary py-1 pl-6">
+              <p class="max-w-[60ch] text-[1.2rem] leading-[1.4] tracking-[-0.01em] text-white">
+                “I don't know much about this, but I'd really like to get people together
+                who do.”
               </p>
-              <footer class="font-mono text-sm text-white/50">
+              <footer class="mt-2 font-mono text-[13px] text-[#858fc6]">
                 That is a perfectly good beCamp pitch.
               </footer>
             </blockquote>
 
-            <details class="group mt-10 max-w-[720px] scroll-mt-24 border-y border-divider py-6">
-              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 text-xl font-medium tracking-[-0.2px] text-white [&::-webkit-details-marker]:hidden">
-                <span class="transition-colors duration-150 group-open:text-link group-hover:text-link">
-                  Pitch-night checklist
-                </span>
-                <span class="shrink-0 group-open:hidden">+</span>
-                <span class="hidden shrink-0 text-link group-open:inline">&minus;</span>
+            <details class="group mt-7 max-w-[760px] border-y border-divider">
+              <summary class="flex cursor-pointer list-none items-center justify-between py-4 font-mono text-[0.95rem] text-white [&::-webkit-details-marker]:hidden">
+                Pitch-night checklist
+                <span
+                  class="text-xl text-primary transition-transform duration-150 group-open:rotate-45"
+                  aria-hidden="true"
+                >+</span>
               </summary>
-              <ul class="mt-4 flex flex-col gap-2 text-base text-white/80">
-                <li>• Give your idea a short, clear title.</li>
-                <li>• Explain what kind of conversation you want in about 30 seconds.</li>
-                <li>• Write the topic on the card or sticky note provided.</li>
-                <li>• Mark it Present, Learn, or Share.</li>
-                <li>• Vote after everyone has pitched.</li>
+              <ul class="list-disc pb-4 pl-5 text-base leading-relaxed text-white/80 marker:text-primary">
+                <li class="mb-1.5">Give your idea a short, clear title.</li>
+                <li class="mb-1.5">Write it on the card provided and mark it Present, Learn, or Share.</li>
+                <li>Deliver it to the room in about 30 seconds.</li>
               </ul>
             </details>
-          </section>
+          </div>
 
-          <section id="parking" class={sectionClass}>
-            <SectionLabel class="text-sm">Parking & getting around</SectionLabel>
-            <h2 class={h2Class}>Park once. Walk between venues.</h2>
-            <p class={leadClass}>
-              For Saturday, Culbreth Parking Garage is the best confirmed free option,
-              about a 6-minute walk from the School of Data Science. Emmet/Ivy Garage is
-              closer—about 2 minutes on foot—but costs $3/hour. The Poplar and the School
-              of Data Science are only a 3–4 minute walk apart, so there is no need to move
-              your car between Friday's reception and Pitch Night.
-            </p>
-            <p class="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-              <span>Event signs sponsored by</span>
-              <TextLink href="https://datatheoretic.com/" external class="text-[13px]">Data Theoretic</TextLink>
-            </p>
-
-            <div class="mt-10 flex flex-col gap-12">
-              <article>
-                <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p class={metaClass}>Free on Saturday</p>
-                    <h3 class={`mt-1.5 ${h3Class}`}>Culbreth Parking Garage</h3>
-                    <p class={`mt-1 ${bodyClass}`}>130 Culbreth Road</p>
-                  </div>
-                  <div class="flex flex-col gap-1 sm:items-end sm:text-right">
-                    <strong class="text-xl font-medium text-primary">Free</strong>
-                    <span class="font-mono text-[13px] text-white/50">6-minute walk · 0.3 mi</span>
-                    <span class="max-w-[280px] font-mono text-[13px] text-white/50">
-                      Open to the public on weekends unless otherwise posted
-                    </span>
-                  </div>
-                </div>
-                <TextLink
-                  href="https://www.google.com/maps/dir/Culbreth+Parking+Garage,+130+Culbreth+Rd,+Charlottesville,+VA+22903/School+of+Data+Science,+1919+Ivy+Rd,+Charlottesville,+VA+22903/@38.0398742,-78.507477,351m/data=!3m2!1e3!4b1!4m14!4m13!1m5!1m1!1s0x89b387ec11d8129b:0x16482c2f6a42fbb9!2m2!1d-78.5045047!2d38.0401693!1m5!1m1!1s0x89b387006a4c9295:0x4105c4fd4e527c99!2m2!1d-78.5077462!2d38.0407311!3e2"
-                  external
-                  class="mt-4 inline-block text-base"
-                >
-                  Walking directions →
-                </TextLink>
-                <figure class="mt-6 flex flex-col gap-3">
-                  <Image
-                    src={culbrethToDataScience}
-                    alt="Satellite walking route from Culbreth Parking Garage to the UVA School of Data Science."
-                    class="w-full border border-white/[0.08] object-cover"
-                  />
-                  <figcaption class="flex flex-col gap-1 font-mono text-[13px] text-white/50 sm:flex-row sm:gap-3">
-                    <strong class="font-medium text-white">6 min · 0.3 mi</strong>
-                    <span>Culbreth Parking Garage → School of Data Science</span>
-                  </figcaption>
-                </figure>
-              </article>
-
-              <article>
-                <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p class={metaClass}>Closest option</p>
-                    <h3 class={`mt-1.5 ${h3Class}`}>Emmet/Ivy Garage</h3>
-                    <p class={`mt-1 ${bodyClass}`}>123 Emmet Street N</p>
-                  </div>
-                  <div class="flex flex-col gap-1 sm:items-end sm:text-right">
-                    <strong class="text-xl font-medium text-primary">$3/hour</strong>
-                    <span class="font-mono text-[13px] text-white/50">2-minute walk · 0.1 mi</span>
-                    <span class="max-w-[280px] font-mono text-[13px] text-white/50">
-                      ParkMobile Zone 5514 or Level 1 pay stations
-                    </span>
-                  </div>
-                </div>
-                <TextLink
-                  href="https://www.google.com/maps/place/Emmet%2FIvy+Garage/@38.041259,-78.5097575,351m/data=!3m1!1e3!4m23!1m16!4m15!1m6!1m2!1s0x89b3864ddd6d9527:0x6c35664105ba923c!2sEmmet%2FIvy+Garage,+123+Emmet+St+N,+Charlottesville,+VA+22903!2m2!1d-78.5078779!2d38.0418726!1m6!1m2!1s0x89b387006a4c9295:0x4105c4fd4e527c99!2sSchool+of+Data+Science,+1919+Ivy+Rd,+Charlottesville,+VA+22903!2m2!1d-78.5077462!2d38.0407311!3e2!3m5!1s0x89b3864ddd6d9527:0x6c35664105ba923c!8m2!3d38.0418359!4d-78.5077953!16s%2Fg%2F11hbnt2xjq"
-                  external
-                  class="mt-4 inline-block text-base"
-                >
-                  Walking directions →
-                </TextLink>
-                <figure class="mt-6 flex flex-col gap-3">
-                  <Image
-                    src={emmetIvyToDataScience}
-                    alt="Satellite walking route from Emmet/Ivy Garage to the UVA School of Data Science."
-                    class="w-full border border-white/[0.08] object-cover"
-                  />
-                  <figcaption class="flex flex-col gap-1 font-mono text-[13px] text-white/50 sm:flex-row sm:gap-3">
-                    <strong class="font-medium text-white">2 min · 0.1 mi</strong>
-                    <span>Emmet/Ivy Garage → School of Data Science</span>
-                  </figcaption>
-                </figure>
-              </article>
-            </div>
-          </section>
-
-          <section id="saturday" class={sectionClass}>
-            <SectionLabel class="text-sm">Saturday, October 3</SectionLabel>
-            <h2 class={h2Class}>The flow of the day</h2>
-            <p class={leadClass}>
+          <div id="saturday" class={sub}>
+            <h3 class={subTitle}>Saturday — Sessions</h3>
+            <p class={lead}>
               Five session blocks, five simultaneous tracks, lightning talks, lunch, and a
-              retrospective.
+              closing retrospective.
             </p>
 
-            <div class="mt-10 max-w-[720px] divide-y divide-divider border-y border-divider">
+            <div class={`mt-6 ${rule}`}>
               {saturdayFlow.map((row) => (
-                <div class="flex items-baseline gap-6 py-4">
-                  <time class="w-20 shrink-0 font-mono text-base text-[#858fc6]">{row.time}</time>
+                <div class="grid grid-cols-[100px_1fr] gap-4 border-b border-divider py-3 sm:grid-cols-[130px_1fr]">
+                  <time class="font-mono text-[0.9rem] text-[#858fc6]">{row.time}</time>
                   <p class="text-base text-white">{row.item}</p>
                 </div>
               ))}
             </div>
+          </div>
+        </section>
 
-            <div class="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
-              <div class={`px-5 py-6 ${panelClass}`}>
-                <SectionLabel class="text-sm">Lightning talks</SectionLabel>
-                <h3 class={`mt-2 ${h3Class}`}>Ten minutes each. First come, first served.</h3>
-                <p class={`mt-3 ${bodyClass}`}>
-                  If your Friday pitch didn't make the Saturday schedule, this is another
-                  chance to share what's on your mind. Sign-up spots are first come, first
-                  served, and each speaker gets up to 10 minutes.
-                </p>
-              </div>
-              <div class={`px-5 py-6 ${panelClass}`}>
-                <SectionLabel class="text-sm">The Law of Two Feet</SectionLabel>
-                <h3 class={`mt-2 ${h3Class}`}>
-                  If you aren't learning, contributing, or interested where you are, move.
-                </h3>
-                <p class={`mt-3 ${bodyClass}`}>
-                  You are welcome to leave one session and join another. You're not being
-                  rude—you're using the unconference format the way it was intended.
-                </p>
-              </div>
-            </div>
-          </section>
+        <!-- ── 02 What to Know ─────────────────────────────────────────────── -->
+        <section id="logistics" class={major}>
+          <div class="flex items-baseline gap-3.5">
+            <span class={majorNum}>02</span>
+            <h2 class={majorTitle}>What to Know</h2>
+          </div>
+          <p class={lead}>
+            Meals, gear, access, how the sessions work, and the people to find if you have
+            a question.
+          </p>
 
-          <section id="food" class={sectionClass}>
-            <SectionLabel class="text-sm">Food & drinks</SectionLabel>
-            <h2 class={h2Class}>You won't need to leave for meals</h2>
+          <div id="food" class={sub}>
+            <h3 class={subTitle}>Food &amp; drinks</h3>
+            <p class={lead}>
+              You won't need to leave for meals.{' '}
+              <strong class="font-medium text-white">Friday:</strong> appetizers and a cash
+              bar at The Poplar; pizza and non-alcoholic drinks at Pitch Night.{' '}
+              <strong class="font-medium text-white">Saturday:</strong> breakfast, coffee
+              and tea, lunch, and cold drinks.
+            </p>
+            <p class={`mt-3 ${meta}`}>
+              Vegetarian and vegan options available — contact the organizers about any
+              dietary need.
+            </p>
+            <p class={sponsorNote}>
+              <span>Friday food &amp; drink sponsors</span>
+              <TextLink href="https://hardshell.ai/" external class="text-[13px]">Hardshell AI</TextLink>
+              <TextLink href="http://cvaiex.org/" external class="text-[13px]">CvAIEx</TextLink>
+            </p>
+            <p class={sponsorNote}>
+              <span>Saturday food &amp; drink sponsors</span>
+              <TextLink href="https://www.carsonsweet.com/" external class="text-[13px]">Carson Sweet</TextLink>
+              <TextLink href="https://spiff.works/" external class="text-[13px]">SpiffWorks</TextLink>
+              <TextLink href="https://jxf.me/" external class="text-[13px]">JFX</TextLink>
+              <TextLink href="https://www.controlaltrecycle.com/" external class="text-[13px]">Control Alt Recycle</TextLink>
+              <TextLink href="https://www.fraccel.com/" external class="text-[13px]">Fraccel</TextLink>
+            </p>
+          </div>
 
-            <div class="mt-8 max-w-[720px] flex flex-col gap-4">
-              <p class={bodyClass}>
-                <strong class="font-medium text-white">Friday:</strong> appetizers and a
-                cash bar at The Poplar; pizza and non-alcoholic drinks at Pitch Night.
-              </p>
-              <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                <span>Pizza sponsor</span>
-                <TextLink href="https://hardshell.ai/" external class="text-[13px]">Hardshell AI</TextLink>
-              </p>
-              <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                <span>Friday beverages at the School of Data Science</span>
-                <TextLink href="http://cvaiex.org/" external class="text-[13px]">CvAIEx</TextLink>
-              </p>
-              <p class={bodyClass}>
-                <strong class="font-medium text-white">Saturday:</strong> breakfast, coffee
-                and tea, lunch, and cold non-alcoholic drinks.
-              </p>
-              <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                <span>Breakfast sponsor</span>
-                <TextLink href="https://www.carsonsweet.com/" external class="text-[13px]">Carson Sweet</TextLink>
-              </p>
-              <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                <span>Coffee sponsor</span>
-                <TextLink href="https://spiff.works/" external class="text-[13px]">Spiff</TextLink>
-              </p>
-              <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                <span>Lunch sponsor</span>
-                <TextLink href="https://jxf.me/" external class="text-[13px]">JFX</TextLink>
-              </p>
-              <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                <span>Lunch treats sponsor</span>
-                <TextLink href="https://www.controlaltrecycle.com/" external class="text-[13px]">Control Alt Recycle</TextLink>
-              </p>
-              <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
-                <span>Saturday session beverages</span>
-                <TextLink href="https://www.fraccel.com/" external class="text-[13px]">Fraccel</TextLink>
-              </p>
-              <p class={bodyClass}>
-                Vegetarian and vegan options will be available. Contact the organizers if
-                you have a dietary or accessibility-related food need.
-              </p>
-            </div>
-          </section>
-
-          <section id="bring" class={sectionClass}>
-            <SectionLabel class="text-sm">What to bring</SectionLabel>
-            <h2 class={h2Class}>Mostly, bring your curiosity</h2>
-
-            <div class="mt-8 max-w-[720px] flex flex-col gap-6">
-              <ul class="flex flex-col gap-2 text-base text-white">
-                <li>• Laptop or notebook</li>
-                <li>• Power cord and charger</li>
-                <li>• Reusable water bottle, if you use one</li>
-                <li>• An idea, question, or topic you're curious about</li>
+          <div class="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-10">
+            <div id="bring" class={sub}>
+              <h3 class={subTitle}>What to bring</h3>
+              <ul class="mt-3 list-disc pl-5 text-base leading-relaxed text-white/80 marker:text-primary">
+                <li class="mb-1.5">Laptop or notebook</li>
+                <li class="mb-1.5">Power cord and charger</li>
+                <li class="mb-1.5">Reusable water bottle, if you use one</li>
+                <li>An idea, question, or topic you're curious about</li>
               </ul>
-              <p class={bodyClass}>
-                Dress is casual. Come comfortable and ready to move between sessions.
+              <p class={`mt-4 ${meta}`}>
+                Dress is casual — come ready to move between sessions.
               </p>
-              <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-white/50">
+              <p class={sponsorNote}>
                 <span>T-shirts sponsored by</span>
                 <TextLink href="https://www.ga-intelligence.com/" external class="text-[13px]">GA Intelligence</TextLink>
               </p>
             </div>
-          </section>
 
-          <section id="accessibility" class={sectionClass}>
-            <SectionLabel class="text-sm">Accessibility</SectionLabel>
-            <h2 class={h2Class}>We want beCamp to work for everyone</h2>
-            <p class={leadClass}>
-              The UVA School of Data Science is designed as an accessible space and
-              includes hearing-loop technology in the Hub and classrooms, gender-neutral
-              restrooms, an ADA-accessible shower, and a Wellness and Affirmation Space.
-            </p>
-            <p class={`mt-4 max-w-[720px] ${bodyClass}`}>
-              If you have an accessibility need or another request that would help you
-              participate fully, contact the organizers and we'll do everything we
-              reasonably can to help.
-            </p>
-            <TextLink href="mailto:ozanzal+becamp@gmail.com" class="mt-6 inline-block text-base">
-              Contact organizers →
-            </TextLink>
-          </section>
+            <div id="accessibility" class={sub}>
+              <h3 class={subTitle}>Accessibility</h3>
+              <p class={`mt-3 ${body}`}>
+                The School of Data Science includes hearing loops in the Hub and
+                classrooms, gender-neutral restrooms, an ADA-accessible shower, and a
+                wellness and affirmation space.
+              </p>
+              <p class={`mt-3 ${meta}`}>
+                Have another need?{' '}
+                <TextLink href="mailto:ozanzal+becamp@gmail.com" class="text-[13px]">Contact the organizers</TextLink>{' '}
+                and we'll do what we reasonably can.
+              </p>
+            </div>
+          </div>
 
-          <section id="share" class={sectionClass}>
-            <SectionLabel class="text-sm">Photos & social</SectionLabel>
-            <h2 class={h2Class}>Capture the weekend. Share the energy.</h2>
-            <p class="mt-6 font-mono text-4xl text-primary">#beCamp</p>
-            <p class={`mt-4 max-w-[720px] ${bodyClass}`}>
-              Take photos of the ideas, conversations, and moments that make beCamp
-              special, then share them on social media with
+          <div id="photos" class={sub}>
+            <h3 class={subTitle}>Photos &amp; social</h3>
+            <p class="mt-3 font-mono text-[2rem] leading-none tracking-[-0.04em] text-primary">#beCamp</p>
+            <p class={`mt-3 ${body}`}>
+              Photograph the ideas, conversations, and moments that make beCamp special,
+              then share them on social media with{' '}
               <strong class="font-medium text-white">#beCamp</strong>.
             </p>
-          </section>
+          </div>
 
-          <section id="organizers" class={sectionClass}>
-            <SectionLabel class="text-sm">Meet the organizers</SectionLabel>
-            <h2 class={h2Class}>Questions? Find Patrick or Owen.</h2>
-            <p class={leadClass}>
-              Patrick Harrison and Owen Zanzal are your beCamp organizers. Say hello during
-              the event or connect with them on LinkedIn.
+          <div id="organizers" class={sub}>
+            <h3 class={subTitle}>Organizers</h3>
+            <p class={lead}>
+              Questions during the event? Find Patrick or Owen — or reach out ahead of
+              time.
             </p>
 
-            <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <article class={`flex flex-col gap-1.5 px-5 py-5 ${panelClass}`}>
-                <h3 class={h3Class}>Patrick Harrison</h3>
-                <p class={metaClass}>beCamp organizer</p>
-                <TextLink href="https://www.linkedin.com/in/patrick-harrison/" external class="mt-3 text-[13px]">
+            <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <article class={`p-5 ${panel}`}>
+                <h4 class="text-[1.15rem] font-medium text-white">Patrick Harrison</h4>
+                <p class={`mt-1.5 ${meta}`}>beCamp organizer</p>
+                <TextLink href="https://www.linkedin.com/in/patrick-harrison/" external class="mt-4 inline-block text-[13px]">
                   Connect on LinkedIn →
                 </TextLink>
               </article>
-              <article class={`flex flex-col gap-1.5 px-5 py-5 ${panelClass}`}>
-                <h3 class={h3Class}>Owen Zanzal</h3>
-                <p class={metaClass}>beCamp organizer</p>
-                <div class="mt-3 flex flex-col gap-1 text-sm text-white/80">
-                  <a href="mailto:ozanzal@gmail.com" class="underline transition-colors duration-150 hover:text-primary">
+              <article class={`p-5 ${panel}`}>
+                <h4 class="text-[1.15rem] font-medium text-white">Owen Zanzal</h4>
+                <p class={`mt-1.5 ${meta}`}>beCamp organizer</p>
+                <div class="mt-4 grid gap-1.5 font-mono text-[13px] leading-normal">
+                  <a href="mailto:ozanzal@gmail.com" class="text-white transition-colors duration-150 hover:text-primary">
                     ozanzal@gmail.com
                   </a>
                   <p>
-                    <a href="tel:+12034175355" class="underline transition-colors duration-150 hover:text-primary">203-417-5355</a>
-                    <span class="text-white/50"> · text messages preferred</span>
+                    <a href="tel:+12034175355" class="text-white transition-colors duration-150 hover:text-primary">203-417-5355</a>
+                    <span class="text-[#858fc6]"> · text preferred</span>
                   </p>
                 </div>
-                <TextLink href="https://www.linkedin.com/in/owenzanzal/" external class="mt-3 text-[13px]">
+                <TextLink href="https://www.linkedin.com/in/owenzanzal/" external class="mt-4 inline-block text-[13px]">
                   Connect on LinkedIn →
                 </TextLink>
               </article>
             </div>
-          </section>
+          </div>
 
-          <section id="conduct" class={sectionClass}>
-            <SectionLabel class="text-sm">Code of Conduct</SectionLabel>
-            <h2 class={h2Class}>Be kind. Be curious. Treat everyone with respect.</h2>
-            <p class={leadClass}>
-              beCamp follows the Charlottesville Community Code of Conduct. Simply by
-              joining this community, you belong here—and so does the next person.
+          <div id="slack" class={sub}>
+            <h3 class={subTitle}>Cville Slack</h3>
+            <p class={lead}>
+              You can chat with organizers and attendees on the #beCamp Slack channel.
             </p>
 
-            <div class="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-2">
+            <div class={`mt-5 flex max-w-[760px] items-start gap-4 px-5 py-4 ${panel}`}>
+              <img src={slackIcon.src} alt="" class="mt-0.5 size-6 shrink-0 opacity-80" />
               <div>
-                <h3 class={h3Class}>What we expect</h3>
-                <ul class="mt-4 flex flex-col gap-2 text-base text-white/80">
-                  <li>• Treat people with consideration and respect.</li>
-                  <li>• Welcome people into conversations and make room for other voices.</li>
-                  <li>• Respect differences, boundaries, privacy, and digital security.</li>
-                  <li>• Listen and adjust if someone tells you your behavior is making the space less welcoming or safe.</li>
+                <p class="font-mono text-[0.95rem] text-white">#beCamp</p>
+                <p class="mt-2 text-[0.96rem] leading-relaxed text-white/80">
+                  Not on Cville Slack yet? Email{' '}
+                  <TextLink href="mailto:ozanzal+slack@gmail.com" class="text-[0.96rem]">ozanzal+slack@gmail.com</TextLink>{' '}
+                  for an invitation. Expect confirmation within 24 hours.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div id="sessions" class={sub}>
+            <h3 class={subTitle}>Sessions</h3>
+            {sessionCallouts.map((callout) => (
+              <div
+                class={`mt-5 max-w-[760px] p-5 ${callout.accent ? 'border border-primary/50 bg-primary/5' : panel}`}
+              >
+                <h4 class="text-[1.1rem] font-medium text-white">{callout.title}</h4>
+                <p class="mt-1.5 text-[0.96rem] leading-relaxed text-white/80">{callout.body}</p>
+              </div>
+            ))}
+          </div>
+
+          <div id="conduct" class={sub}>
+            <h3 class={subTitle}>Code of Conduct</h3>
+            <p class={lead}>
+              beCamp follows the Charlottesville Community Code of Conduct. By joining this
+              community, you belong here — and so does the next person.
+            </p>
+
+            <div class="mt-4 grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-8">
+              <div>
+                <h4 class={itemTitle}>What we expect</h4>
+                <ul class="mt-2 list-disc pl-5 text-base leading-relaxed text-white/80 marker:text-primary">
+                  <li class="mb-1.5">Treat people with consideration and respect.</li>
+                  <li class="mb-1.5">Welcome others in and make room for other voices.</li>
+                  <li class="mb-1.5">Respect differences, boundaries, privacy, and digital security.</li>
+                  <li>Adjust if someone says your behavior is making the space less welcoming.</li>
                 </ul>
               </div>
               <div>
-                <h3 class={h3Class}>What isn't welcome</h3>
-                <ul class="mt-4 flex flex-col gap-2 text-base text-white/80">
-                  <li>• Discrimination, harassment, intimidation, stalking, or threats.</li>
-                  <li>• Unwelcome physical contact or attention, and photography or recording without consent.</li>
-                  <li>• Doxxing, digital-security attacks, or sustained disruption.</li>
+                <h4 class={itemTitle}>What isn't welcome</h4>
+                <ul class="mt-2 list-disc pl-5 text-base leading-relaxed text-white/80 marker:text-primary">
+                  <li class="mb-1.5">Discrimination, harassment, intimidation, stalking, or threats.</li>
+                  <li class="mb-1.5">Unwelcome contact, or photography and recording without consent.</li>
+                  <li>Doxxing, digital-security attacks, or sustained disruption.</li>
                 </ul>
               </div>
             </div>
 
-            <div class={`mt-10 flex w-full items-center gap-5 px-5 py-6 ${panelClass}`}>
-              <img src={infoIcon.src} alt="" class="size-8 shrink-0 opacity-80" />
-              <p class={bodyClass}>
-                If something happens, contact a beCamp organizer. You are encouraged to
-                speak up even if you are not sure whether something rises to the level of a
-                Code of Conduct violation. For an immediate emergency, call 911.
+            <div class={`mt-6 flex max-w-[760px] items-center gap-4 px-5 py-4 ${panel}`}>
+              <span
+                class="grid size-8 shrink-0 rotate-45 place-items-center border border-primary font-mono text-[15px] text-primary"
+                aria-hidden="true"
+              >
+                <span class="-rotate-45">!</span>
+              </span>
+              <p class="text-[0.96rem] leading-relaxed text-white/80">
+                See something? Contact an organizer — even if you're unsure it rises to a
+                violation. For an immediate emergency, call 911.
               </p>
             </div>
 
-            <TextLink href="https://github.com/cville/conduct" external class="mt-6 inline-block text-base">
+            <TextLink href="https://github.com/cville/conduct" external class="mt-5 inline-block text-base">
               Read the full Code of Conduct →
             </TextLink>
-          </section>
+          </div>
+        </section>
 
-          <section class={sectionClass}>
-            <SectionLabel class="text-sm">One last thing</SectionLabel>
-            <h2 class={h2Class}>Stay for the retrospective</h2>
-            <p class={leadClass}>
-              beCamp has been evolving through attendee feedback for 20 years. Saturday's
-              retrospective is where we decide what to keep, what to change, and what to
-              try next.
+        <!-- ── 03 Venue & parking ──────────────────────────────────────────── -->
+        <section id="venue" class={major}>
+          <div class="flex items-baseline gap-3.5">
+            <span class={majorNum}>03</span>
+            <h2 class={majorTitle}>Venue &amp; parking</h2>
+          </div>
+          <p class={lead}>
+            Two venues, about a 3–4 minute (0.1 mi) walk apart. Park once and walk between
+            them — no need to move your car on Friday.
+          </p>
+
+          <div id="venues" class={sub}>
+            <h3 class={subTitle}>Venues</h3>
+
+            <div class={`mt-4 ${rule}`}>
+              <div class="grid grid-cols-1 gap-x-8 gap-y-4 border-b border-divider py-5 sm:grid-cols-[1fr_auto]">
+                <div>
+                  <p class="text-[1.08rem] font-medium text-white">The Poplar</p>
+                  <p class={`mt-0.5 ${meta}`}>2017 Ivy Road · Charlottesville, VA 22903</p>
+                  <p class={sponsorNote}>
+                    <span>Reception venue sponsor</span>
+                    <TextLink href="https://www.virginiaguesthouse.com/dining/poplar/" external class="text-[13px]">The Poplar Restaurant</TextLink>
+                  </p>
+                  <p class="mt-3 max-w-[60ch] text-sm leading-relaxed text-white/50">
+                    Google Maps imagery is out of date and may show a construction site.
+                    The Virginia Guest House is now complete.
+                  </p>
+                </div>
+                <div class="flex flex-col gap-1.5 sm:items-end sm:text-right">
+                  <span class="font-mono text-xs text-[#858fc6]">Friday reception</span>
+                  <TextLink href={POPLAR_MAP} external class="text-[13px]">Open in Maps →</TextLink>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-x-8 gap-y-4 border-b border-divider py-5 sm:grid-cols-[1fr_auto]">
+                <div>
+                  <p class="text-[1.08rem] font-medium text-white">UVA School of Data Science</p>
+                  <p class={`mt-0.5 ${meta}`}>1919 Ivy Road · Charlottesville, VA 22903</p>
+                  <p class={sponsorNote}>
+                    <span>Main venue sponsor</span>
+                    <TextLink href="https://datascience.virginia.edu/" external class="text-[13px]">UVA School of Data Science</TextLink>
+                  </p>
+                </div>
+                <div class="flex flex-col gap-1.5 sm:items-end sm:text-right">
+                  <span class="font-mono text-xs text-[#858fc6]">Pitch Night + Saturday</span>
+                  <TextLink href={DATA_SCIENCE_MAP} external class="text-[13px]">Open in Maps →</TextLink>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="parking" class={sub}>
+            <h3 class={subTitle}>Parking</h3>
+            <p class={lead}>
+              Culbreth Garage is the best free option on Saturday; Emmet/Ivy is closer but
+              paid.
             </p>
-          </section>
-        </div>
+
+            <div class={`mt-4 ${rule}`}>
+              <div class="grid grid-cols-1 gap-x-8 gap-y-3 border-b border-divider py-5 sm:grid-cols-[1fr_auto]">
+                <div>
+                  <p class="text-[1.08rem] font-medium text-white">Culbreth Parking Garage</p>
+                  <p class={`mt-0.5 ${meta}`}>
+                    130 Culbreth Road · open to the public on weekends unless posted
+                  </p>
+                </div>
+                <div class="flex flex-col gap-1.5 sm:items-end sm:text-right">
+                  <span class="text-base font-medium text-white">Free</span>
+                  <span class="font-mono text-xs text-[#858fc6]">6-min walk · 0.3 mi</span>
+                  <TextLink href={CULBRETH_MAP} external class="text-[13px]">Open in Maps →</TextLink>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-x-8 gap-y-3 border-b border-divider py-5 sm:grid-cols-[1fr_auto]">
+                <div>
+                  <p class="text-[1.08rem] font-medium text-white">Emmet/Ivy Garage</p>
+                  <p class={`mt-0.5 ${meta}`}>
+                    123 Emmet Street N · ParkMobile Zone 5514 or Level 1 pay stations
+                  </p>
+                </div>
+                <div class="flex flex-col gap-1.5 sm:items-end sm:text-right">
+                  <span class="text-base font-medium text-white">$3/hour</span>
+                  <span class="font-mono text-xs text-[#858fc6]">2-min walk · 0.1 mi</span>
+                  <TextLink href={EMMET_IVY_MAP} external class="text-[13px]">Open in Maps →</TextLink>
+                </div>
+              </div>
+            </div>
+
+            <p class={sponsorNote}>
+              <span>Event signs sponsored by</span>
+              <TextLink href="https://datatheoretic.com/" external class="text-[13px]">Data Theoretic</TextLink>
+            </p>
+          </div>
+
+          <div id="maps" class={sub}>
+            <h3 class={subTitle}>Walking maps</h3>
+            <p class={`mt-2 ${meta}`}>Tap a route to enlarge.</p>
+
+            <div class="mt-5 grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-4">
+              {walkingMaps.map((route) => (
+                <button
+                  type="button"
+                  data-map-thumb
+                  data-full={route.image.src}
+                  data-caption={route.full}
+                  data-alt={route.alt}
+                  class={`group block w-full text-left transition-colors duration-150 hover:border-primary ${panel}`}
+                >
+                  <Image
+                    src={route.image}
+                    alt={route.alt}
+                    width={480}
+                    height={280}
+                    class="h-[140px] w-full object-cover"
+                  />
+                  <span class="block px-3 py-2 font-mono text-xs leading-relaxed text-white/80 transition-colors duration-150 group-hover:text-primary">
+                    {route.caption}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
     </div>
 
-    <CtaSection />
+    <!-- The shared CtaSection is full-bleed; this page's shell is a centred
+         column, so the closing call to action matches the shell instead. -->
+    <section class="mx-auto max-w-[1120px] border-t border-divider px-5 pb-16 pt-12 sm:px-10">
+      <h2 class="max-w-[20ch] text-[clamp(1.6rem,1.2rem+1.6vw,2.1rem)] font-medium tracking-[-0.02em] text-white">
+        The people who show up make beCamp.
+      </h2>
+      <p class="mt-3 max-w-[60ch] text-base leading-relaxed text-white/80">
+        Come with an idea. Come with a question. Come because you're curious.
+      </p>
+      <Button href="/register" class="mt-6 w-full sm:w-auto sm:px-8">Register now</Button>
+    </section>
   </main>
   <Footer />
+
+  <!-- Walking-map lightbox, mirroring the video lightbox on the home page. -->
+  <div
+    id="map-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-bg/95 p-4 sm:p-10"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Walking map"
+  >
+    <div class={`relative max-h-[92vh] w-full max-w-[1000px] overflow-auto ${panel}`}>
+      <button
+        id="map-modal-close"
+        type="button"
+        aria-label="Close map"
+        class="absolute right-2 top-2 flex size-10 items-center justify-center bg-black/55 text-2xl text-white transition-colors duration-150 hover:bg-primary hover:text-bg"
+      >
+        &#10005;
+      </button>
+      <img id="map-modal-image" src="" alt="" class="block h-auto w-full" />
+      <p id="map-modal-caption" class="border-t border-white/[0.08] px-4 py-3 font-mono text-[13px] text-white/80"></p>
+    </div>
+  </div>
 </Layout>
 
 <script>
-  /* Highlights the sidebar entry for whichever guide section is most visible.
-     Re-runs per navigation (astro:page-load) because the router swaps in fresh
-     nodes, and no-ops on pages without the sidebar. */
+  /* Two behaviours, both re-initialised per navigation (astro:page-load) because
+     the router swaps in fresh nodes: the sidebar scroll-spy and the map
+     lightbox. Both no-op on pages without their markup. */
   let observer: IntersectionObserver | null = null;
+  let modal: HTMLElement | null = null;
 
-  const init = () => {
+  const setModalOpen = (open: boolean) => {
+    modal?.classList.toggle('hidden', !open);
+    modal?.classList.toggle('flex', open);
+    document.body.classList.toggle('overflow-hidden', open);
+    if (!open) {
+      const image = document.getElementById('map-modal-image') as HTMLImageElement | null;
+      if (image) image.src = '';
+    }
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) setModalOpen(false);
+  });
+
+  const initScrollSpy = () => {
     observer?.disconnect();
 
     const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-guide-link]')];
@@ -668,22 +728,63 @@ const panelClass = 'border border-white/[0.08] bg-white/[0.03] backdrop-blur-md'
       .map((link) => document.querySelector(link.hash))
       .filter((section): section is Element => Boolean(section));
 
+    /* A sub-section lights its own entry and the major heading above it, so the
+       reader can see which of the three parts of the guide they are inside. */
+    const mark = (id: string) => {
+      const index = links.findIndex((link) => link.hash === `#${id}`);
+      for (const link of links) {
+        link.setAttribute('aria-current', 'false');
+        link.removeAttribute('data-parent');
+      }
+      if (index < 0) return;
+      links[index].setAttribute('aria-current', 'true');
+      if (!links[index].classList.contains('pl-7')) return;
+      for (let i = index - 1; i >= 0; i--) {
+        if (!links[i].classList.contains('pl-7')) {
+          links[i].setAttribute('data-parent', '');
+          return;
+        }
+      }
+    };
+
     observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible) return;
-
-        for (const link of links) {
-          link.setAttribute('aria-current', String(link.hash === `#${visible.target.id}`));
-        }
+        if (visible) mark(visible.target.id);
       },
-      { rootMargin: '-20% 0px -60% 0px', threshold: [0.01, 0.15, 0.4] }
+      { rootMargin: '-15% 0px -70% 0px', threshold: [0.01, 0.2] }
     );
 
     for (const section of sections) observer.observe(section);
   };
 
-  document.addEventListener('astro:page-load', init);
+  const initLightbox = () => {
+    modal = document.getElementById('map-modal');
+    const image = document.getElementById('map-modal-image') as HTMLImageElement | null;
+    const caption = document.getElementById('map-modal-caption');
+    const closeBtn = document.getElementById('map-modal-close');
+
+    for (const thumb of document.querySelectorAll<HTMLElement>('[data-map-thumb]')) {
+      thumb.addEventListener('click', () => {
+        if (!image) return;
+        image.src = thumb.dataset.full ?? '';
+        image.alt = thumb.dataset.alt ?? '';
+        if (caption) caption.textContent = thumb.dataset.caption ?? '';
+        setModalOpen(true);
+        closeBtn?.focus();
+      });
+    }
+
+    closeBtn?.addEventListener('click', () => setModalOpen(false));
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) setModalOpen(false);
+    });
+  };
+
+  document.addEventListener('astro:page-load', () => {
+    initScrollSpy();
+    initLightbox();
+  });
 </script>
