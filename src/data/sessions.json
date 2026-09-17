@@ -1,0 +1,2163 @@
+[
+  {
+    "year": 2025,
+    "sessions": [
+      {
+        "topic": "Strangers to Best Friends in 45 mins",
+        "time": "9:30am",
+        "speaker": "Dan Funk",
+        "type": "Share"
+      },
+      {
+        "topic": "Improving our City, Making things better",
+        "time": "9:30am",
+        "speaker": "John",
+        "type": "Share"
+      },
+      {
+        "topic": "Deep seek vs deep mind",
+        "time": "9:30am",
+        "speaker": "Noah Healy",
+        "type": "Share"
+      },
+      {
+        "topic": "How to self-analyze your start-up idea",
+        "time": "10:20am",
+        "speaker": "Carson Sweet",
+        "type": "Present"
+      },
+      {
+        "topic": "Strangers to Best Friends in 45 mins",
+        "time": "10:20am",
+        "speaker": "Alex Z",
+        "type": "Learn"
+      },
+      {
+        "topic": "Generative AI Roundup",
+        "time": "10:20am",
+        "speaker": "John Feminella",
+        "type": "Share"
+      },
+      {
+        "topic": "Labor Market",
+        "time": "11:10am",
+        "speaker": "Isaac T",
+        "type": "Present"
+      },
+      {
+        "topic": "Big Feelings/Are You Religious?",
+        "time": "11:10am",
+        "speaker": "Owen/Jessica",
+        "type": "Share"
+      },
+      {
+        "topic": "How embedding models work",
+        "time": "11:10am",
+        "speaker": "Nish",
+        "type": "Share"
+      },
+      {
+        "topic": "Music is dying, what's the deal?",
+        "time": "2:00pm",
+        "speaker": "Mike Powers",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Do you own your own data/right to repair",
+        "time": "2:00pm",
+        "speaker": "Sean B",
+        "type": "Present"
+      },
+      {
+        "topic": "AI Explorers/How are you using LLMs/Cville LLM",
+        "time": "2:00pm",
+        "speaker": "Owen/Stephen L/Ansol",
+        "type": "Share"
+      },
+      {
+        "topic": "What happens to your recycled electronics?",
+        "time": "2:50pm",
+        "speaker": "Steven L",
+        "type": "Present"
+      },
+      {
+        "topic": "Tech for democracy/healthy city",
+        "time": "2:50pm",
+        "speaker": "Ryan Snow",
+        "type": "Learn"
+      },
+      {
+        "topic": "Relational Intelligence: Reasoning in dialogue with AI",
+        "time": "2:50pm",
+        "speaker": "Tina",
+        "type": "Present"
+      }
+    ]
+  },
+  {
+    "year": 2024,
+    "sessions": [
+      {
+        "topic": "Help Community Organizations Win Money Through Workflows",
+        "time": "9:30am",
+        "speaker": "Jon Arthur",
+        "type": "Share"
+      },
+      {
+        "topic": "Is Intellectual Property A Good Or A Bad Idea?",
+        "time": "9:30am",
+        "speaker": "Noah Healy",
+        "type": "Share"
+      },
+      {
+        "topic": "Be An Imposter With Me!",
+        "time": "9:30am",
+        "speaker": "Todd Gerdy",
+        "type": "Share"
+      },
+      {
+        "topic": "AWS Cost Savings",
+        "time": "10:20am",
+        "speaker": "Steven Harrison",
+        "type": "Present"
+      },
+      {
+        "topic": "How Gen AI Will Change The Creative Process And How That Will Change Us",
+        "time": "10:20am",
+        "speaker": "Robin Macklin",
+        "type": "Learn"
+      },
+      {
+        "topic": "Bad Ideas! Share Your Worst Tech Ideas (Or Other Bad Ideas)",
+        "time": "10:20am",
+        "speaker": "Jon Kropko",
+        "type": "Share"
+      },
+      {
+        "topic": "Nix Package Manager",
+        "time": "11:10am",
+        "speaker": "Keith Edyburn",
+        "type": "Present"
+      },
+      {
+        "topic": "LLM App For Training Forensic Interviewers",
+        "time": "11:10am",
+        "speaker": "Jim Grady",
+        "type": "Share"
+      },
+      {
+        "topic": "Neurodivergence And The Tech Sector",
+        "time": "11:10am",
+        "speaker": "Taylor Vierrether",
+        "type": "Share"
+      },
+      {
+        "topic": "No Javascript Websites",
+        "time": "2:00pm",
+        "speaker": "Michael Holroyd",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "AI Hype vs. AI Reality",
+        "time": "2:00pm",
+        "speaker": "John Feminella",
+        "type": "Present"
+      },
+      {
+        "topic": "Rock Tumbling",
+        "time": "2:00pm",
+        "speaker": "Isaac Truett",
+        "type": "Share"
+      },
+      {
+        "topic": "Best Practices For Python As A Second Language",
+        "time": "2:50pm",
+        "speaker": "Noah Bloom",
+        "type": "Present"
+      },
+      {
+        "topic": "Let's Talk Leadership. Good, Bad, And The Lacking",
+        "time": "2:50pm",
+        "speaker": "Jessica Otey",
+        "type": "Learn"
+      },
+      {
+        "topic": "OpenStreetMap For Fun And For Profit",
+        "time": "2:50pm",
+        "speaker": "William Edmisten",
+        "type": "Present"
+      }
+    ]
+  },
+  {
+    "year": 2023,
+    "sessions": [
+      {
+        "topic": "AI Games",
+        "time": "9:30am",
+        "speaker": "Owen Zanzal",
+        "room": "Main Room",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Decarbonizing Computing & The Grid",
+        "time": "9:30am",
+        "speaker": "Cushing Whitney",
+        "room": "2nd Floor Board Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Shaping High Performing Teams",
+        "time": "9:30am",
+        "speaker": "Cameron Sumpter",
+        "room": "2nd Floor Conference Room",
+        "type": "Learn"
+      },
+      {
+        "topic": "How Do We Consume Content? What Do We Do With It Afterwards?",
+        "time": "9:30am",
+        "speaker": "Ben Lechlitner",
+        "room": "2nd Floor common space",
+        "type": "Present/Learn"
+      },
+      {
+        "topic": "Demystifying Equity, Options, and Noncash Compensation for Employees",
+        "time": "10:20am",
+        "speaker": "John Feminella",
+        "room": "2nd Floor Board Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Let's Talk About How Hard Remote Work Is",
+        "time": "10:20am",
+        "speaker": "Todd Gerdy",
+        "room": "Main Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Learn To Play Go",
+        "time": "10:20am",
+        "speaker": "Michael Holroyd",
+        "room": "2nd Floor Conference Room",
+        "type": "Learn"
+      },
+      {
+        "topic": "Front End & Back End Web Development",
+        "time": "10:20am",
+        "speaker": "Tommy Lane",
+        "room": "2nd Floor common space",
+        "type": "Learn"
+      },
+      {
+        "topic": "Civic Tech in Charlottesville",
+        "time": "11:10am",
+        "speaker": "Jonathan Kropko",
+        "room": "2nd Floor common space",
+        "type": "Share"
+      },
+      {
+        "topic": "Expensive Software Disasters and What We Can Learn From Them",
+        "time": "11:10am",
+        "speaker": "John Feminella",
+        "room": "2nd Floor Board Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Shim Sham: Learn to Dance a Solo Jazz Routine",
+        "time": "11:10am",
+        "speaker": "Dave Sorensen",
+        "room": "Main Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Gamifications At Work: Reduce The Suck",
+        "time": "11:10am",
+        "speaker": "Ben Lechlitner",
+        "room": "2nd Floor Conference Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Talk About Imposter Syndrome",
+        "time": "2:00pm",
+        "speaker": "Tom Schroeder",
+        "room": "Main Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Tips/Tricks for Undoing The Wreckage of Distraction",
+        "time": "2:00pm",
+        "speaker": "Jessica Otey",
+        "room": "2nd Floor Board Room",
+        "type": "Share/Learn"
+      },
+      {
+        "topic": "Action Based Change",
+        "time": "2:00pm",
+        "speaker": "Robin Macklin",
+        "room": "2nd Floor common space",
+        "type": "Share"
+      },
+      {
+        "topic": "Applied Contextual Bandits",
+        "time": "2:00pm",
+        "speaker": "Mark Rucker",
+        "room": "2nd Floor Conference Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Compost Doesn't Happen",
+        "time": "2:50pm",
+        "speaker": "Noah Bloom",
+        "room": "Main Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Serverless (AWS) Software Design",
+        "time": "2:50pm",
+        "speaker": "Cameron Sumpter",
+        "room": "2nd Floor Board Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Define! Work-life Balance",
+        "time": "2:50pm",
+        "speaker": "Kangyoon Bae",
+        "room": "2nd Floor common space",
+        "type": "Share"
+      },
+      {
+        "topic": "Social Choice & Voting Rules",
+        "time": "2:50pm",
+        "speaker": "Blaze Zierhut",
+        "room": "2nd Floor Conference Room",
+        "type": "Share"
+      }
+    ]
+  },
+  {
+    "year": 2022,
+    "sessions": [
+      {
+        "topic": "When Things Go Wrong - Story Time",
+        "time": "9:30am",
+        "speaker": "Jeff Bordogna",
+        "room": "Red",
+        "type": "Share"
+      },
+      {
+        "topic": "Gardening Q&A",
+        "time": "9:30am",
+        "speaker": "Noah Bloom",
+        "room": "Blue",
+        "type": "Share"
+      },
+      {
+        "topic": "Web Dev w/o Framework using Web Components",
+        "time": "9:30am",
+        "speaker": "John Loy",
+        "room": "Pink",
+        "type": "Present"
+      },
+      {
+        "topic": "Get Your Dream Job! Learning From Outbound Sales.",
+        "time": "9:30am",
+        "speaker": "Stephen Levin",
+        "room": "Black",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Move It! Stages and Phases of System Migrations",
+        "time": "10:20am",
+        "speaker": "George Hartogensis",
+        "room": "Brown",
+        "type": "Present"
+      },
+      {
+        "topic": "How To Solve It",
+        "time": "10:20am",
+        "speaker": "Ron DuPlain",
+        "room": "Red",
+        "type": "Present"
+      },
+      {
+        "topic": "A Framework for Web Components",
+        "time": "10:20am",
+        "speaker": "Ryan McNeely",
+        "room": "Pink",
+        "type": "Present"
+      },
+      {
+        "topic": "Free IT Education for Non-IT Folks",
+        "time": "10:20am",
+        "speaker": "Omar Khurshid",
+        "room": "Black",
+        "type": "Share"
+      },
+      {
+        "topic": "Foster Care / Adoption Stories, Resources, Information",
+        "time": "11:10am",
+        "speaker": "Stephen Dause",
+        "room": "Blue",
+        "type": "Present"
+      },
+      {
+        "topic": "Quantum Computing",
+        "time": "11:10am",
+        "speaker": "William Proffitt",
+        "room": "Brown",
+        "type": "Present/Learn"
+      },
+      {
+        "topic": "Kubernetes for Busy Technologists",
+        "time": "11:10am",
+        "speaker": "John Feminella",
+        "room": "Red",
+        "type": "Present"
+      },
+      {
+        "topic": "Act -> Think -> Feel Organizational Culture",
+        "time": "11:10am",
+        "speaker": "Robin Macklin",
+        "room": "Blue",
+        "type": "Share"
+      },
+      {
+        "topic": "Finding & Analyzing Data for Fun",
+        "time": "11:10am",
+        "speaker": "Mason Montgomery",
+        "room": "Pink",
+        "type": "Share"
+      },
+      {
+        "topic": "Blockchain Outside of Crypto",
+        "time": "11:10am",
+        "speaker": "Ben Wexler",
+        "room": "Pink"
+      },
+      {
+        "topic": "How to Achieve Your Dreams",
+        "time": "11:10am",
+        "speaker": "Drew Lytle",
+        "room": "Black",
+        "type": "Present"
+      },
+      {
+        "topic": "Hydroponic Garden Optimization",
+        "time": "2:25pm",
+        "speaker": "Ellis Johns",
+        "room": "Red",
+        "type": "Present"
+      },
+      {
+        "topic": "Big Town to Small Town, Small to Big?",
+        "time": "2:25pm",
+        "speaker": "Dan Hiester",
+        "room": "Blue",
+        "type": "Share"
+      },
+      {
+        "topic": "Slack Tips & Tricks",
+        "time": "2:25pm",
+        "speaker": "Courtney Christensen",
+        "room": "Pink",
+        "type": "Share"
+      },
+      {
+        "topic": "Publishing a Codebook OR Teaching Kids Code",
+        "time": "2:25pm",
+        "speaker": "Sidd Dalal",
+        "room": "Brown",
+        "type": "Present"
+      },
+      {
+        "topic": "How to Break into Data Science",
+        "time": "2:25pm",
+        "speaker": "Patrick Harrison",
+        "room": "Black",
+        "type": "Share"
+      },
+      {
+        "topic": "Gender Inclusivity",
+        "time": "3:15pm",
+        "speaker": "Ari Oxford / Alex Oxford",
+        "room": "Red",
+        "type": "Share"
+      },
+      {
+        "topic": "Draw Down: Reducing Greenhouse Gas",
+        "time": "3:15pm",
+        "speaker": "Peter Malcolm",
+        "room": "Blue",
+        "type": "Share"
+      },
+      {
+        "topic": "Managing Digital Artifacts of Your Life! FLAC!",
+        "time": "3:15pm",
+        "speaker": "Al Tenhundfeld",
+        "room": "Pink",
+        "type": "Share"
+      },
+      {
+        "topic": "Generating Functions: 17th Century Lazy Programming",
+        "time": "3:15pm",
+        "speaker": "Noah Healy",
+        "room": "Brown",
+        "type": "Present"
+      },
+      {
+        "topic": "Todd wants to show what he DOES know about career changes.",
+        "time": "3:15pm",
+        "speaker": "Todd Gerdy",
+        "room": "Black",
+        "type": "Present"
+      }
+    ]
+  },
+  {
+    "year": 2019,
+    "sessions": [
+      {
+        "topic": "Good Grief: Sharing About Loss",
+        "time": "9:30am",
+        "speaker": "Jessica Otey",
+        "room": "Davis Commons",
+        "type": "Share"
+      },
+      {
+        "topic": "Topology and Embedding: Systems, Games, and Designs",
+        "time": "9:30am",
+        "speaker": "Noah Healy",
+        "room": "Blue Room (109)",
+        "type": "Present"
+      },
+      {
+        "topic": "Let's Build A Blockchain",
+        "time": "9:30am",
+        "speaker": "John Feminella",
+        "room": "Orange Room (108)",
+        "type": "Present"
+      },
+      {
+        "topic": "Everyone Can Do Great Presentations",
+        "time": "9:30am",
+        "speaker": "Matt Dick",
+        "room": "Yellow Room (107)",
+        "type": "Present"
+      },
+      {
+        "topic": "How To Break Into Data Science",
+        "time": "9:30am",
+        "speaker": "Patrick Harrison",
+        "room": "Red Room (242)",
+        "type": "Share"
+      },
+      {
+        "topic": "Effective Technical Mentorship (How To Weaponize Junior Devs)",
+        "time": "10:20am",
+        "speaker": "Brent Baumgartner",
+        "room": "Davis Commons",
+        "type": "Share"
+      },
+      {
+        "topic": "Understanding Type Systems",
+        "time": "10:20am",
+        "speaker": "John Feminella",
+        "room": "Blue Room (109)",
+        "type": "Present"
+      },
+      {
+        "topic": "Career Workshop Brainstorm",
+        "time": "10:20am",
+        "speaker": "Courtney and Shayna",
+        "room": "Orange Room (108)",
+        "type": "Share"
+      },
+      {
+        "topic": "Math Is Getting Political; Let's Talk About It",
+        "time": "10:20am",
+        "speaker": "Noah Healy",
+        "room": "Yellow Room (107)",
+        "type": "Share"
+      },
+      {
+        "topic": "From Strangers to Best Friends In 45 Minutes",
+        "time": "10:20am",
+        "speaker": "Alex Zorychta",
+        "room": "Red Room (242)",
+        "type": "Present"
+      },
+      {
+        "topic": "Ranked Choice Voting",
+        "time": "11:10am",
+        "speaker": "Sally Hudson",
+        "room": "Davis Commons",
+        "type": "Present"
+      },
+      {
+        "topic": "Credit-Card-Sized AI To Control A Drone",
+        "time": "11:10am",
+        "speaker": "Tim Emerick",
+        "room": "Blue Room (109)",
+        "type": "Present"
+      },
+      {
+        "topic": "Going Solar",
+        "time": "11:10am",
+        "speaker": "Sidd Dalal",
+        "room": "Orange Room (108)",
+        "type": "Present"
+      },
+      {
+        "topic": "CTO Panel",
+        "time": "11:10am",
+        "speaker": "Ron DuPlain",
+        "room": "Yellow Room (107)",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Fail Better, Harder Stronger: How To Keep Going Forward",
+        "time": "11:10am",
+        "speaker": "Vital Boisset",
+        "room": "Red Room (242)",
+        "type": "Share"
+      },
+      {
+        "topic": "Introduction to Distributed Systems",
+        "time": "2:00pm",
+        "speaker": "John Feminella",
+        "room": "Davis Commons",
+        "type": "Present"
+      },
+      {
+        "topic": "Web Accessibility",
+        "time": "2:00pm",
+        "speaker": "Dylan Sheffer",
+        "room": "Blue Room (109)",
+        "type": "Present"
+      },
+      {
+        "topic": "How To Get A Career",
+        "time": "2:00pm",
+        "speaker": "George Hartogensis",
+        "room": "Orange Room (108)",
+        "type": "Learn"
+      },
+      {
+        "topic": "Tree Branch",
+        "time": "2:00pm",
+        "speaker": "Robin Macklin",
+        "room": "Yellow Room (107)",
+        "type": "Share"
+      },
+      {
+        "topic": "Go (Boardgame)",
+        "time": "2:00pm",
+        "speaker": "Michael Holroyd",
+        "room": "Red Room (242)",
+        "type": "Present"
+      },
+      {
+        "topic": "Intuitive, Visual, Tangible, Algorithms",
+        "time": "2:50pm",
+        "speaker": "Phil Varner",
+        "room": "Davis Commons",
+        "type": "Present"
+      },
+      {
+        "topic": "Let's Talk Kubernetes",
+        "time": "2:50pm",
+        "speaker": "Cushing W",
+        "room": "Blue Room (109)",
+        "type": "Share"
+      },
+      {
+        "topic": "Open Source Local Home Automation",
+        "time": "2:50pm",
+        "speaker": "Taylor Vierrether",
+        "room": "Orange Room (108)",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Open A Discussion To Address The Low Percentage Of Women In ICT Field",
+        "time": "2:50pm",
+        "speaker": "Nadia Jean Charles",
+        "room": "Yellow Room (107)",
+        "type": "Present"
+      },
+      {
+        "topic": "How to Create and Maintain High-quality Meaningful Social Connections In The Age Of Anti-Social Media",
+        "time": "2:50pm",
+        "speaker": "Alex Zorychta",
+        "room": "Red Room (242)",
+        "type": "Share"
+      }
+    ]
+  },
+  {
+    "year": 2018,
+    "sessions": [
+      {
+        "topic": "The Kelly Criteria",
+        "time": "10:00am",
+        "speaker": "Noah Healy",
+        "room": "Conf room 1",
+        "type": "Present"
+      },
+      {
+        "topic": "Product Management & How It's Done",
+        "time": "10:00am",
+        "room": "Conf room 2",
+        "type": "Learn"
+      },
+      {
+        "topic": "The Rainbow of Death",
+        "time": "10:00am",
+        "speaker": "Mike Bland",
+        "room": "Conf room 3",
+        "type": "Present"
+      },
+      {
+        "topic": "Application of Machine Learning to Financial Markets",
+        "time": "10:00am",
+        "speaker": "Sunit Shah",
+        "room": "Big Room",
+        "type": "Present"
+      },
+      {
+        "topic": "How to Retire @30, 40, 47...",
+        "time": "10:45am",
+        "speaker": "Jaime",
+        "room": "Conf room 1",
+        "type": "Present"
+      },
+      {
+        "topic": "Writing effective tech blog entries for/at work",
+        "time": "10:45am",
+        "room": "Conf room 2",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Mindfulness in Tech & Innovation",
+        "time": "10:45am",
+        "speaker": "Jessica G",
+        "room": "Conf room 3",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Open source home automation",
+        "time": "10:45am",
+        "speaker": "Ellis",
+        "room": "Big Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Conflict Resolution",
+        "time": "11:30am",
+        "room": "Conf room 1",
+        "type": "Share"
+      },
+      {
+        "topic": "Positive Net '+' Cville Recruitment",
+        "time": "11:30am",
+        "room": "Conf room 2",
+        "type": "Share"
+      },
+      {
+        "topic": "Help Todd Gerdy Know What He Doesn't Know",
+        "time": "11:30am",
+        "room": "Conf room 3",
+        "type": "Share"
+      },
+      {
+        "topic": "Cryptocurrency Crash Course",
+        "time": "11:30am",
+        "speaker": "John Feminella",
+        "room": "Big Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Slack (and Cville Slack)",
+        "time": "2:15pm",
+        "room": "Conf room 1",
+        "type": "Share"
+      },
+      {
+        "topic": "Docs as organizational hacking tools",
+        "time": "2:15pm",
+        "speaker": "Mike Bland",
+        "room": "Conf room 2",
+        "type": "Present"
+      },
+      {
+        "topic": "Future of JavaScript",
+        "time": "2:15pm",
+        "room": "Conf room 3",
+        "type": "Share"
+      },
+      {
+        "topic": "Connecting Cville Tech Talent with Non-Profits",
+        "time": "2:15pm",
+        "room": "Big Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Games and Strategy",
+        "time": "3:00pm",
+        "speaker": "Noah Healy",
+        "room": "Conf room 1",
+        "type": "Present"
+      },
+      {
+        "topic": "Making Friends",
+        "time": "3:00pm",
+        "room": "Conf room 2",
+        "type": "Share"
+      },
+      {
+        "topic": "How to have a career in tech sales",
+        "time": "3:00pm",
+        "speaker": "Mills Horton",
+        "room": "Conf room 3",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Software Disasters",
+        "time": "3:00pm",
+        "speaker": "John Feminella",
+        "room": "Big Room",
+        "type": "Present"
+      },
+      {
+        "topic": "Meetup",
+        "time": "3:45pm",
+        "speaker": "Michael Holroyd",
+        "room": "Conf room 1",
+        "type": "Present"
+      },
+      {
+        "topic": "Work/Life Balance w/kids & Avoiding Burnout",
+        "time": "3:45pm",
+        "room": "Conf room 2",
+        "type": "Share"
+      },
+      {
+        "topic": "Async/Await",
+        "time": "3:45pm",
+        "room": "Conf room 3",
+        "type": "Learn"
+      },
+      {
+        "topic": "Grand Theft Auto for Machine Learning",
+        "time": "3:45pm",
+        "speaker": "Tim Emerick",
+        "room": "Big Room",
+        "type": "Present"
+      }
+    ]
+  },
+  {
+    "year": 2017,
+    "sessions": [
+      {
+        "topic": "Better Visualization !science!",
+        "time": "10:00am",
+        "room": "Room 1"
+      },
+      {
+        "topic": "Working With Sales as an Engineer",
+        "time": "10:00am",
+        "room": "Room 2"
+      },
+      {
+        "topic": "Western Albemarle Highschool Robotics",
+        "time": "10:00am",
+        "room": "Room 3"
+      },
+      {
+        "topic": "Psychological Safety",
+        "time": "10:00am",
+        "room": "Room 4"
+      },
+      {
+        "topic": "\"Things\" I've Connected to the Internet",
+        "time": "10:45am",
+        "room": "Room 1"
+      },
+      {
+        "topic": "Tech Recruiting",
+        "time": "10:45am",
+        "room": "Room 2"
+      },
+      {
+        "topic": "Slack Chatbots for Building Community",
+        "time": "10:45am",
+        "room": "Room 3"
+      },
+      {
+        "topic": "Easy Play With Data - Apache Zeppelin",
+        "time": "10:45am",
+        "room": "Room 4"
+      },
+      {
+        "topic": "SAAS Side Projects - How to be Successful",
+        "time": "11:30am",
+        "room": "Room 1"
+      },
+      {
+        "topic": "How Does a Search Engine Even Work?",
+        "time": "11:30am",
+        "room": "Room 2"
+      },
+      {
+        "topic": "FPV Racing - Freestyle Wings Quads",
+        "time": "11:30am",
+        "room": "Room 3"
+      },
+      {
+        "topic": "Options Markets - How They Work",
+        "time": "11:30am",
+        "room": "Room 4"
+      },
+      {
+        "topic": "Parlor Tricks",
+        "time": "2:15pm",
+        "room": "Room 1"
+      },
+      {
+        "topic": "Visualizing Big Geo Data",
+        "time": "2:15pm",
+        "room": "Room 2"
+      },
+      {
+        "topic": "#cville",
+        "time": "2:15pm",
+        "room": "Room 3"
+      },
+      {
+        "topic": "Cannabis + Tech",
+        "time": "2:15pm",
+        "room": "Room 4"
+      },
+      {
+        "topic": "Machine Learning Round Table",
+        "time": "3:00pm",
+        "room": "Room 1"
+      },
+      {
+        "topic": "Docker Cloud & Introduction to Containers",
+        "time": "3:00pm",
+        "room": "Room 2"
+      },
+      {
+        "topic": "Let's Get You Writing & Blogging",
+        "time": "3:00pm",
+        "room": "Room 3"
+      },
+      {
+        "topic": "Cleaner Code With Enumerables",
+        "time": "3:00pm",
+        "room": "Room 4"
+      },
+      {
+        "topic": "Modern Natural Language Processing",
+        "time": "3:45pm",
+        "room": "Room 1"
+      },
+      {
+        "topic": "Docker Container Orchestration - Rancher",
+        "time": "3:45pm",
+        "room": "Room 2"
+      },
+      {
+        "topic": "Zabbix Monitoring",
+        "time": "3:45pm",
+        "room": "Room 3"
+      },
+      {
+        "topic": "Analog Synthesis",
+        "time": "3:45pm",
+        "room": "Room 4"
+      }
+    ]
+  },
+  {
+    "year": 2016,
+    "sessions": [
+      {
+        "topic": "Docker Routing with Apache",
+        "time": "10:00am",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Elastic Search - What? Why?",
+        "time": "10:00am",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Imposter Syndrome",
+        "time": "10:00am",
+        "room": "Lunch Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Cryptocurrencies, Bitcoin, Etc",
+        "time": "10:00am",
+        "room": "Art Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Packet Sniffing",
+        "time": "10:45am",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Charitable Giving",
+        "time": "10:45am",
+        "room": "Board Room",
+        "type": "Share"
+      },
+      {
+        "topic": "How can we open science?",
+        "time": "10:45am",
+        "room": "Lunch Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Javascript Frameworks",
+        "time": "10:45am",
+        "room": "Art Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Writing Code with my Brother in Law",
+        "time": "11:30am",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Visual Communication - Graphic Grammar",
+        "time": "11:30am",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Diversity in Tech",
+        "time": "11:30am",
+        "room": "Lunch Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Server & Config Management, AWS Server Builds",
+        "time": "11:30am",
+        "room": "Art Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Intro to Machine Learning",
+        "time": "2:15pm",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Reproducible research using R, RMarkDown",
+        "time": "2:15pm",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Code Reviews and how they work at your company",
+        "time": "2:15pm",
+        "room": "Lunch Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Physical Computing",
+        "time": "2:15pm",
+        "room": "Art Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Breakdance in 45 minutes",
+        "time": "3:00pm",
+        "room": "Big Room"
+      },
+      {
+        "topic": "SP@CE Flexspace Incubator",
+        "time": "3:00pm",
+        "room": "Board Room"
+      },
+      {
+        "topic": "KISS Functional Programming",
+        "time": "3:00pm",
+        "room": "Lunch Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Maintaining Open Source Software",
+        "time": "3:00pm",
+        "room": "Art Room",
+        "type": "Share"
+      },
+      {
+        "topic": "Getting & Filling Tech Jobs + Salary Negotiation",
+        "time": "3:45pm",
+        "room": "Big Room"
+      },
+      {
+        "topic": "How to prevent train derailments with software",
+        "time": "3:45pm",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Pizza dough making",
+        "time": "3:45pm",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Ego Depletion and other psychology",
+        "time": "3:45pm",
+        "room": "Art Room",
+        "type": "Share"
+      }
+    ]
+  },
+  {
+    "year": 2015,
+    "sessions": [
+      {
+        "topic": "Testing Methodologies",
+        "time": "10:00am",
+        "room": "Big Conference Room"
+      },
+      {
+        "topic": "Sharing \"entrepreneurial\" failure stories",
+        "time": "10:00am",
+        "room": "Courtyard"
+      },
+      {
+        "topic": "The state of tech in political campaigning",
+        "time": "10:00am",
+        "room": "Small Conference Room"
+      },
+      {
+        "topic": "Sailing + Dev? Yes please!",
+        "time": "10:00am",
+        "room": "Center Room"
+      },
+      {
+        "topic": "Getting started with ReactJS",
+        "time": "10:45am",
+        "room": "Big Conference Room"
+      },
+      {
+        "topic": "Identity, naming and gender in programming",
+        "time": "10:45am",
+        "room": "Courtyard"
+      },
+      {
+        "topic": "Virtual Reality",
+        "time": "10:45am",
+        "room": "Small Conference Room"
+      },
+      {
+        "topic": "CTO Panel",
+        "time": "10:45am",
+        "room": "Center Room"
+      },
+      {
+        "topic": "Command Line Trix",
+        "time": "11:30am",
+        "room": "Big Conference Room"
+      },
+      {
+        "topic": "How do we deploy",
+        "time": "11:30am",
+        "room": "Courtyard"
+      },
+      {
+        "topic": "On Charlottesville's innovation ecosystem",
+        "time": "11:30am",
+        "room": "Small Conference Room"
+      },
+      {
+        "topic": "Wearables that don't suck and aren't ugly how?",
+        "time": "11:30am",
+        "room": "Center Room"
+      },
+      {
+        "topic": "Internet of things and regulated industries",
+        "time": "1:30pm",
+        "room": "Courtyard"
+      },
+      {
+        "topic": "Scaling python to 3,000 cores",
+        "time": "1:30pm",
+        "room": "Small Conference Room"
+      },
+      {
+        "topic": "How to be a freelancer? locally",
+        "time": "1:30pm",
+        "room": "Center Room"
+      },
+      {
+        "topic": "How to build every day innovation culture in Charlottesville?",
+        "time": "2:15pm",
+        "room": "Big Conference Room"
+      },
+      {
+        "topic": "Go (Board-game)",
+        "time": "2:15pm",
+        "room": "Courtyard"
+      },
+      {
+        "topic": "Functional Programming in Ruby",
+        "time": "2:15pm",
+        "room": "Small Conference Room"
+      },
+      {
+        "topic": "Data Science Round table",
+        "time": "2:15pm",
+        "room": "Center Room"
+      },
+      {
+        "topic": "Distributed Consensus",
+        "time": "3:00pm",
+        "room": "Big Conference Room"
+      },
+      {
+        "topic": "Surviving the Rewrite: A War Story",
+        "time": "3:00pm",
+        "room": "Courtyard"
+      },
+      {
+        "topic": "Optimizing code (Go)",
+        "time": "3:00pm",
+        "room": "Small Conference Room"
+      },
+      {
+        "topic": "Working effectively across time zones and cultures",
+        "time": "3:00pm",
+        "room": "Center Room"
+      },
+      {
+        "topic": "Containers and Clouds (Docker)",
+        "time": "3:45pm",
+        "room": "Big Conference Room"
+      }
+    ]
+  },
+  {
+    "year": 2014,
+    "sessions": [
+      {
+        "topic": "Intro to D3",
+        "time": "10:00am",
+        "speaker": "Daniel Beach",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Intro to Mobile Dev",
+        "time": "10:00am",
+        "speaker": "Michael Lake",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Geek Parenting",
+        "time": "10:00am",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Fully Distributed Teams",
+        "time": "10:00am",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Intro Clojure",
+        "time": "10:40am",
+        "speaker": "Tom Steffes & Lief Poorman",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Mobile jQuery",
+        "time": "10:40am",
+        "speaker": "Delia",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Cameras + Computers",
+        "time": "10:40am",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "The Mindful Developer",
+        "time": "10:40am",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Intro Crypto",
+        "time": "11:20am",
+        "speaker": "@superninjarobot",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Federal Acquisition Basics",
+        "time": "11:20am",
+        "speaker": "Matt Derby",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Doing Analytics Right",
+        "time": "11:20am",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Game Development",
+        "time": "11:20am",
+        "speaker": "Ben Taitelbaum",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Docker",
+        "time": "2:00pm",
+        "speaker": "@superninjarobot",
+        "room": "Big Room"
+      },
+      {
+        "topic": "iOS7 session disbanded",
+        "time": "2:00pm",
+        "room": "Board Room"
+      },
+      {
+        "topic": "MAGIC!",
+        "time": "2:00pm",
+        "speaker": "Kyle the Magicer",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Smitten with Scala <3",
+        "time": "2:00pm",
+        "speaker": "Simeon",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Data Viz",
+        "time": "2:50pm",
+        "speaker": "Andrew Montalenti",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Angular JS",
+        "time": "2:50pm",
+        "speaker": "Gilman and Doug",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Graylog and Kibana",
+        "time": "2:50pm",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Enforcing Development Environments",
+        "time": "2:50pm",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Dashboards that Don't Suck",
+        "time": "3:40pm",
+        "speaker": "@superninjarobot",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Cassandra",
+        "time": "3:40pm",
+        "speaker": "Berryman",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Passionate Software Dev",
+        "time": "3:40pm",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Testing is chapping my ___",
+        "time": "3:40pm",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Women in Technology",
+        "time": "3:40pm",
+        "room": "Atrium"
+      }
+    ]
+  },
+  {
+    "year": 2013,
+    "sessions": [
+      {
+        "topic": "User Experience (UX) for Techies",
+        "time": "10:00",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Intro to Windows 8",
+        "time": "10:00",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Concurrent Programming",
+        "time": "10:00",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Coworking \"Jellies\"",
+        "time": "10:00",
+        "room": "Other Room"
+      },
+      {
+        "topic": "JavaScript - testing & server side",
+        "time": "10:50",
+        "room": "Big Room"
+      },
+      {
+        "topic": "WebGL",
+        "time": "10:50",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Idea, or Good Idea?",
+        "time": "10:50",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Data Mining",
+        "time": "10:50",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Startups: How-to & why they die.",
+        "time": "11:40",
+        "room": "Big Room"
+      },
+      {
+        "topic": "JavaScript MVC - Backbone, Ember, Knockout",
+        "time": "11:40",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Scientific Data / Big Data / Visualization",
+        "time": "11:40",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Staying fit as a Desk Jockey",
+        "time": "11:40",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Solr / NoSQL / Big Data",
+        "time": "13:50",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Bleeding Edge Development Environment (e.g. Light Table)",
+        "time": "13:50",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Responsive Design",
+        "time": "13:50",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Made in Cville",
+        "time": "13:50",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Browser-Based Games",
+        "time": "14:40",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Getting Media Attention",
+        "time": "14:40",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Computer-Generated Music",
+        "time": "14:40",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Agile Software Culture",
+        "time": "14:40",
+        "room": "Other Room"
+      },
+      {
+        "topic": "Augmented Reality",
+        "time": "15:30",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Functional Programming in Clojure (Lisp)",
+        "time": "15:30",
+        "room": "Board Room"
+      },
+      {
+        "topic": "DevOps - Continuous Integration & Delivery",
+        "time": "15:30",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Sass / Less / CSS preprocessors",
+        "time": "15:30",
+        "room": "Other Room"
+      }
+    ]
+  },
+  {
+    "year": 2012,
+    "sessions": [
+      {
+        "topic": "Behavior Driven Development",
+        "time": "10:00",
+        "speaker": "Patricia",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Lucene / Solr",
+        "time": "10:00",
+        "speaker": "Erik H",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Native vs Web Apps",
+        "time": "10:00",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Drupal",
+        "time": "10:00",
+        "room": "No Name Space"
+      },
+      {
+        "topic": "Intro to Chef",
+        "time": "10:50",
+        "speaker": "Matt Dawson",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Google Web Toolkit",
+        "time": "10:50",
+        "speaker": "Isaac",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Multicore Programming",
+        "time": "10:50",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "WordPress",
+        "time": "10:50",
+        "room": "No Name Space"
+      },
+      {
+        "topic": "RESTful APIs / Mobile APIs",
+        "time": "11:40",
+        "speaker": "John F, Matt, Thibaud",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Process Info",
+        "time": "11:40",
+        "speaker": "Nick Skriloff",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Graph DBs",
+        "time": "11:40",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Future of MVC",
+        "time": "11:40",
+        "room": "No Name Space"
+      },
+      {
+        "topic": "Intro to Git",
+        "time": "13:50",
+        "speaker": "John F",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Hacking Android",
+        "time": "13:50",
+        "room": "Board Room"
+      },
+      {
+        "topic": "CLI/screen/tmux",
+        "time": "13:50",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Ipad Biz Uses",
+        "time": "13:50",
+        "room": "No Name Space"
+      },
+      {
+        "topic": "Node.js",
+        "time": "14:40",
+        "speaker": "Andrew",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "mod_pagespeed",
+        "time": "14:40",
+        "speaker": "Waldo",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Cont. Integr.",
+        "time": "14:40",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Stat Mistakes",
+        "time": "15:30",
+        "speaker": "John F",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "HTML5/CSS3",
+        "time": "15:30",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Systems Monitoring",
+        "time": "15:30",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Beautiful Code/Theory of Prog",
+        "time": "15:30",
+        "room": "No Name Space"
+      }
+    ]
+  },
+  {
+    "year": 2011,
+    "sessions": [
+      {
+        "topic": "Git for newbies/Git workflows",
+        "time": "10:00am",
+        "speaker": "John F. and John C.",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Drupal/Joomla/Wordpress module/plugin/theme development",
+        "time": "10:00am",
+        "speaker": "Seth and Derrick",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Continuous Integration and Load Testing",
+        "time": "10:00am",
+        "speaker": "Matt",
+        "room": "Big Screen Room"
+      },
+      {
+        "topic": "Mobile market in 6-12 months. (iPads, iPhones, Androids and more).",
+        "time": "10:00am",
+        "speaker": "Dan",
+        "room": "No Name Space"
+      },
+      {
+        "topic": "37Signals was wrong, Joel Spolsky was wrong ...",
+        "time": "10:50am",
+        "speaker": "@coshx and Eric Pugh",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Google Web toolkit",
+        "time": "10:50am",
+        "speaker": "Isaac",
+        "room": "Board Room"
+      },
+      {
+        "topic": "The command line & GNU screen (what you are missing)",
+        "time": "10:50am",
+        "speaker": "Ron D.",
+        "room": "Big Screen Room"
+      },
+      {
+        "topic": "Programming Apps for mobile devices.",
+        "time": "10:50am",
+        "speaker": "Derrick W.",
+        "room": "No Name Space"
+      },
+      {
+        "topic": "How to become an independent consultant. and Turning code into cash",
+        "time": "11:40am",
+        "speaker": "John F. and Eric",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Facebook Apps.",
+        "time": "11:40am",
+        "speaker": "Tommy M.",
+        "room": "Board Room"
+      },
+      {
+        "topic": "jQuery",
+        "time": "11:40am",
+        "speaker": "Jamie O-H.",
+        "room": "Big Screen Room"
+      },
+      {
+        "topic": "Robotics. CNC, fabrication, etc...",
+        "time": "11:40am",
+        "speaker": "Sara",
+        "room": "No Name Space"
+      },
+      {
+        "topic": "The illusion of privacy on the web.",
+        "time": "1:50pm",
+        "speaker": "John F.",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Ruby + MongoDB + MongoMapper + Solr",
+        "time": "1:50pm",
+        "speaker": "Jamie O-H. and Matt",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Design for Non-designers and Improved use of multimedia on the web.",
+        "time": "1:50pm",
+        "speaker": "Mark E. and Jonelle",
+        "room": "Big Screen Room"
+      },
+      {
+        "topic": "Coping with software effort estimation.",
+        "time": "1:50pm",
+        "speaker": "Sim",
+        "room": "No Name Space"
+      },
+      {
+        "topic": "The future of rich internet applications.",
+        "time": "2:40pm",
+        "speaker": "Stuart",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Fast Databases",
+        "time": "2:40pm",
+        "speaker": "Brownlee",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Be a CSS ninja and Cross browser compliant CSS simplified.",
+        "time": "2:40pm",
+        "speaker": "Debra and Delia",
+        "room": "Big Screen Room"
+      },
+      {
+        "topic": "Silver Drupal Bullet.",
+        "time": "2:40pm",
+        "speaker": "Lawton",
+        "room": "No Name Space"
+      },
+      {
+        "topic": "Practical uses of HTML5/CSS3 today",
+        "time": "3:30pm",
+        "speaker": "Jeff and Will",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Cville Tech future",
+        "time": "3:30pm",
+        "speaker": "Eric Pugh",
+        "room": "Board Room"
+      },
+      {
+        "topic": "SQLAlchemy the python ORM. It's not noSQL, but it feels ok.",
+        "time": "3:30pm",
+        "speaker": "Kai",
+        "room": "Big Screen Room"
+      },
+      {
+        "topic": "Grade-School Tech/CS curriculum.",
+        "time": "3:30pm",
+        "speaker": "Matt",
+        "room": "No Name Space"
+      }
+    ]
+  },
+  {
+    "year": 2010,
+    "sessions": [
+      {
+        "topic": "CouchDB",
+        "time": "10:00",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Applying User Interface Design Guidelines to Source Code",
+        "time": "10:00",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Greasemonkey",
+        "time": "10:00",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Entrepreneurship: Challenges and Opportunities",
+        "time": "10:00",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "Git, SVN, tracking changes",
+        "time": "10:50",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Web application performance testing, tools and techniques",
+        "time": "10:50",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Android",
+        "time": "10:50",
+        "room": "Board Room"
+      },
+      {
+        "topic": "ROWE/Coworking",
+        "time": "10:50",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "Hardware Hacking",
+        "time": "11:40",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "CMS Shootout",
+        "time": "11:40",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Erlang",
+        "time": "11:40",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Community/User group building",
+        "time": "11:40",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "Agile people and methods",
+        "time": "1:50",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Web design for developers",
+        "time": "1:50",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Solr",
+        "time": "1:50",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Are hybrid type systems the future?",
+        "time": "1:50",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "Javascript, jQuery",
+        "time": "2:40",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Unix CLI productivity tips",
+        "time": "2:40",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Ajax Push. XMPP/Webapps",
+        "time": "2:40",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Managing open-source projects",
+        "time": "2:40",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "Acceptance testing, TDD",
+        "time": "3:30",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "CSS ninjas",
+        "time": "3:30",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Translating Swing to Clojure, JRuby",
+        "time": "3:30",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Monitoring, trending, planning servers/services",
+        "time": "3:30",
+        "room": "Rack Room"
+      }
+    ]
+  },
+  {
+    "year": 2009,
+    "sessions": [
+      {
+        "topic": "Unix Command Line & Prod. Tips",
+        "time": "10:00",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "MapReduce",
+        "time": "10:00",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Web 3.0",
+        "time": "10:00",
+        "room": "Board Room"
+      },
+      {
+        "topic": "CSS 3 + Unicode",
+        "time": "10:00",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "MySQL Performance",
+        "time": "10:50",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "iPhone Dev",
+        "time": "10:50",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Marketing a Small Biz Online",
+        "time": "10:50",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Choosing Languages for a Project",
+        "time": "10:50",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "Cloud Computing",
+        "time": "11:40",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "JS Design Patterns",
+        "time": "11:40",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Going Out on Your Own",
+        "time": "11:40",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Data Visualization Roundtable",
+        "time": "11:40",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "Iron Ruby and other Ruby Frameworks",
+        "time": "1:50",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Mega Storage (PB, not TB)",
+        "time": "1:50",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Raising Capital and Selling a Business",
+        "time": "1:50",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Design for the Design Challenged",
+        "time": "1:50",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "High Availability Linux",
+        "time": "2:40",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Yahoo JS / JQuery",
+        "time": "2:40",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Facebook/Open Social/Shindig",
+        "time": "2:40",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Fast Search Engine Design",
+        "time": "2:40",
+        "room": "Rack Room"
+      },
+      {
+        "topic": "Google App Engine",
+        "time": "3:30",
+        "room": "BIG Room"
+      },
+      {
+        "topic": "Adobe Air",
+        "time": "3:30",
+        "room": "Mustache Room"
+      },
+      {
+        "topic": "Lifehacking / Telecommuting",
+        "time": "3:30",
+        "room": "Board Room"
+      },
+      {
+        "topic": "WTF is GIT?",
+        "time": "3:30",
+        "room": "Rack Room"
+      }
+    ]
+  },
+  {
+    "year": 2008,
+    "sessions": [
+      {
+        "topic": "Ruby on Rails",
+        "time": "10:30am",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Managing CSS/JS on Large Sites",
+        "time": "10:30am",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Indie Game Development",
+        "time": "10:30am",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Functional vs. Procedural Languages",
+        "time": "10:30am",
+        "room": "Art Room"
+      },
+      {
+        "topic": "Amazon Web Svcs., Facebook Platform, REST/APIs",
+        "time": "11:30am",
+        "room": "Big Room"
+      },
+      {
+        "topic": "How We Understand What to Build",
+        "time": "11:30am",
+        "room": "Board Room"
+      },
+      {
+        "topic": "JS Library Smackdown",
+        "time": "11:30am",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Subversion Release Mgmt",
+        "time": "11:30am",
+        "room": "Art Room"
+      },
+      {
+        "topic": "Animation",
+        "time": "2:00pm",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Flex/Action Script",
+        "time": "2:00pm",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Reputation on the Net",
+        "time": "2:00pm",
+        "room": "Art Room"
+      },
+      {
+        "topic": "Scaling Rails",
+        "time": "3:00pm",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Web Standards/Accessibility",
+        "time": "3:00pm",
+        "room": "Board Room"
+      },
+      {
+        "topic": "SMS Gateways",
+        "time": "3:00pm",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "Agile Methods.",
+        "time": "3:00pm",
+        "room": "Art Room"
+      },
+      {
+        "topic": "JRuby",
+        "time": "4:00pm",
+        "room": "Big Room"
+      },
+      {
+        "topic": "How to Screen Scrape",
+        "time": "4:00pm",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Google Maps/Earth API",
+        "time": "4:00pm",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "CSS Ninja",
+        "time": "4:00pm",
+        "room": "Art Room"
+      },
+      {
+        "topic": "Building Online Community",
+        "time": "5:00pm",
+        "room": "Big Room"
+      },
+      {
+        "topic": "Grails",
+        "time": "5:00pm",
+        "room": "Board Room"
+      },
+      {
+        "topic": "Web Design for the Design Challenged",
+        "time": "5:00pm",
+        "room": "Lunch Room"
+      },
+      {
+        "topic": "What's after Ajax",
+        "time": "5:00pm",
+        "room": "Art Room"
+      }
+    ]
+  }
+]

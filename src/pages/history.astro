@@ -1,0 +1,291 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Footer from '../components/Footer.astro';
+import {
+  SESSION_HISTORY,
+  SESSION_TYPES,
+  earliestYear,
+  latestYear,
+  namedSpeakers,
+  roomCount,
+  searchText,
+  totalSessions,
+  typeTone,
+} from '../lib/sessionHistory';
+
+const stats = [
+  { label: 'Sessions', value: String(totalSessions) },
+  { label: 'Years on record', value: String(SESSION_HISTORY.length) },
+  { label: 'Named speakers', value: String(namedSpeakers) },
+  { label: 'Earliest on record', value: String(earliestYear) },
+];
+
+/* Every year renders; the script hides all but the newest on load, so a
+   visitor without JavaScript gets the whole archive rather than one year. */
+const years = SESSION_HISTORY;
+const newest = years[0];
+
+const columns = 'grid grid-cols-[96px_minmax(0,1fr)] gap-x-5 sm:grid-cols-[96px_minmax(0,1fr)_190px_168px_104px]';
+const meta = 'font-mono text-[13px] text-[#858fc6]';
+const panel = 'border border-white/[0.08] bg-white/[0.03]';
+---
+
+<Layout
+  title="Session History — beCamp"
+  description={`Every beCamp session on record: ${totalSessions} of them, pitched and voted on by the people who showed up, ${earliestYear}–${latestYear}.`}
+>
+  <Header />
+  <main>
+    <PageHero wide label="Session Archive" title="What the room chose to talk about">
+      <p class="mt-6 max-w-[64ch] text-lg leading-relaxed text-white/80">
+        beCamp has never had a pre-selected speaker. Every session below was pitched on a
+        Friday night, voted on by the people in the room, and scheduled before anyone went
+        home.
+      </p>
+    </PageHero>
+
+    <section class="px-5 sm:px-20">
+      <div class="grid grid-cols-2 gap-px border border-divider bg-divider lg:grid-cols-4">
+        {stats.map((stat) => (
+          <div class="bg-bg px-5 py-4">
+            <p class="font-mono text-xs tracking-[0.04em] text-[#858fc6]">{stat.label}</p>
+            <p class="mt-1.5 text-[28px] font-medium tracking-[-0.02em] text-white">{stat.value}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 border-y border-divider px-5 py-6 sm:px-20">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:gap-10">
+        <div class="lg:flex-1">
+          <label for="session-search" class="block font-mono text-xs tracking-[0.04em] text-[#858fc6]">
+            Search {totalSessions} sessions
+          </label>
+          <input
+            id="session-search"
+            type="search"
+            autocomplete="off"
+            placeholder="kubernetes, imposter syndrome, John Feminella…"
+            class={`mt-2 w-full px-3.5 py-2.5 text-[15px] text-white placeholder:text-[#4d5480] focus:border-primary focus:outline-none ${panel}`}
+          />
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5" role="group" aria-label="Filter by session type">
+          {['All', ...SESSION_TYPES].map((type) => (
+            <button
+              type="button"
+              data-type-chip={type}
+              aria-pressed={type === 'All' ? 'true' : 'false'}
+              class={`px-4 py-2.5 font-mono text-[13px] text-[#858fc6] transition-colors duration-150 hover:text-white aria-[pressed=true]:border-primary aria-[pressed=true]:bg-primary/10 aria-[pressed=true]:text-primary ${panel}`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+
+        <p id="session-summary" class={`whitespace-nowrap lg:pb-3 ${meta}`} aria-live="polite">
+          Showing {newest.year}
+        </p>
+      </div>
+    </section>
+
+    <section class="px-5 pt-8 sm:px-20">
+      <div class="flex flex-col gap-10 lg:flex-row lg:gap-14">
+        <!-- Year rail; top-14 clears the sticky countdown bar. -->
+        <nav class="lg:w-[148px] lg:shrink-0" aria-label="Jump to a year">
+          <p class="font-mono text-xs tracking-[0.04em] text-primary">Jump to a year</p>
+          <div class="mt-3.5 flex flex-wrap gap-2 lg:sticky lg:top-14 lg:flex-col lg:gap-0">
+            {years.map((year) => (
+              <button
+                type="button"
+                data-year-link={year.year}
+                aria-pressed={year.year === newest.year ? 'true' : 'false'}
+                class="group relative flex items-baseline gap-2.5 border border-white/[0.08] px-3 py-2.5 font-mono text-sm text-[#858fc6] transition-colors duration-150 hover:text-white aria-[pressed=true]:text-white data-[empty]:text-[#3a4068] lg:justify-between lg:border-0 lg:py-1.5 lg:pl-4.5 lg:pr-0"
+              >
+                <span
+                  class="absolute left-0 top-1/2 hidden size-[5px] -translate-y-1/2 rotate-45 bg-divider transition-colors duration-150 group-aria-[pressed=true]:bg-primary group-data-[hit]:bg-primary lg:block"
+                  aria-hidden="true"
+                ></span>
+                <span>{year.year}</span>
+                <span data-year-count class="font-mono text-xs text-[#4d5480]">{year.sessions.length}</span>
+              </button>
+            ))}
+          </div>
+        </nav>
+
+        <div class="min-w-0 lg:flex-1">
+          <p
+            id="session-empty"
+            hidden
+            class="py-14 text-lg text-white/80"
+          >
+            Nothing matches that yet. Try a broader word, or pitch it this October.
+          </p>
+
+          {years.map((year) => (
+            <div data-year-block={year.year} class="mb-11">
+              <div class="flex items-baseline gap-3.5 pb-3.5">
+                <h2 class="text-3xl font-medium tracking-[-0.02em] text-white">{year.year}</h2>
+                <p data-year-meta class={meta}>
+                  {year.sessions.length} sessions
+                  {roomCount(year) > 0 && ` · ${roomCount(year)} rooms`}
+                </p>
+              </div>
+
+              <div class={`${columns} border-y border-divider py-2.5 font-mono text-[11px] tracking-[0.06em] text-[#4d5480]`}>
+                <span>TIME</span>
+                <span>TOPIC</span>
+                <span class="max-sm:hidden">SPEAKER</span>
+                <span class="max-sm:hidden">ROOM</span>
+                <span class="max-sm:hidden">TYPE</span>
+              </div>
+
+              {year.sessions.map((session) => (
+                <div
+                  data-session
+                  data-text={searchText(session)}
+                  data-type={session.type ?? ''}
+                  class={`${columns} items-baseline border-b border-[#12152e] py-3.5 max-sm:gap-y-1.5`}
+                >
+                  <span class={meta}>{session.time}</span>
+                  <span class="text-base leading-snug text-white">{session.topic}</span>
+                  <span class="text-sm text-white/80 max-sm:col-start-2 max-sm:text-[13px]">
+                    {session.speaker ?? '—'}
+                  </span>
+                  {/* A lone em dash is fine in a desktop table column, but on a
+                      phone it becomes its own line of nothing — so drop it there. */}
+                  <span class={`max-sm:col-start-2 max-sm:text-[11px] ${meta} ${session.room ? '' : 'max-sm:hidden'}`}>
+                    {session.room ?? '—'}
+                  </span>
+                  <span class={`font-mono text-xs max-sm:col-start-2 ${typeTone(session.type)} ${session.type ? '' : 'max-sm:hidden'}`}>
+                    {session.type ?? '—'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <CtaSection />
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  /* Every session ships in the HTML; this filters what is on screen. Without
+     it the page still reads as the full archive, newest year first.
+
+     Two modes. Idle: one year showing, the rail picks it. Filtering (a search
+     term or a type chip): every year showing, cut to what matches, and the
+     rail counts become hit counts. Re-runs per navigation (astro:page-load)
+     because the router swaps in fresh nodes. */
+  const init = () => {
+    const search = document.getElementById('session-search') as HTMLInputElement | null;
+    const summary = document.getElementById('session-summary');
+    const empty = document.getElementById('session-empty');
+    if (!search || !summary || !empty) return;
+
+    const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-type-chip]')];
+    const railLinks = [...document.querySelectorAll<HTMLButtonElement>('[data-year-link]')];
+    const blocks = [...document.querySelectorAll<HTMLElement>('[data-year-block]')];
+
+    const years = blocks.map((block) => ({
+      year: Number(block.dataset.yearBlock),
+      block,
+      meta: block.querySelector<HTMLElement>('[data-year-meta]'),
+      /* The build wrote each row's haystack and type into data attributes, so
+         a keystroke is a string compare and never a DOM walk. */
+      rows: [...block.querySelectorAll<HTMLElement>('[data-session]')].map((row) => ({
+        row,
+        text: row.dataset.text ?? '',
+        type: row.dataset.type ?? '',
+      })),
+      total: block.querySelectorAll('[data-session]').length,
+    }));
+
+    let selected = years[0]?.year ?? 0;
+    let type = 'All';
+
+    const apply = () => {
+      const query = search.value.trim().toLowerCase();
+      const filtering = query.length > 0 || type !== 'All';
+      let hits = 0;
+
+      for (const year of years) {
+        let shown = 0;
+
+        for (const entry of year.rows) {
+          const match =
+            (type === 'All' || entry.type.includes(type)) &&
+            (query === '' || entry.text.includes(query));
+          /* In idle mode every row of the chosen year shows; the block is what
+             gets hidden, so switching years costs one class toggle, not 363. */
+          entry.row.hidden = filtering && !match;
+          if (match) shown += 1;
+        }
+
+        hits += shown;
+        year.block.hidden = filtering ? shown === 0 : year.year !== selected;
+
+        if (year.meta && filtering) {
+          year.meta.textContent = `${shown} ${shown === 1 ? 'match' : 'matches'}`;
+        } else if (year.meta) {
+          year.meta.textContent = year.meta.dataset.idle ?? year.meta.textContent;
+        }
+
+        const link = railLinks.find((l) => Number(l.dataset.yearLink) === year.year);
+        if (!link) continue;
+        link.setAttribute('aria-pressed', String(!filtering && year.year === selected));
+        link.toggleAttribute('data-hit', filtering && shown > 0);
+        link.toggleAttribute('data-empty', filtering && shown === 0);
+        const count = link.querySelector<HTMLElement>('[data-year-count]');
+        if (count) count.textContent = String(filtering ? shown : year.total);
+      }
+
+      empty.hidden = !filtering || hits > 0;
+      summary.textContent = filtering
+        ? `${hits} ${hits === 1 ? 'session matches' : 'sessions match'}`
+        : `Showing ${selected}`;
+    };
+
+    /* Remember each year's build-time meta line so idle mode can restore it
+       after a search has overwritten it with a hit count. */
+    for (const year of years) {
+      if (year.meta) year.meta.dataset.idle = year.meta.textContent ?? '';
+    }
+
+    search.addEventListener('input', apply);
+
+    for (const chip of chips) {
+      chip.addEventListener('click', () => {
+        type = chip.dataset.typeChip ?? 'All';
+        for (const other of chips) {
+          other.setAttribute('aria-pressed', String(other === chip));
+        }
+        apply();
+      });
+    }
+
+    for (const link of railLinks) {
+      link.addEventListener('click', () => {
+        selected = Number(link.dataset.yearLink);
+        /* Picking a year is also the way out of a search. */
+        search.value = '';
+        type = 'All';
+        for (const chip of chips) {
+          chip.setAttribute('aria-pressed', String(chip.dataset.typeChip === 'All'));
+        }
+        apply();
+      });
+    }
+
+    apply();
+  };
+
+  document.addEventListener('astro:page-load', init);
+</script>
