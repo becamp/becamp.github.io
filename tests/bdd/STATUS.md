@@ -44,7 +44,7 @@ scenario order. Do not undo it.
 | Attendees + content | 7 | undefined | Not started |
 | Site-wide | 8 | undefined | Not started |
 | Interactive (browser) | 10 | undefined | Not started |
-| Session board | 7 | 57 pass, 3 fail, 17 `@manual` | Complete; the three failures are findings 3 and 4 |
+| Session board | 7 | 75 pass, 3 fail, 17 `@manual` | Complete; the three failures are findings 3 and 4 |
 
 The session board area is driven almost entirely through the browser: focus,
 its labelling, the idle fade and fullscreen are applied by the page's own
@@ -98,6 +98,36 @@ scrolls 33px even though the grid does not. It is invisible on a 1080p display
 and appears on the 4:3 projector the feature file names. The board opts out of
 the countdown bar (`countdown={false}`) but not out of the backdrop.
 **These two tests are left failing on purpose.**
+
+## Harness flakiness — concurrent builds share `.astro/.prerender`
+
+`sessions-board-rows.feature` intermittently fails with
+
+```
+build failed: Cannot find module '<root>/.astro/.prerender/chunks/remote_<hash>.mjs'
+  imported from '<root>/.astro/.prerender/prerender-entry.<hash>.mjs'
+```
+
+on a varying set of scenarios — 10, then 5, then 0 failures across consecutive
+runs of the same unchanged file. It is never an assertion failure: the build
+itself dies, so the scenario cannot even render.
+
+`support/build.ts` gives each configuration its own `outDir` under `tmpdir()`,
+but Astro's prerender staging directory, `.astro/.prerender`, lives in the
+project root and is shared by every build. A build cleans it on entry, so a
+child process that has not fully flushed when the next one starts leaves an
+entry file pointing at a chunk the next build already deleted.
+
+It bites this file hardest because it drives the most distinct build
+configurations of any feature file — four clock settings plus three schedule
+overrides — and so runs the most builds in the shortest time. It is worst from
+a cold cache: deleting `.astro` before a run reproduced it immediately. Feature
+files that build once or twice (`sessions-board-idle-chrome`,
+`sessions-board-focus-labelling`) have never shown it.
+
+Re-running is the workaround. The fix belongs in `support/build.ts` — staging
+each build's prerender directory per key, as `outDir` already is — and is left
+for whoever owns the harness (CONTRACT.md rule 1).
 
 ## Harness bug — `openPage`'s clock option does not work
 
