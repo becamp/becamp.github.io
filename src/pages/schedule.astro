@@ -9,7 +9,7 @@ import SponsorPlaceholder from '../components/SponsorPlaceholder.astro';
 import CtaSection from '../components/CtaSection.astro';
 import Footer from '../components/Footer.astro';
 import infoIcon from '../assets/icons/info.svg';
-import { getSaturdaySchedule, TIME_SLOTS } from '../lib/airtable';
+import { getSaturdaySchedule, TIME_SLOTS, USE_FAKE_DATA } from '../lib/airtable';
 
 const pitchNightRows = [
   { time: '4:00pm', title: 'Volunteers arrive' },
@@ -25,8 +25,10 @@ const sessions = await getSaturdaySchedule();
 /* Until the schedule is real, the grid renders as a magazine-style teaser:
    blurred, faded, and cut off after a few rows. Any build after Pitch Night
    wraps shows the full schedule, so the Friday-night publish rebuild reveals
-   it automatically. */
-const schedulePreview = Date.now() < new Date('2026-10-02T20:30:00-04:00').getTime();
+   it automatically. USE_FAKE_DATA previews skip the teaser — the sample grid
+   behind it is the whole point of that build. */
+const schedulePreview =
+  !USE_FAKE_DATA && Date.now() < new Date('2026-10-02T20:30:00-04:00').getTime();
 const scheduleRows = TIME_SLOTS.map((slot) => ({
   time: slot,
   sessions: sessions.filter((s) => s.time === slot),

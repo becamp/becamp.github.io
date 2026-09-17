@@ -1,0 +1,461 @@
+---
+/* The Saturday session board: a display-only page meant for a projector, not
+   for navigating to. No Header, no Footer, no countdown bar — just the grid.
+   Ported from the approved mockup (session-board.html); see src/lib/sessionBoard.ts
+   for the focus rule this page hands off to the browser. */
+import Layout from '../layouts/Layout.astro';
+import logoMark from '../assets/icons/logo-mark.svg';
+import { getSaturdaySchedule } from '../lib/airtable';
+import { SLOTS, formatTime, type Slot } from '../lib/sessionBoard';
+
+const sessions = await getSaturdaySchedule();
+
+/* Breakout-room sessions only — lunch, lightning talks, the break, the
+   retrospective and drinks live in other locations and are deliberately
+   absent from this board. */
+const BREAKOUT_ROOM = /^Breakout Room (\d+)$/;
+const breakoutSessions = sessions.filter((s) => s.location && BREAKOUT_ROOM.test(s.location));
+
+/* Room columns are derived from the data rather than hardcoded. The mockup
+   assumes five Breakout Rooms; a build with a different count still lays out
+   cleanly since --tracks below follows whatever is found. */
+const rooms = Array.from(new Set(breakoutSessions.map((s) => s.location as string)))
+  .map((location) => ({ location, number: Number(location.match(BREAKOUT_ROOM)?.[1] ?? 0) }))
+  .sort((a, b) => a.number - b.number);
+
+const rows = SLOTS.map((slot) => ({
+  slot,
+  cells: rooms.map(
+    (room) => breakoutSessions.find((s) => s.time === slot.key && s.location === room.location) ?? null
+  ),
+}));
+
+/* "9:30<br>10:15am" — start time bare, end time with its meridiem, matching
+   the mockup's two-line time gutter. */
+function formatSlotTime(slot: Slot) {
+  const start = formatTime(slot.start).replace(/(am|pm)$/, '');
+  const end = formatTime(slot.end);
+  return `${start}<br>${end}`;
+}
+
+const gridCols = `grid-template-columns: calc(16 * var(--s)) repeat(${rooms.length}, minmax(0, 1fr));`;
+---
+
+<Layout title="Today’s Sessions — beCamp" countdown={false}>
+  <div
+    id="board"
+    class="relative flex h-screen flex-col overflow-hidden bg-bg pb-[calc(2.4*var(--s))] pl-[calc(2.8*var(--s))] pr-[calc(2.8*var(--s))] pt-[calc(2.6*var(--s))] text-white"
+    style={`--s: min(1vh, 0.5625vw);`}
+  >
+    <header class="flex flex-shrink-0 items-center gap-[calc(3*var(--s))] pb-[calc(2.2*var(--s))]">
+      <img src={logoMark.src} alt="beCamp" class="h-[calc(4*var(--s))] w-auto" />
+
+      <div class="min-w-0 flex-1">
+        <p class="m-0 mb-[calc(0.5*var(--s))] font-mono text-[calc(1.45*var(--s))] tracking-[0.06em] text-primary">
+          Saturday, October 3 &middot; UVA School of Data Science
+        </p>
+        <h1 class="m-0 text-balance text-[calc(4.2*var(--s))] font-semibold leading-none tracking-[-0.025em]">
+          Today&rsquo;s Sessions
+        </h1>
+      </div>
+
+      <div id="clock-box" class="flex-shrink-0 border-l border-white/[0.08] pl-[calc(2.4*var(--s))] text-right">
+        <p
+          id="clock-label"
+          class="m-0 mb-[calc(0.4*var(--s))] font-mono text-[calc(1.25*var(--s))] uppercase tracking-[0.14em] text-[#858fc6]"
+        >
+          Now
+        </p>
+        <p class="m-0 font-mono text-[calc(3.6*var(--s))] font-medium leading-none [font-variant-numeric:tabular-nums]">
+          <span id="clock-hm">--:--</span><span
+            id="clock-ampm"
+            class="ml-[calc(0.3*var(--s))] text-[calc(1.7*var(--s))] text-[#858fc6]"></span>
+        </p>
+      </div>
+
+      <button
+        id="fs-btn"
+        type="button"
+        aria-pressed="false"
+        class="inline-flex flex-shrink-0 items-center gap-[calc(0.65*var(--s))] border border-white/[0.08] bg-white/[0.03] px-[calc(1.2*var(--s))] py-[calc(0.8*var(--s))] font-mono text-[calc(1.25*var(--s))] text-[#858fc6] transition-[opacity,color,border-color] duration-200 ease-in-out hover:border-white/[0.22] hover:text-white focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-primary"
+      >
+        <svg
+          id="fs-icon-enter"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="square"
+          aria-hidden="true"
+          class="size-[calc(1.5*var(--s))]"
+        >
+          <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" />
+        </svg>
+        <svg
+          id="fs-icon-exit"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="square"
+          aria-hidden="true"
+          class="hidden size-[calc(1.5*var(--s))]"
+        >
+          <path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6" />
+        </svg>
+        <span id="fs-label">Fullscreen</span>
+      </button>
+    </header>
+
+    <div class="flex min-h-0 flex-1 flex-col gap-[calc(1*var(--s))]">
+      <div
+        class="row-head flex-shrink-0 grid gap-[calc(1*var(--s))] border-b border-divider pb-[calc(1.2*var(--s))]"
+        style={gridCols}
+      >
+        <div class="self-end font-mono text-[calc(1.2*var(--s))] uppercase tracking-[0.14em] text-[#858fc6]">
+          Time
+        </div>
+        {rooms.map((room) => (
+          <div class="col-head flex min-w-0 items-baseline gap-[calc(0.8*var(--s))] pl-[calc(0.2*var(--s))]">
+            <span class="col-num font-mono text-[calc(1.7*var(--s))] font-medium text-primary">{room.number}</span>
+            <span class="col-room whitespace-nowrap text-[calc(1.7*var(--s))] font-medium tracking-[-0.01em] text-white">
+              {room.location}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {rows.map((row) => (
+        <div
+          class="row-session grid min-h-0 flex-1 gap-[calc(1*var(--s))]"
+          style={gridCols}
+          data-slot={row.slot.key}
+        >
+          <div class="slot flex flex-col justify-center gap-[calc(0.5*var(--s))] border-l-[calc(0.32*var(--s))] border-transparent pl-[calc(1.2*var(--s))] pr-[calc(1*var(--s))]">
+            <span
+              class="slot-time font-mono text-[calc(2.05*var(--s))] font-medium leading-[1.2] text-white [font-variant-numeric:tabular-nums]"
+              set:html={formatSlotTime(row.slot)}
+            />
+            <span class="slot-ord font-mono text-[calc(1.25*var(--s))] uppercase tracking-[0.14em] text-mountain">
+              <span
+                class="live-dot mr-[calc(0.55*var(--s))] hidden size-[calc(0.8*var(--s))] rounded-full bg-primary align-baseline"
+              ></span><span class="ord-text">{row.slot.ord}</span>
+            </span>
+          </div>
+
+          {row.cells.map((session) =>
+            session ? (
+              <div class="card flex min-h-0 min-w-0 flex-col gap-[calc(0.6*var(--s))] overflow-hidden border border-white/[0.08] bg-white/[0.03] px-[calc(1.7*var(--s))] py-[calc(1.5*var(--s))]">
+                <p class="card-title m-0 text-pretty text-[calc(2.35*var(--s))] font-semibold leading-[1.18] tracking-[-0.015em]">
+                  {session.topic}
+                </p>
+                <p class="card-meta m-0 mt-auto flex min-w-0 items-baseline gap-[calc(0.8*var(--s))]">
+                  {session.speaker && (
+                    <span class="card-who overflow-hidden text-ellipsis whitespace-nowrap text-[calc(1.65*var(--s))] leading-[1.2] text-white/60">
+                      {session.speaker}
+                    </span>
+                  )}
+                  {session.type && (
+                    <span class="card-type ml-auto whitespace-nowrap font-mono text-[calc(1.3*var(--s))] text-[#858fc6]">
+                      {session.type}
+                    </span>
+                  )}
+                </p>
+              </div>
+            ) : (
+              <div class="card card-open flex min-h-0 min-w-0 flex-col justify-center gap-[calc(0.6*var(--s))] border border-dashed border-white/[0.13] bg-transparent px-[calc(1.7*var(--s))] py-[calc(1.5*var(--s))]">
+                <p class="card-title m-0 text-[calc(2.35*var(--s))] font-medium leading-[1.18] tracking-[-0.015em] text-mountain">
+                  Open &mdash; claim it at the board
+                </p>
+              </div>
+            )
+          )}
+        </div>
+      ))}
+    </div>
+
+    {import.meta.env.DEV && (
+      <aside
+        id="debug"
+        class="fixed bottom-[calc(2*var(--s))] right-[calc(2*var(--s))] z-10 flex w-[calc(44*var(--s))] max-w-[calc(100vw-4*var(--s))] flex-col gap-[calc(1*var(--s))] border border-[rgba(255,117,15,0.35)] bg-[rgba(6,9,38,0.94)] p-[calc(1.4*var(--s))] font-mono text-[calc(1.2*var(--s))] text-[#858fc6] backdrop-blur-md"
+      >
+        <div class="flex items-baseline gap-[calc(0.8*var(--s))] border-b border-divider pb-[calc(0.8*var(--s))]">
+          <strong class="font-medium uppercase tracking-[0.1em] text-primary">Debug</strong>
+          <span>simulated clock</span>
+          <span class="ml-auto text-mountain">D to hide</span>
+        </div>
+
+        <div class="flex items-baseline justify-between gap-[calc(1*var(--s))]">
+          <span id="dbg-time" class="text-[calc(2.6*var(--s))] text-white [font-variant-numeric:tabular-nums]">--:--</span>
+          <span id="dbg-focus" class="text-right leading-[1.4]"></span>
+        </div>
+
+        <div>
+          <label for="dbg-scrub" class="text-[calc(1.05*var(--s))] uppercase tracking-[0.08em] text-mountain">
+            Scrub 8:00am &rarr; 5:00pm
+          </label>
+          <input type="range" id="dbg-scrub" min="480" max="1020" step="1" value="690" class="m-0 mt-1 w-full accent-primary" />
+        </div>
+
+        <div class="flex flex-wrap gap-[calc(0.6*var(--s))]">
+          <button type="button" data-step="-5" class="border border-white/[0.08] bg-white/[0.05] px-[calc(0.8*var(--s))] py-[calc(0.5*var(--s))] font-mono text-[calc(1.15*var(--s))] text-[#858fc6] hover:border-white/[0.24] hover:text-white">&minus;5m</button>
+          <button type="button" data-step="-1" class="border border-white/[0.08] bg-white/[0.05] px-[calc(0.8*var(--s))] py-[calc(0.5*var(--s))] font-mono text-[calc(1.15*var(--s))] text-[#858fc6] hover:border-white/[0.24] hover:text-white">&minus;1m</button>
+          <button type="button" data-step="1" class="border border-white/[0.08] bg-white/[0.05] px-[calc(0.8*var(--s))] py-[calc(0.5*var(--s))] font-mono text-[calc(1.15*var(--s))] text-[#858fc6] hover:border-white/[0.24] hover:text-white">+1m</button>
+          <button type="button" data-step="5" class="border border-white/[0.08] bg-white/[0.05] px-[calc(0.8*var(--s))] py-[calc(0.5*var(--s))] font-mono text-[calc(1.15*var(--s))] text-[#858fc6] hover:border-white/[0.24] hover:text-white">+5m</button>
+          <button type="button" id="dbg-live" class="border border-[rgba(255,117,15,0.5)] bg-white/[0.05] px-[calc(0.8*var(--s))] py-[calc(0.5*var(--s))] font-mono text-[calc(1.15*var(--s))] text-primary">Use real clock</button>
+        </div>
+
+        <div>
+          <span class="text-[calc(1.05*var(--s))] uppercase tracking-[0.08em] text-mountain">Jump to a boundary</span>
+          <div id="dbg-jumps" class="mt-1 flex flex-wrap gap-[calc(0.6*var(--s))]"></div>
+        </div>
+      </aside>
+    )}
+  </div>
+</Layout>
+
+<style>
+  @keyframes board-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  .is-live .live-dot {
+    animation: board-pulse 2.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .is-live .live-dot {
+      animation: none;
+    }
+  }
+
+  /* The one place the accent is spent: the focused row's time gutter, rail,
+     and card tint. */
+  .is-live .slot {
+    border-left-color: var(--color-primary);
+  }
+  .is-live .slot-time,
+  .is-live .slot-ord {
+    color: var(--color-primary);
+  }
+  .is-live .card {
+    background: rgba(255, 117, 15, 0.06);
+    border-color: rgba(255, 117, 15, 0.3);
+  }
+  .is-live .card-open {
+    background: transparent;
+    border-color: rgba(255, 117, 15, 0.22);
+  }
+  .is-live .card-type {
+    color: rgba(255, 179, 122, 0.85);
+  }
+
+  /* Cursor and the fullscreen control retreat together once the board has
+     gone idle. Targets `body`, which lives outside this component. */
+  :global(body.idle) {
+    cursor: none;
+  }
+  :global(body.idle) #fs-btn {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  import { SLOTS, focusedSlot, isRunning, focusLabel, formatTime, type Slot } from '../lib/sessionBoard';
+
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('.row-session'));
+  const clockHm = document.getElementById('clock-hm');
+  const clockAmpm = document.getElementById('clock-ampm');
+  const clockLabel = document.getElementById('clock-label');
+
+  /* null = follow the real clock. Only the DEV-only debug panel below can set
+     this to a number. */
+  let simulated: number | null = null;
+
+  const nowMinutes = () => {
+    if (simulated !== null) return simulated;
+    const d = new Date();
+    return d.getHours() * 60 + d.getMinutes();
+  };
+
+  /* Set by the DEV-only block below, so render() can report into the debug
+     panel without this file needing two copies of the rendering logic. In a
+     production build import.meta.env.DEV is statically false, so every branch
+     that touches this stays dead code and is stripped — the panel never ships. */
+  let reportDebug: ((stamp: string, slot: Slot | null, running: boolean) => void) | null = null;
+
+  function render() {
+    const mins = nowMinutes();
+    const slot = focusedSlot(mins);
+
+    const stamp = formatTime(mins);
+    const cut = stamp.length - 2;
+    if (clockHm) clockHm.textContent = stamp.slice(0, cut);
+    if (clockAmpm) clockAmpm.textContent = stamp.slice(cut);
+    if (clockLabel) {
+      clockLabel.textContent = simulated !== null ? 'Simulated' : 'Now';
+      clockLabel.classList.toggle('text-primary', simulated !== null);
+      clockLabel.classList.toggle('text-[#858fc6]', simulated === null);
+    }
+
+    const running = slot ? isRunning(slot, mins) : false;
+
+    rows.forEach((row) => {
+      const isFocus = Boolean(slot) && row.dataset.slot === slot!.key;
+      row.classList.toggle('is-live', isFocus);
+
+      const label = row.querySelector('.ord-text');
+      const dot = row.querySelector('.live-dot');
+      const own = SLOTS.find((s) => s.key === row.dataset.slot);
+
+      if (isFocus && slot) {
+        if (label) label.textContent = focusLabel(slot, mins);
+        if (dot) dot.classList.toggle('hidden', !running);
+      } else {
+        if (label) label.textContent = own ? own.ord : '';
+        if (dot) dot.classList.add('hidden');
+      }
+    });
+
+    if (import.meta.env.DEV) reportDebug?.(stamp, slot, running);
+  }
+
+  /* ── Presentation mode ────────────────────────────────────────────────────
+     Native fullscreen on the whole document, plus "f" for whoever is at the
+     display machine with a keyboard. Esc is the browser's own exit, caught
+     below via the fullscreenchange event so the control stays in step. */
+  const fsBtn = document.getElementById('fs-btn');
+  const fsIconEnter = document.getElementById('fs-icon-enter');
+  const fsIconExit = document.getElementById('fs-icon-exit');
+  const fsLabel = document.getElementById('fs-label');
+
+  const isFullscreen = () => Boolean(document.fullscreenElement);
+
+  function syncFullscreen() {
+    const on = isFullscreen();
+    fsIconEnter?.classList.toggle('hidden', on);
+    fsIconExit?.classList.toggle('hidden', !on);
+    if (fsLabel) fsLabel.textContent = on ? 'Exit' : 'Fullscreen';
+    fsBtn?.setAttribute('aria-pressed', String(on));
+  }
+
+  async function toggleFullscreen() {
+    try {
+      if (isFullscreen()) {
+        await document.exitFullscreen();
+      } else {
+        await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+      }
+    } catch (err) {
+      /* Refused — most often an embed without fullscreen permission. The board
+         still fills its own frame, so leave the layout alone and say why. */
+      console.warn('Fullscreen refused:', err);
+      if (fsLabel) fsLabel.textContent = 'Blocked here';
+    }
+  }
+
+  fsBtn?.addEventListener('click', toggleFullscreen);
+  document.addEventListener('fullscreenchange', syncFullscreen);
+  syncFullscreen();
+
+  /* ── DEV-only debug clock ─────────────────────────────────────────────── */
+  if (import.meta.env.DEV) {
+    const panel = document.getElementById('debug') as HTMLElement | null;
+    const dbgTime = document.getElementById('dbg-time');
+    const dbgFocus = document.getElementById('dbg-focus');
+    const scrub = document.getElementById('dbg-scrub') as HTMLInputElement | null;
+    const jumps = document.getElementById('dbg-jumps');
+
+    function setSimulated(mins: number) {
+      simulated = Math.max(480, Math.min(1020, mins));
+      render();
+    }
+
+    scrub?.addEventListener('input', () => setSimulated(Number(scrub.value)));
+
+    panel?.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((btn) => {
+      btn.addEventListener('click', () => setSimulated(nowMinutes() + Number(btn.dataset.step)));
+    });
+
+    document.getElementById('dbg-live')?.addEventListener('click', () => {
+      simulated = null;
+      render();
+    });
+
+    /* Every slot edge, plus the interesting moments are exactly where focus
+       is supposed to hand over. */
+    SLOTS.forEach((slot) => {
+      (['start', 'end'] as const).forEach((which) => {
+        const mins = slot[which];
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className =
+          'border border-white/[0.08] bg-white/[0.05] px-[calc(0.8*var(--s))] py-[calc(0.5*var(--s))] font-mono text-[calc(1.15*var(--s))] text-[#858fc6] hover:border-white/[0.24] hover:text-white';
+        btn.textContent = formatTime(mins).replace(/(am|pm)$/, '');
+        btn.title = `${slot.ord} ${which} — ${formatTime(mins)}`;
+        btn.addEventListener('click', () => setSimulated(mins));
+        jumps?.appendChild(btn);
+      });
+    });
+
+    reportDebug = (stamp, slot, running) => {
+      if (dbgTime) dbgTime.textContent = stamp;
+      if (dbgFocus) {
+        dbgFocus.innerHTML = slot
+          ? `<b>${slot.ord}</b><br>${running ? 'on now' : 'up next'}`
+          : '<b>&mdash;</b><br>day over';
+      }
+      if (scrub && simulated !== null) scrub.value = String(simulated);
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === 'd') {
+        e.preventDefault();
+        if (panel) panel.hidden = !panel.hidden;
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        /* The scrubber handles its own arrows — don't step the clock twice. */
+        if (e.target === scrub) return;
+        e.preventDefault();
+        setSimulated(nowMinutes() + (e.key === 'ArrowRight' ? 1 : -1));
+      }
+    });
+  }
+
+  /* "f" enters/exits fullscreen from anywhere on the board, unmodified only —
+     Cmd/Ctrl/Alt+F is left to the browser (find-in-page etc). */
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'f') {
+      e.preventDefault();
+      toggleFullscreen();
+    }
+  });
+
+  /* ── Idle chrome ──────────────────────────────────────────────────────────
+     Cursor and control retreat after four idle seconds; any input brings them
+     straight back and restarts the countdown. The schedule itself never fades —
+     only `body.idle` styling (above) touches cursor and #fs-btn. */
+  let idleTimer: ReturnType<typeof setTimeout>;
+  function wake() {
+    document.body.classList.remove('idle');
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => document.body.classList.add('idle'), 4000);
+  }
+  (['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel'] as const).forEach((evt) => {
+    window.addEventListener(evt, wake, { passive: true });
+  });
+  wake();
+
+  render();
+  setInterval(() => {
+    if (simulated === null) render();
+  }, 15000);
+</script>

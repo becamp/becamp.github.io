@@ -9,7 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test:bdd": "ASTRO_TELEMETRY_DISABLED=1 NODE_OPTIONS=\"--import tsx/esm\" cucumber-js docs/bdd",
+    "test:bdd:dry": "ASTRO_TELEMETRY_DISABLED=1 NODE_OPTIONS=\"--import tsx/esm\" cucumber-js docs/bdd --dry-run"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -19,5 +21,13 @@
     "astro": "^7.2.2",
     "shaders": "^3.0.448",
     "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.3.0",
+    "@playwright/test": "^1.63.0",
+    "@types/js-yaml": "^4.0.9",
+    "js-yaml": "^5.4.1",
+    "linkedom": "^0.18.13",
+    "tsx": "^4.23.13"
   }
 }

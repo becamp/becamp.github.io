@@ -145,10 +145,11 @@ export const TIME_SLOTS = [
 ];
 
 /* One switch for all preview data: set the USE_FAKE_DATA env var to "true" to
-   fake the registrant count and attendee directory so the gated UI can be
-   reviewed before real registrations exist. Unset (the default, and what
-   production builds use) reads real Airtable data. */
-const USE_FAKE_DATA = import.meta.env.USE_FAKE_DATA === 'true';
+   fake the registrant count, attendee directory, and Saturday schedule so the
+   gated UI can be reviewed before real registrations and a voted schedule
+   exist. Unset (the default, and what production builds use) reads real
+   Airtable data. */
+export const USE_FAKE_DATA = import.meta.env.USE_FAKE_DATA === 'true';
 const FAKE_REGISTRANT_COUNT = 78;
 
 /* The peer-count line and the attendee directory stay hidden until this many
@@ -211,7 +212,42 @@ export async function getAttendees(): Promise<Attendee[]> {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
+/* Sample Saturday grid for USE_FAKE_DATA previews: three parallel tracks in the
+   morning and afternoon session blocks, single full-width rows for lunch,
+   lightning talks, the break, and the retrospective — the shape a real voted
+   schedule takes, so the populated grid can be reviewed before Pitch Night. */
+const FAKE_SESSIONS: Session[] = [
+  { topic: 'Running Postgres Until It Hurts', speaker: 'Maya Trent', time: TIME_SLOTS[0], location: 'Breakout Room 1', type: 'Discussion' },
+  { topic: 'Hand-Tool Woodworking for People Who Sit All Day', speaker: 'Hank Morrow', time: TIME_SLOTS[0], location: 'Breakout Room 2', type: 'Workshop' },
+  { topic: 'What Cville Open Data Actually Tells Us', speaker: 'Imani Clarke', time: TIME_SLOTS[0], location: 'Breakout Room 3', type: 'Talk' },
+
+  { topic: 'Local LLMs on a Five-Year-Old Laptop', speaker: 'Felix Nguyen', time: TIME_SLOTS[1], location: 'Breakout Room 1', type: 'Demo' },
+  { topic: 'Leaving Management and Going Back to IC', speaker: 'Grace Aldridge', time: TIME_SLOTS[1], location: 'Breakout Room 2', type: 'Discussion' },
+  { topic: 'Bread: The Long Fermentation Argument', speaker: 'Jonas Feld', time: TIME_SLOTS[1], location: 'Breakout Room 3', type: 'Talk' },
+
+  { topic: 'Terraform Modules Nobody Wants to Maintain', speaker: 'Devon Marsh', time: TIME_SLOTS[2], location: 'Breakout Room 1', type: 'Discussion' },
+  { topic: 'Intro to Analog Synthesis', speaker: 'Wren Palmer', time: TIME_SLOTS[2], location: 'Breakout Room 2', type: 'Workshop' },
+  { topic: 'Hiring Juniors in an AI-Assisted Codebase', speaker: 'Priya Raman', time: TIME_SLOTS[2], location: 'Breakout Room 3', type: 'Discussion' },
+
+  { topic: 'Lunch', time: TIME_SLOTS[3], location: 'Atrium' },
+  { topic: 'Lightning Talks — five minutes each, sign up on the board', time: TIME_SLOTS[4], location: 'Auditorium', type: 'Lightning Talks' },
+  { topic: 'Break & Sponsor Raffle', time: TIME_SLOTS[5], location: 'Atrium' },
+
+  { topic: 'Debugging Someone Else’s Kubernetes', speaker: 'Victor Hale', time: TIME_SLOTS[6], location: 'Breakout Room 1', type: 'Discussion' },
+  { topic: 'Zines, Risograph, and Cheap Printing', speaker: 'Rosa Delgado', time: TIME_SLOTS[6], location: 'Breakout Room 2', type: 'Workshop' },
+  { topic: 'Starting a Co-op Instead of a Startup', speaker: 'Ben Okafor', time: TIME_SLOTS[6], location: 'Breakout Room 3', type: 'Talk' },
+
+  { topic: 'Type Systems Are a Design Tool', speaker: 'Elena Petrov', time: TIME_SLOTS[7], location: 'Breakout Room 1', type: 'Talk' },
+  { topic: 'Trail Maintenance in the Blue Ridge', speaker: 'Camille Reyes', time: TIME_SLOTS[7], location: 'Breakout Room 2', type: 'Discussion' },
+  { topic: 'Home Automation Without the Cloud', speaker: 'Zeke Lawson', time: TIME_SLOTS[7], location: 'Breakout Room 3', type: 'Demo' },
+
+  { topic: 'Retrospective — what worked, what we change next year', time: TIME_SLOTS[8], location: 'Auditorium' },
+  { topic: 'Drinks somewhere on the Downtown Mall', time: TIME_SLOTS[9] },
+];
+
 export async function getSaturdaySchedule(): Promise<Session[]> {
+  if (USE_FAKE_DATA) return FAKE_SESSIONS;
+
   const records = await fetchAll('Saturday Schedule', 'fields%5B%5D=Topic&fields%5B%5D=Speaker&fields%5B%5D=Time&fields%5B%5D=Location&fields%5B%5D=Type');
 
   return records
