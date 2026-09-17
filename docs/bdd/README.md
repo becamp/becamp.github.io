@@ -63,7 +63,7 @@ additionally tagged `@mockup`; it is scaffolding and is not intended to ship.
 | --- | --- |
 | `sessions-board-focus-advance.feature` | Focus is the first session that has not ended |
 | `sessions-board-focus-labelling.feature` | "On now" only once a session has started |
-| `sessions-board-breakout-only.feature` | Breakout-room sessions and nothing else |
+| `sessions-board-rows.feature` | Five breakout rows, plus the full-width midday and retrospective bands |
 | `sessions-board-presentation-mode.feature` | Native fullscreen, one control |
 | `sessions-board-idle-chrome.feature` | Cursor and control retreat when left alone |
 | `sessions-board-viewport-scaling.feature` | Fits any display without a media query |

@@ -1,4 +1,4 @@
-/* The /sessions display board: docs/bdd/sessions-board-breakout-only.feature,
+/* The /sessions display board: docs/bdd/sessions-board-rows.feature,
    sessions-board-focus-advance.feature, sessions-board-focus-labelling.feature,
    sessions-board-idle-chrome.feature, sessions-board-presentation-mode.feature
    and sessions-board-viewport-scaling.feature.
@@ -62,7 +62,7 @@ const epochFor = (minutes: number, seconds = 5) =>
   new Date(2026, 9, 3, Math.floor(minutes / 60), minutes % 60, seconds).getTime();
 
 /* A full board: five breakout slots across three rooms, plus the non-breakout
-   items the board is supposed to leave out. */
+   items — the ones the bands absorb, and the ones the board leaves out. */
 function boardRecords(
   overrides: { omit?: Array<{ slot: number; room: number }>; topic?: { slot: number; room: number; value: string }; speaker?: { slot: number; room: number; value: string } } = {}
 ): AirtableRecord[] {
@@ -84,7 +84,8 @@ function boardRecords(
     });
   });
 
-  /* Everything the board must not show. Drinks carries no location at all. */
+  /* The non-breakout items: lunch, the talks, the break and the retrospective
+     are banded; drinks carries no location at all and stays off the board. */
   rows.push(
     { topic: 'Lunch', time: TIME_SLOTS[3], location: 'Atrium' },
     { topic: 'Lightning Talks — five minutes each', time: TIME_SLOTS[4], location: 'Auditorium', type: 'Lightning Talks' },
@@ -270,8 +271,197 @@ Given('the viewer prefers reduced motion', function (this: BecampWorld) {
 });
 
 /* ══════════════════════════════════════════════════════════════════════════
-   sessions-board-breakout-only.feature
+   sessions-board-rows.feature
    ══════════════════════════════════════════════════════════════════════════ */
+
+/* The blocks the bands absorb, as the feature tables state them. Re-declared
+   here for the same reason BREAKOUT_SLOTS is: a spec checked against the code
+   it specifies proves nothing. The spans are the band's own, not the records'
+   — the retrospective band runs past its record to cover the clean-up. */
+const BANDED_BLOCKS = {
+  doors: {
+    span: { start: '9:00am', end: '9:30am' },
+    /* No record: doors and breakfast are fixed, and nobody votes on them. */
+    records: [],
+  },
+  midday: {
+    span: { start: '12:05pm', end: '1:55pm' },
+    records: [
+      { topic: 'Lunch', time: '12:05pm - 12:35pm' },
+      { topic: 'Lightning Talks', time: '12:35pm - 1:25pm' },
+      { topic: 'Break & Sponsor Raffle', time: '1:25pm - 1:55pm' },
+    ],
+  },
+  retro: {
+    span: { start: '3:40pm', end: '4:30pm' },
+    records: [{ topic: 'Retrospective', time: '3:40pm - 4:05pm' }],
+  },
+} as const;
+
+type BandId = keyof typeof BANDED_BLOCKS;
+
+const blockFor = (id: string) => {
+  const block = BANDED_BLOCKS[id as BandId];
+  assert.ok(block, `the feature names a band the spec does not declare: "${id}"`);
+  return block;
+};
+
+const bands = (doc: Document) => all(doc, '[data-band]');
+
+const bandRow = (doc: Document, id: string) => {
+  const found = all(doc, `[data-band="${id}"]`);
+  assert.equal(found.length, 1, `the board does not show exactly one "${id}" row`);
+  return found[0];
+};
+
+/* The schedule the board is about to be built from. */
+const scheduledRecords = (world: BecampWorld): AirtableRecord[] =>
+  (world.buildOptions.records?.['Saturday Schedule'] ?? []) as AirtableRecord[];
+
+const recordTime = (r: AirtableRecord) => String(r.fields.Time ?? '');
+
+Given('the Saturday schedule holds the banded blocks', function (this: BecampWorld, table: DataTable) {
+  const declared = table.hashes().map((r) => r.time.trim());
+  const expected = Object.values(BANDED_BLOCKS).flatMap((b) =>
+    (b.records as readonly { time: string }[]).map((r) => r.time)
+  );
+  assert.deepEqual(declared, expected, 'the feature table no longer matches the banded spans');
+  /* The standard board, not the scenario's own schedule: this step is a
+     Background, and a scenario that overrides the schedule sets its records
+     afterwards. It must therefore never build — an early build would freeze
+     the default in place and the override would never take. */
+  const held = boardRecords().map(recordTime);
+  declared.forEach((time) => {
+    assert.ok(held.includes(time), `the standard board holds no record for ${time}`);
+  });
+});
+
+/* The doors band is fixed, so the board must show it from a schedule that
+   names no morning block at all. The standard board already holds no such
+   record; this step proves that, then leaves the schedule as it is. */
+Given('the schedule holds no record for the doors band', async function (this: BecampWorld) {
+  if (!this.buildOptions.records) await buildBoard(this);
+  const morning = scheduledRecords(this).filter((r) => /^9:0\d?am/.test(recordTime(r)));
+  assert.deepEqual(morning, [], 'the schedule holds a record the doors band could absorb');
+});
+
+Given('the midday block holds three records', async function (this: BecampWorld) {
+  if (!this.buildOptions.records) await buildBoard(this);
+  const times = BANDED_BLOCKS.midday.records.map((r) => r.time);
+  const inSpan = scheduledRecords(this).filter((r) => times.includes(recordTime(r)));
+  assert.equal(inSpan.length, 3, 'the schedule does not hold three midday records');
+});
+
+Then('exactly one {string} row is shown', function (this: BecampWorld, id: string) {
+  assert.ok(this.document, 'no board has been rendered');
+  blockFor(id);
+  bandRow(this.document, id);
+});
+
+Then('the midday block occupies exactly one row', function (this: BecampWorld) {
+  assert.ok(this.document);
+  bandRow(this.document, 'midday');
+  /* The merge is the point: no breakout row may be bound to a midday span. */
+  const times = BANDED_BLOCKS.midday.records.map((r) => r.time) as readonly string[];
+  const bound = rows(this.document)
+    .map((r) => r.getAttribute('data-slot'))
+    .filter((key) => key !== null && times.includes(key));
+  assert.deepEqual(bound, [], 'a breakout row carries a midday span');
+});
+
+Then(/^the "([a-z]+)" row runs from (\d{1,2}:\d{2}[ap]m) to (\d{1,2}:\d{2}[ap]m)$/, function (
+  this: BecampWorld,
+  id: string,
+  start: string,
+  end: string
+) {
+  assert.ok(this.document);
+  /* The span the feature states is the span the spec declares — a feature that
+     drifts from BANDED_BLOCKS is a spec conflict, not a passing test. */
+  const block = blockFor(id);
+  assert.deepEqual({ start, end }, { start: block.span.start, end: block.span.end }, `the feature states a span the spec does not hold for "${id}"`);
+  const body = text(bandRow(this.document, id));
+  assert.ok(body.includes(start), `the "${id}" row does not name ${start}: ${body}`);
+  assert.ok(body.includes(end), `the "${id}" row does not name ${end}: ${body}`);
+});
+
+Then('the {string} row is labelled {string}', function (this: BecampWorld, id: string, label: string) {
+  assert.ok(this.document);
+  blockFor(id);
+  const body = text(bandRow(this.document, id));
+  assert.ok(body.includes(label), `the "${id}" row is not labelled "${label}": ${body}`);
+});
+
+Then('the {string} row spans every room column', async function (this: BecampWorld, id: string) {
+  blockFor(id);
+  const page = await boardPage(this);
+  /* A string body, for the same reason clockScript is one: tsx names every
+     function it sees and the `__name` helper it calls does not exist in the
+     page. */
+  const measured = await page.evaluate(`(() => {
+    const el = document.querySelector('[data-band="${id}"]');
+    const grid = document.querySelector('.row-session');
+    const heads = Array.from(document.querySelectorAll('.col-head'));
+    const last = heads[heads.length - 1];
+    if (!el || !grid || !last) return null;
+    const b = el.getBoundingClientRect();
+    const g = grid.getBoundingClientRect();
+    const l = last.getBoundingClientRect();
+    return {
+      bandLeft: Math.round(b.left),
+      bandRight: Math.round(b.right),
+      gridLeft: Math.round(g.left),
+      gridRight: Math.round(g.right),
+      lastRight: Math.round(l.right),
+    };
+  })()`);
+  assert.ok(measured, `the board shows no "${id}" row, no session row or no room columns`);
+  assert.ok(
+    Math.abs(measured.bandLeft - measured.gridLeft) <= 1.5,
+    `the "${id}" row starts at ${measured.bandLeft}px, the grid at ${measured.gridLeft}px`
+  );
+  assert.ok(
+    measured.bandRight >= measured.lastRight - 1.5,
+    `the "${id}" row ends at ${measured.bandRight}px, the last room column at ${measured.lastRight}px`
+  );
+});
+
+/* Document order is board order: the rows and the bands are siblings in the
+   same flex column, so the band that follows a slot is the next sibling that
+   carries either marker. */
+const boardOrder = (doc: Document) =>
+  all(doc, '.row-session, [data-band]').map((el) => el.getAttribute('data-band') ?? `slot:${el.getAttribute('data-slot')}`);
+
+Then('the {string} row follows the {string} row', function (this: BecampWorld, id: string, slot: string) {
+  assert.ok(this.document);
+  blockFor(id);
+  const order = boardOrder(this.document);
+  const at = order.indexOf(id);
+  assert.ok(at > 0, `the board shows no "${id}" row: ${order.join(', ')}`);
+  assert.equal(order[at - 1], `slot:${slot}`, `the "${id}" row does not follow the ${slot} row: ${order.join(', ')}`);
+});
+
+Then('the {string} row opens the board', function (this: BecampWorld, id: string) {
+  assert.ok(this.document);
+  blockFor(id);
+  const order = boardOrder(this.document);
+  assert.equal(order[0], id, `the "${id}" row does not open the board: ${order.join(', ')}`);
+});
+
+Then('the {string} row is the last row on the board', function (this: BecampWorld, id: string) {
+  assert.ok(this.document);
+  blockFor(id);
+  const order = boardOrder(this.document);
+  assert.equal(order[order.length - 1], id, `the "${id}" row does not close the board: ${order.join(', ')}`);
+});
+
+Then('no band carries focus', async function (this: BecampWorld) {
+  const page = await boardPage(this);
+  const shown = await page.evaluate(`(() => document.querySelectorAll('[data-band]').length)()`);
+  assert.ok(shown > 0, 'the board shows no band at all');
+  const live = await page.evaluate(`(() => document.querySelectorAll('.row-band.is-live, [data-band].is-live').length)()`);
+  assert.equal(live, 0, 'a band carries focus');
+});
 
 Then('exactly five session rows are shown', function (this: BecampWorld) {
   assert.ok(this.document, 'no board has been rendered');

@@ -6,7 +6,7 @@
 import Layout from '../layouts/Layout.astro';
 import logoMark from '../assets/icons/logo-mark.svg';
 import { getSaturdaySchedule } from '../lib/airtable';
-import { SLOTS, formatTime, type Slot } from '../lib/sessionBoard';
+import { BANDS, SLOTS, formatTime, type Band, type Slot } from '../lib/sessionBoard';
 
 const sessions = await getSaturdaySchedule();
 
@@ -29,6 +29,32 @@ const rows = SLOTS.map((slot) => ({
     (room) => breakoutSessions.find((s) => s.time === slot.key && s.location === room.location) ?? null
   ),
 }));
+
+/* A band absorbs every record whose time it names. Lunch, the lightning talks,
+   the break and the retrospective each live in their own record, but no room
+   column can hold them, so the board merges each band's records into one row.
+   A build whose schedule holds no record for a band shows no band. A fixed
+   band is the exception: doors and breakfast are part of every beCamp Saturday,
+   and nobody votes on them, so no schedule record ever declares them. */
+const shownBands = BANDS.filter(
+  (band) => band.fixed || sessions.some((s) => s.time && band.keys.includes(s.time))
+);
+
+/* A band sits where the clock reaches it — after every slot that starts before
+   the band ends — so the rows keep their order. A band before every slot, like
+   doors, opens the board; one past the last slot, like the retrospective,
+   lands at its foot. */
+type Row = (typeof rows)[number];
+type BoardRow = { band: Band; row?: undefined } | { band?: undefined; row: Row };
+
+const bandAfter = (band: Band) => rows.filter((row) => row.slot.start < band.end).length;
+
+const boardRows: BoardRow[] = [];
+rows.forEach((row, index) => {
+  shownBands.filter((band) => bandAfter(band) === index).forEach((band) => boardRows.push({ band }));
+  boardRows.push({ row });
+});
+shownBands.filter((band) => bandAfter(band) >= rows.length).forEach((band) => boardRows.push({ band }));
 
 /* "9:30<br>10:15am" — start time bare, end time with its meridiem, matching
    the mockup's two-line time gutter. */
@@ -125,25 +151,40 @@ const gridCols = `grid-template-columns: calc(16 * var(--s)) repeat(${rooms.leng
         ))}
       </div>
 
-      {rows.map((row) => (
+      {boardRows.map((row) =>
+        row.band ? (
+          <div
+            class="row-band flex flex-shrink-0 items-center justify-between gap-[calc(2*var(--s))] border-y border-white/[0.1] bg-white/[0.04] px-[calc(1.7*var(--s))] py-[calc(1.2*var(--s))]"
+            data-band={row.band.id}
+            data-start={formatTime(row.band.start)}
+            data-end={formatTime(row.band.end)}
+          >
+            <span class="band-label text-[calc(2.1*var(--s))] font-semibold tracking-[-0.015em] text-white">
+              {row.band.label}
+            </span>
+            <span class="band-time font-mono text-[calc(1.6*var(--s))] text-[#858fc6] [font-variant-numeric:tabular-nums]">
+              {formatTime(row.band.start)} &ndash; {formatTime(row.band.end)}
+            </span>
+          </div>
+        ) : (
         <div
           class="row-session grid min-h-0 flex-1 gap-[calc(1*var(--s))]"
           style={gridCols}
-          data-slot={row.slot.key}
+          data-slot={row.row.slot.key}
         >
           <div class="slot flex flex-col justify-center gap-[calc(0.5*var(--s))] border-l-[calc(0.32*var(--s))] border-transparent pl-[calc(1.2*var(--s))] pr-[calc(1*var(--s))]">
             <span
               class="slot-time font-mono text-[calc(2.05*var(--s))] font-medium leading-[1.2] text-white [font-variant-numeric:tabular-nums]"
-              set:html={formatSlotTime(row.slot)}
+              set:html={formatSlotTime(row.row.slot)}
             />
             <span class="slot-ord font-mono text-[calc(1.25*var(--s))] uppercase tracking-[0.14em] text-mountain">
               <span
                 class="live-dot mr-[calc(0.55*var(--s))] hidden size-[calc(0.8*var(--s))] rounded-full bg-primary align-baseline"
-              ></span><span class="ord-text">{row.slot.ord}</span>
+              ></span><span class="ord-text">{row.row.slot.ord}</span>
             </span>
           </div>
 
-          {row.cells.map((session) =>
+          {row.row.cells.map((session) =>
             session ? (
               <div class="card flex min-h-0 min-w-0 flex-col gap-[calc(0.6*var(--s))] overflow-hidden border border-white/[0.08] bg-white/[0.03] px-[calc(1.7*var(--s))] py-[calc(1.5*var(--s))]">
                 <p class="card-title m-0 text-pretty text-[calc(2.35*var(--s))] font-semibold leading-[1.18] tracking-[-0.015em]">
@@ -171,7 +212,8 @@ const gridCols = `grid-template-columns: calc(16 * var(--s)) repeat(${rooms.leng
             )
           )}
         </div>
-      ))}
+        )
+      )}
     </div>
 
     {import.meta.env.DEV && (
