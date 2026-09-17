@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import TextLink from '../components/TextLink.astro';
 import Button from '../components/Button.astro';
 import Footer from '../components/Footer.astro';
+import slackIcon from '../assets/icons/slack.svg';
 import dataScienceToPoplar from '../assets/images/guide/data-science-to-poplar.webp';
 import culbrethToDataScience from '../assets/images/guide/culbreth-to-data-science.webp';
 import emmetIvyToDataScience from '../assets/images/guide/emmet-ivy-to-data-science.webp';
@@ -43,6 +44,7 @@ const guideNav = [
   { href: '#accessibility', label: 'Accessibility', sub: true },
   { href: '#photos', label: 'Photos & social', sub: true },
   { href: '#organizers', label: 'Organizers', sub: true },
+  { href: '#slack', label: 'Cville Slack', sub: true },
   { href: '#sessions', label: 'Sessions', sub: true },
   { href: '#conduct', label: 'Code of Conduct', sub: true },
   { href: '#venue', label: 'Venue & parking' },
@@ -452,6 +454,25 @@ const rule = 'border-t border-divider';
                   Connect on LinkedIn →
                 </TextLink>
               </article>
+            </div>
+          </div>
+
+          <div id="slack" class={sub}>
+            <h3 class={subTitle}>Cville Slack</h3>
+            <p class={lead}>
+              You can chat with organizers and attendees on the #beCamp Slack channel.
+            </p>
+
+            <div class={`mt-5 flex max-w-[760px] items-start gap-4 px-5 py-4 ${panel}`}>
+              <img src={slackIcon.src} alt="" class="mt-0.5 size-6 shrink-0 opacity-80" />
+              <div>
+                <p class="font-mono text-[0.95rem] text-white">#beCamp</p>
+                <p class="mt-2 text-[0.96rem] leading-relaxed text-white/80">
+                  Not on Cville Slack yet? Email{' '}
+                  <TextLink href="mailto:ozanzal+slack@gmail.com" class="text-[0.96rem]">ozanzal+slack@gmail.com</TextLink>{' '}
+                  for an invitation. Expect confirmation within 24 hours.
+                </p>
+              </div>
             </div>
           </div>
 
