@@ -1,9 +1,17 @@
 /* The session archive, one entry per beCamp, newest first.
  *
- * Source: the organizers' "beCamp sessions" spreadsheet, one tab per event.
- * The tabs carry no year label, so the years below are INFERRED from the room
- * names and the subject matter, on the assumption that 2020 and 2021 did not
- * happen. Correct src/data/sessions.json if a tab turns out to be another year.
+ * Source: the organizers' "beCamp Session History" spreadsheet, one tab per
+ * event. The tabs carry no year label, so the years are derived: 16 tabs, and
+ * no event in 2020, 2021 or 2023, puts the oldest at 2007. The topics
+ * corroborate it — "iOS7 session disbanded" lands in 2013, "Intro to Windows 8"
+ * in 2012, "Google App Engine" in 2008, each within months of that thing
+ * shipping. Correct src/data/sessions.json if a tab turns out to be another
+ * year.
+ *
+ * NOT EVERYTHING IS HERE. The spreadsheet has at least one further tab, older
+ * than 2007 and presumably 2006, whose rows the Drive connector truncates. Two
+ * rows were also left out on purpose: a "Breakfast" row in 2015 and a bare
+ * "cont." row in 2007, neither of which is a session.
  *
  * Many older rows carry no speaker and no type — the Present / Learn / Share
  * labels only came in part way through. The page shows those gaps rather than

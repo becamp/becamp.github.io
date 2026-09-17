@@ -190,7 +190,7 @@
     ]
   },
   {
-    "year": 2023,
+    "year": 2022,
     "sessions": [
       {
         "topic": "AI Games",
@@ -335,7 +335,7 @@
     ]
   },
   {
-    "year": 2022,
+    "year": 2019,
     "sessions": [
       {
         "topic": "When Things Go Wrong - Story Time",
@@ -514,7 +514,7 @@
     ]
   },
   {
-    "year": 2019,
+    "year": 2018,
     "sessions": [
       {
         "topic": "Good Grief: Sharing About Loss",
@@ -694,7 +694,7 @@
     ]
   },
   {
-    "year": 2018,
+    "year": 2017,
     "sessions": [
       {
         "topic": "The Kelly Criteria",
@@ -856,7 +856,7 @@
     ]
   },
   {
-    "year": 2017,
+    "year": 2016,
     "sessions": [
       {
         "topic": "Better Visualization !science!",
@@ -981,7 +981,7 @@
     ]
   },
   {
-    "year": 2016,
+    "year": 2015,
     "sessions": [
       {
         "topic": "Docker Routing with Apache",
@@ -1118,7 +1118,7 @@
     ]
   },
   {
-    "year": 2015,
+    "year": 2014,
     "sessions": [
       {
         "topic": "Testing Methodologies",
@@ -1243,7 +1243,7 @@
     ]
   },
   {
-    "year": 2014,
+    "year": 2013,
     "sessions": [
       {
         "topic": "Intro to D3",
@@ -1387,7 +1387,7 @@
     ]
   },
   {
-    "year": 2013,
+    "year": 2012,
     "sessions": [
       {
         "topic": "User Experience (UX) for Techies",
@@ -1512,7 +1512,7 @@
     ]
   },
   {
-    "year": 2012,
+    "year": 2011,
     "sessions": [
       {
         "topic": "Behavior Driven Development",
@@ -1642,7 +1642,7 @@
     ]
   },
   {
-    "year": 2011,
+    "year": 2010,
     "sessions": [
       {
         "topic": "Git for newbies/Git workflows",
@@ -1791,7 +1791,7 @@
     ]
   },
   {
-    "year": 2010,
+    "year": 2009,
     "sessions": [
       {
         "topic": "CouchDB",
@@ -1916,7 +1916,7 @@
     ]
   },
   {
-    "year": 2009,
+    "year": 2008,
     "sessions": [
       {
         "topic": "Unix Command Line & Prod. Tips",
@@ -2041,7 +2041,7 @@
     ]
   },
   {
-    "year": 2008,
+    "year": 2007,
     "sessions": [
       {
         "topic": "Ruby on Rails",
