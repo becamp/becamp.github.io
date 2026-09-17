@@ -27,6 +27,7 @@ const PAGES: Record<string, string> = {
   '404': '/404.html',
   'not-found': '/404.html',
   sessions: '/sessions',
+  history: '/history',
 };
 
 export const pathFor = (name: string) => {
