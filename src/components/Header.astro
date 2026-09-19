@@ -10,6 +10,7 @@ const showAttendees = (await getRegistrantCount()) >= REGISTRANT_THRESHOLD;
 
 const navLinks = [
   { href: '/schedule', label: 'Schedule' },
+  { href: '/guide', label: 'Guide' },
   { href: '/sponsors', label: 'Sponsors' },
   ...(showAttendees ? [{ href: '/attendees', label: 'Attendees' }] : []),
   { href: '/history', label: 'History' },
