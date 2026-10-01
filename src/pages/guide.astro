@@ -57,27 +57,27 @@ const guideNav = [
 ];
 
 const pitchProcess = [
-  { step: '01', title: 'Think', body: 'Bring something you want to present, learn, share, demo, or discuss.' },
-  { step: '02', title: 'Pitch', body: 'Give the room a 30-second explanation of your idea. No slides required.' },
-  { step: '03', title: 'Vote', body: 'Everyone votes for the topics they most want to attend.' },
-  { step: '04', title: 'Build Saturday', body: 'Volunteers arrange the top topics into five parallel tracks.' },
+  { step: '01', title: 'Think', body: 'Bring a topic you want to present, learn, share, demo, or discuss.' },
+  { step: '02', title: 'Pitch', body: 'Turn your topic into a pitch: a 30-second explanation to the room. No slides required.' },
+  { step: '03', title: 'Vote', body: 'Everyone votes for the pitches they most want to see become sessions.' },
+  { step: '04', title: 'Build Saturday', body: 'Volunteers turn the top pitches into sessions across five parallel tracks.' },
 ];
 
 const votingRules = [
   {
     step: '1',
     title: 'You have 5 votes',
-    body: "It's an honor system. Don't vote for everything — if you vote for everything, you voted for nothing.",
+    body: "It's an honor system. There are more pitches than votes, so use all five on the pitches you most want as sessions.",
   },
   {
     step: '2',
     title: 'Make a tally mark',
-    body: 'Use your pen or marker to put a tally mark on each pitch you want to attend.',
+    body: 'Use your pen or marker to put a tally mark on each pitch you would attend as a session.',
   },
   {
     step: '3',
-    title: 'One vote per topic',
-    body: 'You can vote only once on each pitched topic. No putting all five votes on one pitch.',
+    title: 'One mark per pitch',
+    body: 'Spread your five votes across five different pitches. Each pitch gets at most one tally mark from you — no stacking votes.',
   },
 ];
 
@@ -304,7 +304,7 @@ const rule = 'border-t border-divider';
 
             <h4 id="voting" class={`${itemTitle} scroll-mt-16`}>Voting rules</h4>
             <p class={meta}>
-              After the pitches, everyone votes on the pitch cards.
+              Topic → pitch → session. Your votes decide which pitches become Saturday's sessions.
             </p>
 
             <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
