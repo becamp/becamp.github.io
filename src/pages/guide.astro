@@ -38,6 +38,7 @@ const quickMaps = [
 const guideNav = [
   { href: '#schedule', label: 'Event Agenda' },
   { href: '#friday', label: 'Friday', sub: true },
+  { href: '#voting', label: 'Voting rules', sub: true },
   { href: '#saturday', label: 'Saturday', sub: true },
   { href: '#logistics', label: 'What to Know' },
   { href: '#food', label: 'Food & drinks', sub: true },
@@ -60,6 +61,24 @@ const pitchProcess = [
   { step: '02', title: 'Pitch', body: 'Give the room a 30-second explanation of your idea. No slides required.' },
   { step: '03', title: 'Vote', body: 'Everyone votes for the topics they most want to attend.' },
   { step: '04', title: 'Build Saturday', body: 'Volunteers arrange the top topics into five parallel tracks.' },
+];
+
+const votingRules = [
+  {
+    step: '1',
+    title: 'You have 5 votes',
+    body: "It's an honor system. Don't vote for everything — if you vote for everything, you voted for nothing.",
+  },
+  {
+    step: '2',
+    title: 'Make a tally mark',
+    body: 'Use your pen or marker to put a tally mark on each pitch you want to attend.',
+  },
+  {
+    step: '3',
+    title: 'One vote per topic',
+    body: 'You can vote only once on each pitched topic. No putting all five votes on one pitch.',
+  },
 ];
 
 const pitchTypes = [
@@ -282,6 +301,21 @@ const rule = 'border-t border-divider';
                 </li>
               ))}
             </ol>
+
+            <h4 id="voting" class={`${itemTitle} scroll-mt-16`}>Voting rules</h4>
+            <p class={meta}>
+              After the pitches, everyone votes on the pitch cards.
+            </p>
+
+            <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {votingRules.map((entry) => (
+                <article class={`p-5 ${panel}`}>
+                  <p class="font-mono text-[1.7rem] leading-none text-primary">{entry.step}</p>
+                  <h4 class="mt-4 text-[1.05rem] font-medium text-white">{entry.title}</h4>
+                  <p class="mt-1.5 text-[0.95rem] leading-relaxed text-white/80">{entry.body}</p>
+                </article>
+              ))}
+            </div>
 
             <h4 class={itemTitle}>How to pitch</h4>
             <p class={meta}>
