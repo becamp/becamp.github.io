@@ -14,6 +14,7 @@ const navLinks = [
   { href: '/sponsors', label: 'Sponsors' },
   ...(showAttendees ? [{ href: '/attendees', label: 'Attendees' }] : []),
   { href: '/history', label: 'History' },
+  { href: '/photos', label: 'Photos' },
   { href: '/about', label: 'About' },
   { href: '/faqs', label: 'FAQs' },
 ];
@@ -29,7 +30,7 @@ const isActive = (href: string) => currentPath === href;
     <LogoMark class="sm:hidden" />
     <Logo class="max-sm:hidden" />
 
-    <nav class="hidden items-center gap-9 font-mono text-sm text-white lg:flex">
+    <nav class="hidden items-center gap-9 font-mono text-sm text-white xl:flex">
       {navLinks.map((link) => (
         <a
           href={link.href}
@@ -46,7 +47,7 @@ const isActive = (href: string) => currentPath === href;
       </a>
     </nav>
 
-    <div class="flex items-center gap-3 lg:hidden">
+    <div class="flex items-center gap-3 xl:hidden">
       <Button href="/register" class="px-3 py-2 text-sm">Register</Button>
       <button
         id="menu-toggle"
@@ -65,7 +66,7 @@ const isActive = (href: string) => currentPath === href;
 
   <nav
     id="mobile-menu"
-    class="fixed inset-0 z-50 hidden flex-col bg-bg px-5 pb-8 pt-6 sm:px-20 sm:pt-10 lg:hidden"
+    class="fixed inset-0 z-50 hidden flex-col bg-bg px-5 pb-8 pt-6 sm:px-20 sm:pt-10 xl:hidden"
   >
     <!-- min-h matches the header row (44px, set by the Register button) so the
          logo lands exactly where the header's logo sits when the menu opens. -->

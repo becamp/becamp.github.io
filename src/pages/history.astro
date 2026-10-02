@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaSection from '../components/CtaSection.astro';
+import TextLink from '../components/TextLink.astro';
 import Footer from '../components/Footer.astro';
 import {
   SESSION_HISTORY,
@@ -15,6 +16,7 @@ import {
   totalSessions,
   typeTone,
 } from '../lib/sessionHistory';
+import { galleryYears } from '../lib/gallery';
 
 const stats = [
   { label: 'Sessions', value: String(totalSessions) },
@@ -133,6 +135,9 @@ const panel = 'border border-white/[0.08] bg-white/[0.03]';
                   {year.sessions.length} sessions
                   {roomCount(year) > 0 && ` · ${roomCount(year)} rooms`}
                 </p>
+                {galleryYears.has(year.year) && (
+                  <TextLink href={`/photos#${year.year}`} class="ml-auto text-[13px]">Photos →</TextLink>
+                )}
               </div>
 
               <div class={`${columns} border-y border-divider py-2.5 font-mono text-[11px] tracking-[0.06em] text-[#4d5480]`}>
@@ -208,7 +213,9 @@ const panel = 'border border-white/[0.08] bg-white/[0.03]';
       total: block.querySelectorAll('[data-session]').length,
     }));
 
-    let selected = years[0]?.year ?? 0;
+    /* /history#2008 opens on that year; the photo archive links here that way. */
+    const linked = Number(location.hash.slice(1));
+    let selected = years.some((year) => year.year === linked) ? linked : (years[0]?.year ?? 0);
     let type = 'All';
 
     const apply = () => {

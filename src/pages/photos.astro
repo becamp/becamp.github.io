@@ -1,0 +1,348 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import PageHero from '../components/PageHero.astro';
+import TextLink from '../components/TextLink.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Footer from '../components/Footer.astro';
+import { GALLERY, totalPhotos } from '../lib/gallery';
+
+/* The full-size rendition each tile links to. It is what the viewer shows,
+   and without JavaScript the link simply opens it. Astro never upscales, so
+   the smaller Flickr originals stay at their own size. */
+const years = await Promise.all(
+  GALLERY.map(async (entry) => ({
+    ...entry,
+    /* The year line names who took them; where they came from (Flickr) is
+       detail for the viewer, so 2008 reads "beCamp community" once. */
+    credits: [...new Set(entry.photos.map((photo) => photo.credit.replace(' / Flickr', '')))],
+    photos: await Promise.all(
+      entry.photos.map(async (photo) => ({
+        ...photo,
+        full: await getImage({ src: photo.src, width: Math.min(photo.src.width, 1600), format: 'webp' }),
+      })),
+    ),
+  })),
+);
+
+/* Where each year starts in the page-wide sequence the viewer steps through,
+   so a year's slideshow can begin at its first photo. */
+const starts = years.map((_, i) => years.slice(0, i).reduce((n, entry) => n + entry.photos.length, 0));
+
+const meta = 'font-mono text-[13px] text-[#858fc6]';
+/* The slideshow controls only work with the script, so they render hidden
+   and the script reveals them. */
+const playButton = 'inline-flex items-center justify-center gap-2.5 px-4 py-3 font-mono text-base font-medium text-bg transition-colors duration-150 bg-primary hover:bg-[#ff8b33]';
+const photosEmail = 'mailto:ozanzal+becamp@gmail.com?subject=beCamp%20photos';
+---
+
+<Layout
+  title="Photos — beCamp"
+  description={`${totalPhotos} photos from ${years.length} beCamps, taken by the people who were there.`}
+>
+  <Header />
+  <main>
+    <PageHero wide label="Photo Archive" title="The room, year by year">
+      <p class="mt-6 max-w-[64ch] text-lg leading-relaxed text-white/80">
+        {totalPhotos} photos from {years.length} beCamps, taken by the people who were there:
+        the session walls, the circles of folding chairs, the band in 2007 and the bread in 2016.
+      </p>
+      <button type="button" data-slideshow-start="0" hidden class={`mt-8 ${playButton}`}>
+        <span aria-hidden="true">&#9654;</span> Play slideshow
+      </button>
+    </PageHero>
+
+    <section class="px-5 sm:px-20">
+      <div class="flex flex-col gap-10 lg:flex-row lg:gap-14">
+        <!-- Year rail; top-14 clears the sticky countdown bar. -->
+        <nav class="lg:w-[148px] lg:shrink-0" aria-label="Jump to a year">
+          <p class="font-mono text-xs tracking-[0.04em] text-primary">Jump to a year</p>
+          <div class="mt-3.5 flex flex-wrap gap-2 lg:sticky lg:top-14 lg:flex-col lg:gap-0">
+            {years.map((entry) => (
+              <a
+                href={`#${entry.year}`}
+                class="group relative flex items-baseline gap-2.5 border border-white/[0.08] px-3 py-2.5 font-mono text-sm text-[#858fc6] transition-colors duration-150 hover:text-white lg:justify-between lg:border-0 lg:py-1.5 lg:pl-4.5 lg:pr-0"
+              >
+                <span
+                  class="absolute left-0 top-1/2 hidden size-[5px] -translate-y-1/2 rotate-45 bg-divider transition-colors duration-150 group-hover:bg-primary lg:block"
+                  aria-hidden="true"
+                ></span>
+                <span>{entry.year}</span>
+                <span class="font-mono text-xs text-[#4d5480]">{entry.photos.length}</span>
+              </a>
+            ))}
+          </div>
+        </nav>
+
+        <div class="min-w-0 lg:flex-1">
+          {years.map((entry, yearIndex) => (
+            <section id={String(entry.year)} aria-labelledby={`year-${entry.year}`} class="mb-14 scroll-mt-16">
+              <div class="flex flex-wrap items-baseline gap-x-3.5 gap-y-1 border-b border-divider pb-3.5">
+                <h2 id={`year-${entry.year}`} class="text-3xl font-medium tracking-[-0.02em] text-white">
+                  {entry.year}
+                </h2>
+                <p class={meta}>
+                  {entry.photos.length} {entry.photos.length === 1 ? 'photo' : 'photos'} · {entry.credits.join(', ')}
+                </p>
+                <span class="flex items-baseline gap-5 sm:ml-auto">
+                  <button
+                    type="button"
+                    data-slideshow-start={starts[yearIndex]}
+                    hidden
+                    class="font-mono text-[13px] text-primary transition-colors duration-150 hover:text-[#ff8b33] hover:underline"
+                  >
+                    <span aria-hidden="true">&#9654;</span> Play {entry.year}
+                  </button>
+                  <TextLink href={`/history#${entry.year}`} class="text-[13px]">
+                    {entry.year} sessions →
+                  </TextLink>
+                </span>
+              </div>
+
+              <!-- CSS columns keep each photo's own shape. They fill top to
+                   bottom, which is fine for browsing; the viewer steps through
+                   in shooting order regardless. -->
+              <div class="mt-5 columns-2 gap-3 sm:columns-3 xl:columns-4">
+                {entry.photos.map((photo, index) => (
+                  <a
+                    href={photo.full.src}
+                    data-photo
+                    data-alt={photo.alt}
+                    data-credit={photo.credit}
+                    data-year={entry.year}
+                    data-width={photo.full.attributes.width}
+                    data-height={photo.full.attributes.height}
+                    class="group mb-3 block break-inside-avoid overflow-hidden bg-white/[0.03] outline-offset-2 focus-visible:outline-2 focus-visible:outline-primary"
+                  >
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      widths={[400, 800]}
+                      sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 26vw, (min-width: 640px) 31vw, 47vw"
+                      loading={yearIndex === 0 && index < 8 ? 'eager' : 'lazy'}
+                      class="h-auto w-full transition-[opacity,transform] duration-300 group-hover:scale-[1.02] group-hover:opacity-90 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    />
+                  </a>
+                ))}
+              </div>
+            </section>
+          ))}
+
+          <div class="border-t border-divider pt-6">
+            <p class="max-w-[64ch] text-base leading-relaxed text-white/80">
+              The archive has gaps: nothing yet from 2010, 2012, 2013, or any year since 2018.
+              If you have photos from a beCamp, we would love to add them, with your name on them.
+            </p>
+            <TextLink href={photosEmail} external class="mt-3 inline-block text-sm">Send us your photos →</TextLink>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- The viewer. A native modal dialog: Escape closes it, focus is trapped
+         inside while open and returns to the photo that opened it. -->
+    <dialog
+      id="photo-viewer"
+      aria-label="Photo viewer"
+      class="m-0 h-dvh max-h-none w-screen max-w-none bg-transparent p-0 backdrop:bg-bg/95"
+    >
+      <!-- Time left on the current slide. Restarted per photo by the script;
+           only shown while the slideshow plays. -->
+      <div class="absolute inset-x-0 top-0 h-0.5 bg-white/[0.06]" aria-hidden="true">
+        <div id="viewer-progress" class="h-full w-0 bg-primary"></div>
+      </div>
+
+      <figure data-viewer-backdrop class="flex h-full w-full flex-col items-center justify-center gap-4 px-5 pb-6 pt-16 sm:px-24">
+        <img
+          id="viewer-image"
+          alt=""
+          class="max-h-[calc(100dvh-170px)] max-w-full object-contain transition-opacity duration-300 motion-reduce:transition-none"
+        />
+        <figcaption class="max-w-[72ch] text-center">
+          <p id="viewer-alt" class="text-base leading-snug text-white"></p>
+          <p id="viewer-meta" class={`mt-1.5 ${meta}`}></p>
+        </figcaption>
+      </figure>
+
+      <button
+        type="button"
+        data-viewer-play
+        class="absolute left-3 top-3 flex h-11 items-center gap-2 px-2 font-mono text-sm text-white transition-colors duration-150 hover:text-primary data-[playing]:text-primary sm:left-6 sm:top-6"
+      >
+        <span data-play-icon aria-hidden="true">&#9654;</span>
+        <span data-play-label>Play slideshow</span>
+      </button>
+      <button
+        type="button"
+        data-viewer-close
+        aria-label="Close"
+        class="absolute right-3 top-3 flex size-11 items-center justify-center text-2xl text-white transition-colors duration-150 hover:text-primary sm:right-6 sm:top-6"
+      >
+        &#10005;
+      </button>
+      <button
+        type="button"
+        data-viewer-step="-1"
+        aria-label="Previous photo"
+        class="absolute left-1 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center font-mono text-2xl text-white transition-colors duration-150 hover:text-primary sm:left-6"
+      >
+        &larr;
+      </button>
+      <button
+        type="button"
+        data-viewer-step="1"
+        aria-label="Next photo"
+        class="absolute right-1 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center font-mono text-2xl text-white transition-colors duration-150 hover:text-primary sm:right-6"
+      >
+        &rarr;
+      </button>
+    </dialog>
+
+    <CtaSection />
+  </main>
+  <Footer />
+</Layout>
+
+<style is:global>
+  /* The page behind the viewer stays put. Done in CSS rather than on the
+     dialog's close event so no path out of the viewer can leave it locked. */
+  html:has(#photo-viewer[open]) {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  /* Opens a tile in the viewer instead of following its link, and steps
+     through every photo on the page in order, across years. Without this
+     script each tile is an ordinary link to the full-size image. Re-runs per
+     navigation (astro:page-load) because the router swaps in fresh nodes;
+     every listener sits on an element of this page, so none accumulate.
+
+     Slideshow mode is the same viewer advancing itself. It only ever starts
+     from a button press, pauses on Space or the toggle, and stops when the
+     viewer closes. */
+  const SLIDE_MS = 5000;
+
+  const init = () => {
+    const viewer = document.getElementById('photo-viewer') as HTMLDialogElement | null;
+    const image = document.getElementById('viewer-image') as HTMLImageElement | null;
+    const alt = document.getElementById('viewer-alt');
+    const meta = document.getElementById('viewer-meta');
+    const progress = document.getElementById('viewer-progress');
+    const toggle = viewer?.querySelector<HTMLButtonElement>('[data-viewer-play]');
+    if (!viewer || !image || !alt || !meta || !progress || !toggle) return;
+
+    const tiles = [...document.querySelectorAll<HTMLAnchorElement>('[data-photo]')];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let current = 0;
+    let playing = false;
+    let timer: number | undefined;
+    let loading = 0;
+
+    /* The bar fills over one slide. Under reduced motion it stays empty; the
+       toggle's label still says whether the show is running. */
+    const restartProgress = () => {
+      for (const animation of progress.getAnimations()) animation.cancel();
+      if (!playing || reducedMotion.matches) return;
+      progress.animate([{ width: '0%' }, { width: '100%' }], { duration: SLIDE_MS, easing: 'linear', fill: 'forwards' });
+    };
+
+    const schedule = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        /* The close event is the usual way out, but a timer outliving the
+           dialog must never reopen anything. */
+        if (viewer.open) show(current + 1);
+        else setPlaying(false);
+      }, SLIDE_MS);
+      restartProgress();
+    };
+
+    const show = (index: number) => {
+      current = (index + tiles.length) % tiles.length;
+      const tile = tiles[current];
+
+      /* Fade in once the new photo is decoded, so a slow load never flashes
+         half an image. Only the latest request may lift the fade. */
+      const request = ++loading;
+      image.classList.add('opacity-0');
+      image.src = tile.href;
+      image.alt = tile.dataset.alt ?? '';
+      image.width = Number(tile.dataset.width);
+      image.height = Number(tile.dataset.height);
+      image
+        .decode()
+        .catch(() => {})
+        .finally(() => {
+          if (request === loading) image.classList.remove('opacity-0');
+        });
+
+      alt.textContent = tile.dataset.alt ?? '';
+      meta.textContent = `${tile.dataset.year} · Photo: ${tile.dataset.credit} · ${current + 1} of ${tiles.length}`;
+
+      /* Warm the next photo so the slideshow never waits on the network. */
+      new Image().src = tiles[(current + 1) % tiles.length].href;
+
+      /* A manual step while playing restarts the clock rather than cutting
+         the new photo short. */
+      if (playing) schedule();
+    };
+
+    const setPlaying = (on: boolean) => {
+      playing = on;
+      window.clearTimeout(timer);
+      toggle.toggleAttribute('data-playing', on);
+      toggle.querySelector('[data-play-icon]')!.textContent = on ? '❚❚' : '▶';
+      toggle.querySelector('[data-play-label]')!.textContent = on ? 'Pause' : 'Play slideshow';
+      if (on) schedule();
+      else restartProgress();
+    };
+
+    const open = (index: number, play: boolean) => {
+      setPlaying(false);
+      show(index);
+      if (!viewer.open) viewer.showModal();
+      setPlaying(play);
+    };
+
+    tiles.forEach((tile, index) => {
+      tile.addEventListener('click', (event) => {
+        /* Let modified clicks open the image in a new tab as usual. */
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+        event.preventDefault();
+        open(index, false);
+      });
+    });
+
+    for (const button of document.querySelectorAll<HTMLButtonElement>('[data-slideshow-start]')) {
+      button.hidden = false;
+      button.addEventListener('click', () => open(Number(button.dataset.slideshowStart), true));
+    }
+
+    toggle.addEventListener('click', () => setPlaying(!playing));
+    viewer.addEventListener('close', () => setPlaying(false));
+
+    viewer.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') show(current - 1);
+      if (event.key === 'ArrowRight') show(current + 1);
+      /* Space on a focused button presses that button; anywhere else it
+         plays or pauses. */
+      if (event.key === ' ' && !(event.target as HTMLElement).closest('button')) {
+        event.preventDefault();
+        setPlaying(!playing);
+      }
+    });
+
+    viewer.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      const step = target.closest<HTMLElement>('[data-viewer-step]');
+      if (step) show(current + Number(step.dataset.viewerStep));
+      /* The figure fills the screen; a click on it, rather than on the photo
+         or caption inside, is a click on the backdrop. */
+      if (target.closest('[data-viewer-close]') || target.hasAttribute('data-viewer-backdrop')) viewer.close();
+    });
+  };
+
+  document.addEventListener('astro:page-load', init);
+</script>
