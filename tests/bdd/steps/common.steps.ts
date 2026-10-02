@@ -28,6 +28,7 @@ const PAGES: Record<string, string> = {
   'not-found': '/404.html',
   sessions: '/sessions',
   history: '/history',
+  photos: '/photos',
 };
 
 export const pathFor = (name: string) => {

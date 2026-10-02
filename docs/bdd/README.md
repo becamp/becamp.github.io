@@ -1,7 +1,7 @@
 # Behaviour specifications
 
 One Gherkin feature file per observable behaviour of the beCamp site, extracted
-from the source rather than written ahead of it. 59 files, 328 scenarios.
+from the source rather than written ahead of it. 60 files, 367 scenarios.
 
 These describe what the site does as someone outside it can observe: what a
 visitor sees, what the registration endpoint answers, what a build publishes.
@@ -107,6 +107,7 @@ additionally tagged `@mockup`; it is scaffolding and is not intended to ship.
 | `event-details.feature` | Dates and venues agree wherever they appear |
 | `video-lightbox.feature` | The intro video opens and unloads on demand |
 | `photo-marquee.feature` | The photo strip scrolls and pauses on hover |
+| `photo-gallery.feature` | The photo archive, year by year, with a viewer |
 | `faq-accordion.feature` | Answers expand and collapse without scripting |
 | `faq-deep-links.feature` | Each question has a stable anchor |
 | `footer-parallax.feature` | The mountains shift as you approach |
