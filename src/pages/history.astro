@@ -231,7 +231,7 @@ const panel = 'border border-white/[0.08] bg-white/[0.03]';
             (type === 'All' || entry.type.includes(type)) &&
             (query === '' || entry.text.includes(query));
           /* In idle mode every row of the chosen year shows; the block is what
-             gets hidden, so switching years costs one class toggle, not 363. */
+             gets hidden, so switching years costs one class toggle, not one per row. */
           entry.row.hidden = filtering && !match;
           if (match) shown += 1;
         }
