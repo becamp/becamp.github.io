@@ -5,6 +5,7 @@
    for the focus rule this page hands off to the browser. */
 import Layout from '../layouts/Layout.astro';
 import logoMark from '../assets/icons/logo-mark.svg';
+import checkinQr from '../assets/images/checkin-qr.svg';
 import { getSaturdaySchedule } from '../lib/airtable';
 import { BANDS, SLOTS, formatTime, type Band, type Slot } from '../lib/sessionBoard';
 
@@ -84,6 +85,32 @@ const gridCols = `grid-template-columns: calc(16 * var(--s)) repeat(${rooms.leng
           Today&rsquo;s Sessions
         </h1>
       </div>
+
+      <!-- Self check-in. The QR is exactly the title block's height, so the
+           header, and the grid below it, keep their size. It encodes the short
+           URL rather than the form it redirects to: fewer, larger modules scan
+           from further away, and repointing the short link updates the board. -->
+      <a
+        id="checkin"
+        href="https://tinyurl.com/becamp"
+        target="_blank"
+        rel="noopener"
+        class="flex flex-shrink-0 items-center gap-[calc(1.6*var(--s))] text-right"
+      >
+        <span>
+          <span class="mb-[calc(0.4*var(--s))] block font-mono text-[calc(1.25*var(--s))] uppercase tracking-[0.14em] text-primary">
+            Self check-in
+          </span>
+          <span class="block font-mono text-[calc(2.2*var(--s))] font-medium leading-none text-white">
+            tinyurl.com/becamp
+          </span>
+        </span>
+        <img
+          src={checkinQr.src}
+          alt="QR code for tinyurl.com/becamp"
+          class="size-[calc(6.85*var(--s))] [image-rendering:pixelated]"
+        />
+      </a>
 
       <div id="clock-box" class="flex-shrink-0 border-l border-white/[0.08] pl-[calc(2.4*var(--s))] text-right">
         <p
@@ -187,7 +214,7 @@ const gridCols = `grid-template-columns: calc(16 * var(--s)) repeat(${rooms.leng
           {row.row.cells.map((session) =>
             session ? (
               <div class="card flex min-h-0 min-w-0 flex-col gap-[calc(0.6*var(--s))] overflow-hidden border border-white/[0.08] bg-white/[0.03] px-[calc(1.7*var(--s))] py-[calc(1.5*var(--s))]">
-                <p class="card-title m-0 text-pretty text-[calc(2.35*var(--s))] font-semibold leading-[1.18] tracking-[-0.015em]">
+                <p class="card-title m-0 text-pretty text-[calc(1.95*var(--s))] font-semibold leading-[1.18] tracking-[-0.015em]">
                   {session.topic}
                 </p>
                 <p class="card-meta m-0 mt-auto flex min-w-0 items-baseline gap-[calc(0.8*var(--s))]">
@@ -205,7 +232,7 @@ const gridCols = `grid-template-columns: calc(16 * var(--s)) repeat(${rooms.leng
               </div>
             ) : (
               <div class="card card-open flex min-h-0 min-w-0 flex-col justify-center gap-[calc(0.6*var(--s))] border border-dashed border-white/[0.13] bg-transparent px-[calc(1.7*var(--s))] py-[calc(1.5*var(--s))]">
-                <p class="card-title m-0 text-[calc(2.35*var(--s))] font-medium leading-[1.18] tracking-[-0.015em] text-mountain">
+                <p class="card-title m-0 text-[calc(1.95*var(--s))] font-medium leading-[1.18] tracking-[-0.015em] text-mountain">
                   Open &mdash; claim it at the board
                 </p>
               </div>
