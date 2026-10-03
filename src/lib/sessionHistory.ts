@@ -8,6 +8,11 @@
  * shipping. Correct src/data/sessions.json if a tab turns out to be another
  * year.
  *
+ * 2026 is the exception: it was copied from the published /sessions board
+ * (the Airtable "Saturday Schedule" table) after the event, rooms included.
+ * The lunch, lightning-talk and retrospective bands are left out, as they are
+ * for every other year.
+ *
  * NOT EVERYTHING IS HERE. The spreadsheet has at least one further tab, older
  * than 2007 and presumably 2006, whose rows the Drive connector truncates. Two
  * rows were also left out on purpose: a "Breakfast" row in 2015 and a bare

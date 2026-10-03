@@ -1,5 +1,185 @@
 [
   {
+    "year": 2026,
+    "sessions": [
+      {
+        "topic": "Why do we read?",
+        "time": "9:30am",
+        "speaker": "Jessica Otey",
+        "room": "Breakout Room 1",
+        "type": "Share"
+      },
+      {
+        "topic": "Oops, I ran that in prod",
+        "time": "9:30am",
+        "speaker": "Jeff Bordogna",
+        "room": "Breakout Room 2",
+        "type": "Share"
+      },
+      {
+        "topic": "AI sucks. Change my mind",
+        "time": "9:30am",
+        "speaker": "Noah Bloom",
+        "room": "Breakout Room 3",
+        "type": "Share"
+      },
+      {
+        "topic": "Let's build an AI agent, part A",
+        "time": "9:30am",
+        "speaker": "Andrew Boyd",
+        "room": "Breakout Room 4",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "The accelerator micro-workshops to start something or get unstuck",
+        "time": "9:30am",
+        "speaker": "John Rabasa",
+        "room": "Breakout Room 5",
+        "type": "Present"
+      },
+      {
+        "topic": "Roversa community + play build robot",
+        "time": "10:20am",
+        "speaker": "Kim Wilkinson",
+        "room": "Breakout Room 1",
+        "type": "Share/Learn"
+      },
+      {
+        "topic": "How not to kill your trees",
+        "time": "10:20am",
+        "speaker": "Taylor Vierrether",
+        "room": "Breakout Room 2",
+        "type": "Present"
+      },
+      {
+        "topic": "Build your own Jev",
+        "time": "10:20am",
+        "speaker": "Nish Tahir",
+        "room": "Breakout Room 3",
+        "type": "Present"
+      },
+      {
+        "topic": "Let's build an agent, part B",
+        "time": "10:20am",
+        "speaker": "Justin Schroder",
+        "room": "Breakout Room 4",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Making better decisions in life and work",
+        "time": "10:20am",
+        "speaker": "Mason Montgomory",
+        "room": "Breakout Room 5",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Home automation",
+        "time": "11:10am",
+        "speaker": "Boris Rapoport",
+        "room": "Breakout Room 1",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "What have you vibe coded lately?",
+        "time": "11:10am",
+        "speaker": "Jessica Otey",
+        "room": "Breakout Room 2",
+        "type": "Share"
+      },
+      {
+        "topic": "What are all the DEAD stores that now Spirit Halloween stores?",
+        "time": "11:10am",
+        "speaker": "Jon Kropko",
+        "room": "Breakout Room 3",
+        "type": "Present"
+      },
+      {
+        "topic": "Proof of Thought: Bringing slop down to zero",
+        "time": "11:10am",
+        "speaker": "John Feminella",
+        "room": "Breakout Room 4",
+        "type": "Present"
+      },
+      {
+        "topic": "How to start collecting rare books",
+        "time": "11:10am",
+        "speaker": "Donna Sy",
+        "room": "Breakout Room 5",
+        "type": "Present"
+      },
+      {
+        "topic": "Technical future of government consulting in the age of AI",
+        "time": "2:00pm",
+        "speaker": "Albert Lee",
+        "room": "Breakout Room 1",
+        "type": "Present"
+      },
+      {
+        "topic": "How to raise children in a highly intelligent AI world",
+        "time": "2:00pm",
+        "speaker": "Shannon Coble",
+        "room": "Breakout Room 2",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Unsolicited career advice",
+        "time": "2:00pm",
+        "speaker": "Doug Turnbull",
+        "room": "Breakout Room 3",
+        "type": "Present/Share"
+      },
+      {
+        "topic": "Taiwanese civic hacking digital democracy",
+        "time": "2:00pm",
+        "speaker": "Joe Holmes",
+        "room": "Breakout Room 4",
+        "type": "Present"
+      },
+      {
+        "topic": "Meditation",
+        "time": "2:00pm",
+        "speaker": "William Proffitt",
+        "room": "Breakout Room 5",
+        "type": "Share"
+      },
+      {
+        "topic": "How to learn in the age of AI",
+        "time": "2:50pm",
+        "speaker": "Vaughn Spurrier",
+        "room": "Breakout Room 1",
+        "type": "Share"
+      },
+      {
+        "topic": "State of Charlottesville Technology Community",
+        "time": "2:50pm",
+        "speaker": "Patrick Harrison",
+        "room": "Breakout Room 2",
+        "type": "Share"
+      },
+      {
+        "topic": "AI security",
+        "time": "2:50pm",
+        "speaker": "Carson Sweet",
+        "room": "Breakout Room 3",
+        "type": "Present"
+      },
+      {
+        "topic": "How to make health decisions with data",
+        "time": "2:50pm",
+        "speaker": "Jason Itri",
+        "room": "Breakout Room 4",
+        "type": "Present"
+      },
+      {
+        "topic": "Crazy alcohol regs of the U.S.",
+        "time": "2:50pm",
+        "speaker": "Sidd Dalal",
+        "room": "Breakout Room 5",
+        "type": "Present/Share"
+      }
+    ]
+  },
+  {
     "year": 2025,
     "sessions": [
       {
