@@ -29,9 +29,14 @@ const sessions = await getSaturdaySchedule();
    behind it is the whole point of that build. */
 const schedulePreview =
   !USE_FAKE_DATA && Date.now() < new Date('2026-10-02T20:30:00-04:00').getTime();
+/* Within a slot, rooms run in order (Breakout Room 1, 2, … 5) whatever order
+   Airtable returns them in. The comparison is numeric, so Room 10 follows
+   Room 9; a session with no room goes last. */
+const byRoom = (a: { location?: string }, b: { location?: string }) =>
+  (a.location ?? '￿').localeCompare(b.location ?? '￿', 'en', { numeric: true });
 const scheduleRows = TIME_SLOTS.map((slot) => ({
   time: slot,
-  sessions: sessions.filter((s) => s.time === slot),
+  sessions: sessions.filter((s) => s.time === slot).sort(byRoom),
 }));
 
 /* slots: 3 = three parallel session placeholders, 1 = single full-width block */
