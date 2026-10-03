@@ -187,7 +187,7 @@ const gridCols = `grid-template-columns: calc(16 * var(--s)) repeat(${rooms.leng
           {row.row.cells.map((session) =>
             session ? (
               <div class="card flex min-h-0 min-w-0 flex-col gap-[calc(0.6*var(--s))] overflow-hidden border border-white/[0.08] bg-white/[0.03] px-[calc(1.7*var(--s))] py-[calc(1.5*var(--s))]">
-                <p class="card-title m-0 text-pretty text-[calc(2.35*var(--s))] font-semibold leading-[1.18] tracking-[-0.015em]">
+                <p class="card-title m-0 text-pretty text-[calc(1.95*var(--s))] font-semibold leading-[1.18] tracking-[-0.015em]">
                   {session.topic}
                 </p>
                 <p class="card-meta m-0 mt-auto flex min-w-0 items-baseline gap-[calc(0.8*var(--s))]">
@@ -205,7 +205,7 @@ const gridCols = `grid-template-columns: calc(16 * var(--s)) repeat(${rooms.leng
               </div>
             ) : (
               <div class="card card-open flex min-h-0 min-w-0 flex-col justify-center gap-[calc(0.6*var(--s))] border border-dashed border-white/[0.13] bg-transparent px-[calc(1.7*var(--s))] py-[calc(1.5*var(--s))]">
-                <p class="card-title m-0 text-[calc(2.35*var(--s))] font-medium leading-[1.18] tracking-[-0.015em] text-mountain">
+                <p class="card-title m-0 text-[calc(1.95*var(--s))] font-medium leading-[1.18] tracking-[-0.015em] text-mountain">
                   Open &mdash; claim it at the board
                 </p>
               </div>
