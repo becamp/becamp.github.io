@@ -5,6 +5,7 @@
    for the focus rule this page hands off to the browser. */
 import Layout from '../layouts/Layout.astro';
 import logoMark from '../assets/icons/logo-mark.svg';
+import checkinQr from '../assets/images/checkin-qr.svg';
 import { getSaturdaySchedule } from '../lib/airtable';
 import { BANDS, SLOTS, formatTime, type Band, type Slot } from '../lib/sessionBoard';
 
@@ -84,6 +85,32 @@ const gridCols = `grid-template-columns: calc(16 * var(--s)) repeat(${rooms.leng
           Today&rsquo;s Sessions
         </h1>
       </div>
+
+      <!-- Self check-in. The QR is exactly the title block's height, so the
+           header, and the grid below it, keep their size. It encodes the short
+           URL rather than the form it redirects to: fewer, larger modules scan
+           from further away, and repointing the short link updates the board. -->
+      <a
+        id="checkin"
+        href="https://tinyurl.com/becamp"
+        target="_blank"
+        rel="noopener"
+        class="flex flex-shrink-0 items-center gap-[calc(1.6*var(--s))] text-right"
+      >
+        <span>
+          <span class="mb-[calc(0.4*var(--s))] block font-mono text-[calc(1.25*var(--s))] uppercase tracking-[0.14em] text-primary">
+            Self check-in
+          </span>
+          <span class="block font-mono text-[calc(2.2*var(--s))] font-medium leading-none text-white">
+            tinyurl.com/becamp
+          </span>
+        </span>
+        <img
+          src={checkinQr.src}
+          alt="QR code for tinyurl.com/becamp"
+          class="size-[calc(6.85*var(--s))] [image-rendering:pixelated]"
+        />
+      </a>
 
       <div id="clock-box" class="flex-shrink-0 border-l border-white/[0.08] pl-[calc(2.4*var(--s))] text-right">
         <p
