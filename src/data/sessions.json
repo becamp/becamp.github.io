@@ -42,7 +42,13 @@
         "time": "10:20am",
         "speaker": "Kim Wilkens",
         "room": "Breakout Room 1",
-        "type": "Share/Learn"
+        "type": "Share/Learn",
+        "links": [
+          {
+            "label": "Roversa",
+            "url": "https://www.roversa.com/"
+          }
+        ]
       },
       {
         "topic": "How not to kill your trees",
@@ -105,7 +111,14 @@
         "time": "11:10am",
         "speaker": "Donna Sy",
         "room": "Breakout Room 5",
-        "type": "Present"
+        "type": "Present",
+        "links": [
+          {
+            "label": "Open house",
+            "url": "https://rarebookschool.org/events/2026/10/open-house/"
+          }
+        ],
+        "notes": "Donna's follow-up: the Rare Book School open house, Thursday, October 8, 2026, 1–4pm, a chance to try letterpress printing and gold foil stamping."
       },
       {
         "topic": "Technical future of government consulting in the age of AI",
@@ -122,18 +135,30 @@
         "type": "Present/Share"
       },
       {
-        "topic": "Unsolicited career advice",
+        "topic": "Unc. Solicited Career Advice",
         "time": "2:00pm",
         "speaker": "Doug Turnbull",
         "room": "Breakout Room 3",
-        "type": "Present/Share"
+        "type": "Present/Share",
+        "links": [
+          {
+            "label": "Slides",
+            "url": "https://docs.google.com/presentation/d/1UdTITKEo3h_6Znu4ArkPq0TD8-ZXTje6zfsKoNGcpxY/edit"
+          }
+        ]
       },
       {
         "topic": "Taiwanese civic hacking digital democracy",
         "time": "2:00pm",
         "speaker": "Joe Holmes",
         "room": "Breakout Room 4",
-        "type": "Present"
+        "type": "Present",
+        "links": [
+          {
+            "label": "Slides",
+            "url": "/talks/upgrading-democracy.html"
+          }
+        ]
       },
       {
         "topic": "Meditation",
@@ -161,7 +186,26 @@
         "time": "2:50pm",
         "speaker": "Carson Sweet",
         "room": "Breakout Room 3",
-        "type": "Present"
+        "type": "Present",
+        "links": [
+          {
+            "label": "Slides",
+            "url": "https://drive.google.com/file/d/1AVZ5iGKO5u6nfHJvUMIKxCwQdevHHk5G/view"
+          },
+          {
+            "label": "Mouse sim",
+            "url": "https://mice.jev.carsonsweet.com/"
+          },
+          {
+            "label": "Design article",
+            "url": "https://carsonsweet.substack.com/p/what-happens-when-judgment-replaces"
+          },
+          {
+            "label": "Repo",
+            "url": "https://github.com/carson-sweet/jev-mice"
+          }
+        ],
+        "notes": "Carson also shared his Game of Life–style mouse colony simulation, which came up in questions (unrelated to the security talk): the game, a design article and the repo."
       },
       {
         "topic": "How to make health decisions with data",
