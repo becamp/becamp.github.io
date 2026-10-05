@@ -1,0 +1,205 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import PageHero from '../../../components/PageHero.astro';
+import TextLink from '../../../components/TextLink.astro';
+import PitchCharts from '../../../components/PitchCharts.astro';
+import ThemeHistory from '../../../components/ThemeHistory.astro';
+import CtaSection from '../../../components/CtaSection.astro';
+import Footer from '../../../components/Footer.astro';
+import { RETROSPECTIVES, THEME_LABELS, pitchesFor } from '../../../lib/retrospectives';
+import { SESSION_HISTORY } from '../../../lib/sessionHistory';
+import { GALLERY } from '../../../lib/gallery';
+
+export function getStaticPaths() {
+  return RETROSPECTIVES.map((retro) => ({
+    params: { year: String(retro.frontmatter.year) },
+    props: { retro },
+  }));
+}
+
+const { retro } = Astro.props;
+const { year, title, description, registered, checkedIn, pitched } = retro.frontmatter;
+const { Content } = retro;
+
+/* Scheduled sessions and photos come from the archive itself, so these
+   tiles can never disagree with the history and photo pages. */
+const scheduled = SESSION_HISTORY.find((entry) => entry.year === year)?.sessions.length;
+const photos = GALLERY.find((entry) => entry.year === year)?.photos.length;
+
+/* With a pitch list, the pitched count comes from it, and must agree with the
+   number the write-up quotes. */
+const pitches = pitchesFor(year);
+if (pitches && pitched !== undefined && pitches.length !== pitched) {
+  throw new Error(`${year} retrospective says ${pitched} pitches but ${year}-pitches.json lists ${pitches.length}`);
+}
+
+/* Patterns in the pitches. Every figure is counted from the pitch list; the
+   sentences around them are ours. */
+const insights = (() => {
+  if (!pitches) return [];
+  const total = pitches.length;
+  const onSchedule = pitches.filter((p) => p.scheduled);
+  const has = (theme: string) => (p: (typeof pitches)[number]) => p.themes.includes(theme);
+  const ai = pitches.filter(has('ai'));
+  const presenters = new Map<string, number>();
+  for (const p of pitches) if (p.presenter) presenters.set(p.presenter, (presenters.get(p.presenter) ?? 0) + 1);
+  const repeat = [...presenters.values()].filter((n) => n > 1).length;
+  const agents = pitches.filter((p) => /\b(agents?|agentic|RAG)\b/i.test(p.title));
+  const rag = pitches.filter((p) => /\bRAG\b/.test(p.title));
+  /* Only pitches whose every theme is culture, life or health: a robotics or
+     home-automation pitch has no AI tag but is still about technology. */
+  const beyondTech = pitches.filter((p) => p.themes.length > 0 && p.themes.every((t) => ['culture', 'life', 'health'].includes(t)));
+  const handsOn = pitches.filter(has('hands-on'));
+  const pct = (n: number, of: number) => Math.round((n / of) * 100);
+  return [
+    {
+      figure: `${pct(ai.length, total)}%`,
+      text: `of pitches touched AI (${ai.length} of ${total}): the biggest single theme, but not the majority. The room scheduled it at about the same rate, ${ai.filter((p) => p.scheduled).length} of ${onSchedule.length} sessions.`,
+    },
+    {
+      figure: String(total - onSchedule.length),
+      text: `pitches didn't make the schedule, ${pct(total - onSchedule.length, total)}% of the room's ideas for ${onSchedule.length} slots. That is the case behind more lightning talks and first-timer slots.`,
+    },
+    {
+      /* Approximate: a partial name ("Doug T.") may be someone listed in full. */
+      figure: `~${presenters.size}`,
+      text: `different people pitched (a few cards were hard to read), and at least ${repeat} of them pitched twice.`,
+    },
+    {
+      figure: String(agents.length),
+      text: `pitches were about agents or RAG, including ${rag.length} separate RAG pitches: the kind of overlap the Try list suggests combining.`,
+    },
+    {
+      figure: String(beyondTech.length),
+      text: 'pitches had nothing to do with technology: rare books, sea shanties, trees, alcohol law, meditation, why we read.',
+    },
+    {
+      figure: String(handsOn.length),
+      text: 'pitches promised hands-on building: agents, robots, a search engine from scratch, a mission-statement workshop.',
+    },
+  ];
+})();
+
+const boards = pitches
+  ? [...new Set(pitches.map((p) => p.board))].sort((a, b) => a - b).map((board) => ({
+      board,
+      pitches: pitches.filter((p) => p.board === board),
+    }))
+  : [];
+
+const stats = [
+  { label: 'Registered', value: registered },
+  { label: 'Checked in', value: checkedIn },
+  { label: 'Sessions pitched', value: pitches?.length ?? pitched },
+  { label: 'Sessions scheduled', value: scheduled },
+  { label: 'Photos', value: photos },
+].filter((stat) => stat.value !== undefined);
+
+/* Markdown arrives as plain h2/p/ul; these give it the site's type scale.
+   Keep / Change / Try are the h2s, each followed by its list. */
+const prose = [
+  'max-w-[720px]',
+  '[&>p]:mt-6 [&>p]:text-lg [&>p]:leading-relaxed [&>p]:text-white/80',
+  '[&>h2]:mt-16 [&>h2]:border-t [&>h2]:border-divider [&>h2]:pt-10 [&>h2]:text-4xl [&>h2]:font-medium [&>h2]:tracking-[-0.36px] [&>h2]:text-white',
+  '[&>ul]:mt-6 [&>ul]:flex [&>ul]:flex-col [&>ul]:gap-4 [&>ul]:border-l-[3px] [&>ul]:border-primary [&>ul]:pl-6',
+  '[&_li]:text-base [&_li]:leading-relaxed [&_li]:text-white',
+  '[&_a]:text-link [&_a]:transition-colors [&_a]:duration-150 hover:[&_a]:text-[#85bfff] hover:[&_a]:underline',
+].join(' ');
+---
+
+<Layout title={`${year} Retrospective — beCamp`} description={description}>
+  <Header />
+  <main>
+    <PageHero wide label={`Session Archive · ${year}`} title={title}>
+      <div class="mt-6 flex flex-wrap gap-x-8 gap-y-2">
+        <TextLink href={`/history#${year}`} class="text-sm">← {year} sessions</TextLink>
+        {photos !== undefined && <TextLink href={`/photos#${year}`} class="text-sm">{year} photos →</TextLink>}
+      </div>
+    </PageHero>
+
+    {stats.length > 0 && (
+      <section class="px-5 sm:px-20">
+        <!-- Classes written out in full so Tailwind sees both. Two tiles to a
+             row on narrow screens; an odd last tile spans the row rather than
+             leaving a gap beside it. -->
+        <div class={`grid grid-cols-2 gap-px border border-divider bg-divider ${stats.length === 5 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`}>
+          {stats.map((stat) => (
+            <div class="bg-bg px-5 py-4 max-lg:last:odd:col-span-2">
+              <p class="font-mono text-xs tracking-[0.04em] text-[#858fc6]">{stat.label}</p>
+              <p class="mt-1.5 text-[28px] font-medium tracking-[-0.02em] text-white">{stat.value}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <article class="px-5 pt-10 sm:px-20">
+      <div class={prose}>
+        <Content />
+      </div>
+    </article>
+
+    {pitches && (
+      <section class="px-5 pt-20 sm:px-20" aria-labelledby="pitches">
+        <div class="max-w-[720px] border-t border-divider pt-10">
+          <h2 id="pitches" class="text-4xl font-medium tracking-[-0.36px] text-white">Every pitch</h2>
+          <p class="mt-6 text-lg leading-relaxed text-white/80">
+            All {pitches.length} ideas pitched on Friday night, scheduled or not, as written on the cards.
+            Names are left off where a card couldn't be read with confidence.
+          </p>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 gap-px border border-divider bg-divider sm:grid-cols-2 lg:grid-cols-3">
+          {insights.map((insight) => (
+            <div class="bg-bg px-5 py-5">
+              <p class="text-[28px] font-medium tracking-[-0.02em] text-primary">{insight.figure}</p>
+              <p class="mt-2 text-sm leading-relaxed text-white/80">{insight.text}</p>
+            </div>
+          ))}
+        </div>
+        <p class="mt-3 font-mono text-xs text-[#4d5480]">Themes are our reading of each title; a pitch can count toward more than one.</p>
+
+        <PitchCharts pitches={pitches} />
+
+        <div class="mt-20 max-w-[720px] border-t border-divider pt-10">
+          <h2 class="text-4xl font-medium tracking-[-0.36px] text-white">How {year} compares</h2>
+          <p class="mt-6 text-lg leading-relaxed text-white/80">
+            The same themes, applied to every scheduled session since 2007.
+          </p>
+        </div>
+        <ThemeHistory year={year} />
+
+        {boards.map(({ board, pitches: list }) => (
+          <div class="mt-14">
+            <div class="flex flex-wrap items-baseline gap-x-3.5 gap-y-1 border-b border-divider pb-3.5">
+              <h3 class="text-2xl font-medium tracking-[-0.02em] text-white">Board {board}</h3>
+              <p class="font-mono text-[13px] text-[#858fc6]">
+                {list.length} pitches{list.every((p) => p.scheduled) && ' · all scheduled'}
+              </p>
+              {list.every((p) => p.scheduled) && (
+                <TextLink href={`/history#${year}`} class="text-[13px] sm:ml-auto">See them in the schedule →</TextLink>
+              )}
+            </div>
+            <ol class="divide-y divide-[#12152e]">
+              {list.map((pitch) => (
+                <li class="grid grid-cols-1 gap-x-5 gap-y-1.5 py-3.5 md:grid-cols-[minmax(0,1fr)_200px_220px] md:items-baseline">
+                  <span class="text-base leading-snug text-white">{pitch.title}</span>
+                  <span class="text-sm text-white/80">{pitch.presenter ?? '—'}</span>
+                  <span class="flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-[#858fc6]">
+                    {pitch.themes.map((theme) => (
+                      <span class={theme === 'ai' ? 'text-primary' : ''}>{THEME_LABELS[theme]}</span>
+                    ))}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))}
+      </section>
+    )}
+
+    <CtaSection />
+  </main>
+  <Footer />
+</Layout>

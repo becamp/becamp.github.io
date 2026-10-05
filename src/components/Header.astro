@@ -22,7 +22,9 @@ const navLinks = [
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const activeDot =
   "after:absolute after:-bottom-2.5 after:left-1/2 after:size-1.5 after:-translate-x-1/2 after:rotate-45 after:bg-primary after:content-['']";
-const isActive = (href: string) => currentPath === href;
+/* A section's sub-pages count as that section: /history/2026/retrospective
+   marks History. */
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(`${href}/`);
 ---
 
 <header class="relative px-5 py-6 sm:px-20 sm:py-10">
