@@ -17,6 +17,7 @@ import {
   typeTone,
 } from '../lib/sessionHistory';
 import { galleryYears } from '../lib/gallery';
+import { retrospectiveHref, retrospectiveYears } from '../lib/retrospectives';
 
 const stats = [
   { label: 'Sessions', value: String(totalSessions) },
@@ -138,8 +139,15 @@ const panel = 'border border-white/[0.08] bg-white/[0.03]';
                   {year.sessions.length} sessions
                   {roomCount(year) > 0 && ` · ${roomCount(year)} rooms`}
                 </p>
-                {galleryYears.has(year.year) && (
-                  <TextLink href={`/photos#${year.year}`} class="ml-auto text-[13px]">Photos →</TextLink>
+                {(retrospectiveYears.has(year.year) || galleryYears.has(year.year)) && (
+                  <span class="ml-auto flex flex-wrap items-baseline gap-x-5 gap-y-1">
+                    {retrospectiveYears.has(year.year) && (
+                      <TextLink href={retrospectiveHref(year.year)} class="text-[13px]">Retrospective →</TextLink>
+                    )}
+                    {galleryYears.has(year.year) && (
+                      <TextLink href={`/photos#${year.year}`} class="text-[13px]">Photos →</TextLink>
+                    )}
+                  </span>
                 )}
               </div>
 

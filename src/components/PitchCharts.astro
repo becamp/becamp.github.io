@@ -1,0 +1,327 @@
+---
+/* Three views of a year's pitch list. Every number is counted from the
+   pitches; themes are our reading of each title (see lib/retrospectives).
+
+   Colour: one accent and one context grey, the "emphasis" form, because
+   each chart's point is a subset (this theme, the scheduled ones), not eight
+   series to tell apart. The accent is a step darker than the brand orange so
+   it sits inside the dark-surface lightness band; both were checked against
+   the page's navy (accent 6.0:1, context 3.2:1; colour-blind separation
+   ΔE 21). Text never takes the data colour. */
+import { THEME_LABELS, type Pitch } from '../lib/retrospectives';
+
+interface Props {
+  pitches: Pitch[];
+}
+
+const { pitches } = Astro.props;
+
+const ACCENT = '#e8640c';
+const CONTEXT = '#555e92';
+
+const label = (theme: string) => THEME_LABELS[theme] ?? theme;
+const tipFor = (p: Pitch) =>
+  JSON.stringify([
+    p.title,
+    [p.presenter, `Board ${p.board}`].filter(Boolean).join(' · '),
+    [p.themes.map(label).join(', '), p.scheduled ? 'Scheduled' : 'Not scheduled'].filter(Boolean).join(' · '),
+  ]);
+
+/* 1 · The field: one square per pitch, by board. */
+const boards = [...new Set(pitches.map((p) => p.board))]
+  .sort((a, b) => a - b)
+  .map((board) => ({ board, pitches: pitches.filter((p) => p.board === board) }));
+const DEFAULT_THEME = 'ai';
+const themesByCount = Object.keys(THEME_LABELS)
+  .map((theme) => ({ theme, count: pitches.filter((p) => p.themes.includes(theme)).length }))
+  .filter((t) => t.count > 0)
+  .sort((a, b) => b.count - a.count);
+
+/* 2 · Themes: pitched, and how many of those were scheduled. */
+const themeRows = themesByCount.map(({ theme, count }) => ({
+  theme,
+  pitched: count,
+  scheduled: pitches.filter((p) => p.themes.includes(theme) && p.scheduled).length,
+}));
+const maxPitched = Math.max(...themeRows.map((r) => r.pitched));
+const ticks = Array.from({ length: Math.floor(maxPitched / 5) + 1 }, (_, i) => i * 5);
+const axisMax = Math.max(ticks[ticks.length - 1], maxPitched);
+
+/* 3 · Title style: share of each kind of title that made the schedule,
+   against the rate for every pitch. */
+const styles = [
+  { name: 'Starts with “How to”', test: (t: string) => /^how to\b/i.test(t) },
+  { name: 'Asked as a question', test: (t: string) => /\?\s*$/.test(t) },
+  { name: 'About building', test: (t: string) => /\bbuil[dt]\b/i.test(t) },
+].map((style) => {
+  const matching = pitches.filter((p) => style.test(p.title));
+  const scheduled = matching.filter((p) => p.scheduled).length;
+  return { ...style, total: matching.length, scheduled, share: matching.length ? scheduled / matching.length : 0 };
+});
+const overallScheduled = pitches.filter((p) => p.scheduled).length;
+const baseline = overallScheduled / pitches.length;
+const pct = (x: number) => `${Math.round(x * 100)}%`;
+---
+
+<div class="pitch-charts mt-14 flex flex-col gap-16" style={`--accent: ${ACCENT}; --context: ${CONTEXT};`}>
+  <!-- 1 · The field -->
+  <figure class="m-0">
+    <figcaption>
+      <h3 class="text-2xl font-medium tracking-[-0.02em] text-white">All {pitches.length} pitches, one square each</h3>
+      <p class="mt-2 max-w-[64ch] text-sm leading-relaxed text-white/70">
+        Grouped by the board they were posted on. Pick a theme to light up its pitches; hover or tab to a square to read it.
+      </p>
+    </figcaption>
+
+    <div class="mt-5 flex flex-wrap gap-2" role="group" aria-label="Highlight a theme" data-theme-chips hidden>
+      {themesByCount.map(({ theme, count }) => (
+        <button
+          type="button"
+          data-theme-chip={theme}
+          aria-pressed={theme === DEFAULT_THEME ? 'true' : 'false'}
+          class="border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 font-mono text-xs text-[#858fc6] transition-colors duration-150 hover:text-white aria-[pressed=true]:border-[var(--accent)] aria-[pressed=true]:text-white"
+        >
+          {label(theme)} <span class="text-[#4d5480]">{count}</span>
+        </button>
+      ))}
+    </div>
+
+    <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-xs text-[#858fc6]">
+      <span class="flex items-center gap-2"><span class="inline-block size-3 rounded-[3px] bg-[var(--accent)]"></span><span data-field-key>{label(DEFAULT_THEME)}</span></span>
+      <span class="flex items-center gap-2"><span class="inline-block size-3 rounded-[3px] bg-[var(--context)]"></span>Other pitches</span>
+      <span data-field-count class="text-white/80">
+        {pitches.filter((p) => p.themes.includes(DEFAULT_THEME)).length} of {pitches.length}
+      </span>
+    </div>
+
+    <div class="mt-5 flex flex-wrap gap-x-10 gap-y-6">
+      {boards.map(({ board, pitches: list }) => (
+        <div>
+          <p class="font-mono text-xs text-[#858fc6]">
+            Board {board}{list.every((p) => p.scheduled) && <span class="text-white/80"> · scheduled</span>}
+          </p>
+          <ul class="m-0 mt-2.5 grid list-none grid-cols-[repeat(5,28px)] gap-1 p-0">
+            {list.map((p) => (
+              <li>
+                <button
+                  type="button"
+                  data-tip={tipFor(p)}
+                  data-themes={p.themes.join(' ')}
+                  aria-label={`${p.title}${p.presenter ? `, ${p.presenter}` : ''}`}
+                  class:list={[
+                    'block size-7 rounded-[4px] transition-[background-color,transform] duration-150 hover:scale-110 focus-visible:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none motion-reduce:hover:scale-100',
+                    p.themes.includes(DEFAULT_THEME) ? 'bg-[var(--accent)]' : 'bg-[var(--context)]',
+                  ]}
+                ></button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="mt-4 font-mono text-xs text-[#4d5480]">Every pitch is also listed in full below.</p>
+  </figure>
+
+  <!-- 2 · Themes -->
+  <figure class="m-0">
+    <figcaption>
+      <h3 class="text-2xl font-medium tracking-[-0.02em] text-white">What was pitched, and what made the schedule</h3>
+      <p class="mt-2 max-w-[64ch] text-sm leading-relaxed text-white/70">
+        Pitches per theme. A pitch can count toward more than one.
+      </p>
+    </figcaption>
+    <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-xs text-[#858fc6]">
+      <span class="flex items-center gap-2"><span class="inline-block h-3 w-4 rounded-[3px] bg-[var(--accent)]"></span>Scheduled</span>
+      <span class="flex items-center gap-2"><span class="inline-block h-3 w-4 rounded-[3px] bg-[var(--context)]"></span>Not scheduled</span>
+    </div>
+
+    <div class="mt-5 max-w-[860px]">
+      {themeRows.map((row) => (
+        <div
+          class="grid grid-cols-[112px_minmax(0,1fr)] items-center gap-x-4 py-[5px] sm:grid-cols-[140px_minmax(0,1fr)]"
+          tabindex="0"
+          data-tip={JSON.stringify([`${row.scheduled} of ${row.pitched} scheduled`, label(row.theme), `${row.pitched - row.scheduled} not scheduled`])}
+        >
+          <span class="truncate text-sm text-white/80">{label(row.theme)}</span>
+          <span class="flex items-center gap-2.5">
+            <!-- The bar spans pitched/axisMax of the track; the scheduled part
+                 is the share of that bar. 2px surface gap between parts. -->
+            <span class="flex h-4 min-w-0 gap-[2px]" style={`width: calc(${(row.pitched / axisMax) * 100}% * 0.86)`}>
+              {row.scheduled > 0 && (
+                <span class:list={['h-full bg-[var(--accent)]', row.scheduled === row.pitched && 'rounded-r-[4px]']} style={`flex: ${row.scheduled} 0 0`}></span>
+              )}
+              {row.pitched > row.scheduled && (
+                <span class="h-full rounded-r-[4px] bg-[var(--context)]" style={`flex: ${row.pitched - row.scheduled} 0 0`}></span>
+              )}
+            </span>
+            <span class="shrink-0 font-mono text-xs text-[#858fc6] [font-variant-numeric:tabular-nums]">
+              <span class="text-white/90">{row.scheduled}</span> of {row.pitched}
+            </span>
+          </span>
+        </div>
+      ))}
+      <div class="mt-1 grid grid-cols-[112px_minmax(0,1fr)] gap-x-4 sm:grid-cols-[140px_minmax(0,1fr)]" aria-hidden="true">
+        <span></span>
+        <span class="relative h-5 border-t border-[#2a2f55]">
+          {ticks.map((tick) => (
+            <span class="absolute top-1 -translate-x-1/2 font-mono text-[11px] text-[#4d5480] [font-variant-numeric:tabular-nums]" style={`left: calc(${(tick / axisMax) * 100}% * 0.86)`}>{tick}</span>
+          ))}
+        </span>
+      </div>
+    </div>
+
+    <details class="mt-4">
+      <summary class="font-mono text-xs text-[#858fc6] hover:text-white">Show as a table</summary>
+      <table class="mt-3 border-collapse font-mono text-xs text-white/80 [font-variant-numeric:tabular-nums]">
+        <thead><tr class="text-[#858fc6]"><th class="py-1 pr-6 text-left font-normal">Theme</th><th class="py-1 pr-6 text-right font-normal">Pitched</th><th class="py-1 text-right font-normal">Scheduled</th></tr></thead>
+        <tbody>
+          {themeRows.map((row) => (
+            <tr class="border-t border-[#12152e]"><td class="py-1 pr-6">{label(row.theme)}</td><td class="py-1 pr-6 text-right">{row.pitched}</td><td class="py-1 text-right">{row.scheduled}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </details>
+  </figure>
+
+  <!-- 3 · Title style -->
+  <figure class="m-0">
+    <figcaption>
+      <h3 class="text-2xl font-medium tracking-[-0.02em] text-white">Does the title matter?</h3>
+      <p class="mt-2 max-w-[64ch] text-sm leading-relaxed text-white/70">
+        Share of each kind of title that made the schedule, against {pct(baseline)} for all {pitches.length} pitches.
+        Small numbers: a pattern worth noticing, not a rule.
+      </p>
+    </figcaption>
+
+    <div class="mt-6 max-w-[860px]">
+      {styles.map((style) => (
+        <div
+          class="grid grid-cols-[112px_minmax(0,1fr)] items-center gap-x-4 py-[7px] sm:grid-cols-[180px_minmax(0,1fr)]"
+          tabindex="0"
+          data-tip={JSON.stringify([pct(style.share), style.name, `${style.scheduled} of ${style.total} scheduled`])}
+        >
+          <span class="text-sm text-white/80">{style.name}</span>
+          <span class="flex items-center gap-2.5">
+            <span class="relative h-4 w-[86%]">
+              <span class="absolute inset-y-0 left-0 rounded-r-[4px] bg-[var(--accent)]" style={`width: ${style.share * 100}%`}></span>
+              <span class="absolute -inset-y-1.5 w-px bg-white/45" style={`left: ${baseline * 100}%`}></span>
+            </span>
+            <span class="shrink-0 font-mono text-xs text-[#858fc6] [font-variant-numeric:tabular-nums]">
+              <span class="text-white/90">{style.scheduled}</span> of {style.total}
+            </span>
+          </span>
+        </div>
+      ))}
+      <div class="mt-1 grid grid-cols-[112px_minmax(0,1fr)] gap-x-4 sm:grid-cols-[180px_minmax(0,1fr)]">
+        <span></span>
+        <span class="relative h-5 w-[86%] border-t border-[#2a2f55]">
+          <span class="absolute top-1 -translate-x-1/2 whitespace-nowrap font-mono text-[11px] text-white/60" style={`left: ${baseline * 100}%`}>
+            all pitches {pct(baseline)}
+          </span>
+          <span class="absolute right-0 top-1 font-mono text-[11px] text-[#4d5480]" aria-hidden="true">100%</span>
+          <span class="absolute left-0 top-1 font-mono text-[11px] text-[#4d5480]" aria-hidden="true">0</span>
+        </span>
+      </div>
+    </div>
+
+    <details class="mt-4">
+      <summary class="font-mono text-xs text-[#858fc6] hover:text-white">Show as a table</summary>
+      <table class="mt-3 border-collapse font-mono text-xs text-white/80 [font-variant-numeric:tabular-nums]">
+        <thead><tr class="text-[#858fc6]"><th class="py-1 pr-6 text-left font-normal">Title style</th><th class="py-1 pr-6 text-right font-normal">Pitches</th><th class="py-1 pr-6 text-right font-normal">Scheduled</th><th class="py-1 text-right font-normal">Share</th></tr></thead>
+        <tbody>
+          {styles.map((style) => (
+            <tr class="border-t border-[#12152e]"><td class="py-1 pr-6">{style.name}</td><td class="py-1 pr-6 text-right">{style.total}</td><td class="py-1 pr-6 text-right">{style.scheduled}</td><td class="py-1 text-right">{pct(style.share)}</td></tr>
+          ))}
+          <tr class="border-t border-[#12152e] text-white/60"><td class="py-1 pr-6">All pitches</td><td class="py-1 pr-6 text-right">{pitches.length}</td><td class="py-1 pr-6 text-right">{overallScheduled}</td><td class="py-1 text-right">{pct(baseline)}</td></tr>
+        </tbody>
+      </table>
+    </details>
+  </figure>
+
+  <!-- One shared tooltip. Value first, then the label. Filled with
+       textContent: titles are data, never markup. -->
+  <div
+    data-chart-tip
+    role="tooltip"
+    hidden
+    class="pointer-events-none fixed z-50 max-w-[300px] border border-white/[0.1] bg-[#0b0f33] px-3 py-2 shadow-lg"
+  >
+    <p data-tip-line="0" class="m-0 text-sm font-medium leading-snug text-white"></p>
+    <p data-tip-line="1" class="m-0 mt-1 font-mono text-xs text-[#858fc6]"></p>
+    <p data-tip-line="2" class="m-0 mt-0.5 font-mono text-xs text-[#4d5480]"></p>
+  </div>
+</div>
+
+<script>
+  /* Tooltips for every [data-tip] mark, and the theme chips on the field.
+     Without this script the charts are still complete: the field shows the
+     AI pitches, every value is printed beside its bar, and both bar charts
+     have a table. Re-runs per navigation (astro:page-load). */
+  const init = () => {
+    const root = document.querySelector<HTMLElement>('.pitch-charts');
+    if (!root) return;
+    const tip = root.querySelector<HTMLElement>('[data-chart-tip]');
+    const lines = [...root.querySelectorAll<HTMLElement>('[data-tip-line]')];
+    if (!tip) return;
+
+    const show = (target: HTMLElement, x: number, y: number) => {
+      let content: string[] = [];
+      try {
+        content = JSON.parse(target.dataset.tip ?? '[]');
+      } catch {
+        return;
+      }
+      lines.forEach((line, i) => {
+        line.textContent = content[i] ?? '';
+        line.hidden = !content[i];
+      });
+      tip.hidden = false;
+      const { width, height } = tip.getBoundingClientRect();
+      const left = Math.min(Math.max(8, x + 14), window.innerWidth - width - 8);
+      const top = y + 14 + height > window.innerHeight - 8 ? y - height - 14 : y + 14;
+      tip.style.left = `${left}px`;
+      tip.style.top = `${Math.max(8, top)}px`;
+    };
+    const hide = () => {
+      tip.hidden = true;
+    };
+
+    for (const target of root.querySelectorAll<HTMLElement>('[data-tip]')) {
+      target.addEventListener('pointermove', (e) => show(target, e.clientX, e.clientY));
+      target.addEventListener('pointerleave', hide);
+      target.addEventListener('focus', () => {
+        const r = target.getBoundingClientRect();
+        show(target, r.left + r.width / 2, r.bottom);
+      });
+      target.addEventListener('blur', hide);
+    }
+    window.addEventListener('scroll', hide, { passive: true });
+
+    /* Theme chips: recolour the field. A square's colour follows its own
+       themes, never its position, so switching never repaints the wrong one. */
+    const chipRow = root.querySelector<HTMLElement>('[data-theme-chips]');
+    const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-theme-chip]')];
+    const squares = [...root.querySelectorAll<HTMLElement>('[data-themes]')];
+    const key = root.querySelector<HTMLElement>('[data-field-key]');
+    const count = root.querySelector<HTMLElement>('[data-field-count]');
+    if (!chipRow) return;
+    chipRow.hidden = false;
+    for (const chip of chips) {
+      chip.addEventListener('click', () => {
+        const theme = chip.dataset.themeChip ?? '';
+        let lit = 0;
+        for (const square of squares) {
+          const on = (square.dataset.themes ?? '').split(' ').includes(theme);
+          square.classList.toggle('bg-[var(--accent)]', on);
+          square.classList.toggle('bg-[var(--context)]', !on);
+          if (on) lit += 1;
+        }
+        for (const other of chips) other.setAttribute('aria-pressed', String(other === chip));
+        if (key) key.textContent = chip.firstChild?.textContent?.trim() ?? theme;
+        if (count) count.textContent = `${lit} of ${squares.length}`;
+      });
+    }
+  };
+
+  document.addEventListener('astro:page-load', init);
+</script>

@@ -1,0 +1,600 @@
+[
+  {
+    "board": 1,
+    "title": "The Accelerative Micro Workshop: Start Something or Get Unstuck",
+    "presenter": "John Rabasa",
+    "scheduled": true,
+    "themes": [
+      "careers"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Oops, I Ran That in Prod",
+    "presenter": "Jeff Bordogna",
+    "scheduled": true,
+    "themes": [
+      "software"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Technical Future of Government Consulting in the Age of AI",
+    "presenter": "Albert Lee",
+    "scheduled": true,
+    "themes": [
+      "ai",
+      "careers"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Let’s Build an Agent, Part A",
+    "presenter": "Andrew Boyd",
+    "scheduled": true,
+    "themes": [
+      "ai",
+      "hands-on"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Why Do We Read? (And Why Are We the Last People Who Will?)",
+    "presenter": "Jessica Otey",
+    "scheduled": true,
+    "themes": [
+      "culture"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Making Better Decisions in Life + Work",
+    "presenter": "Mason Montgomery",
+    "scheduled": true,
+    "themes": [
+      "life"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Build Your Own Jev",
+    "presenter": "Nish Tahir",
+    "scheduled": true,
+    "themes": [
+      "software",
+      "hands-on"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Robotics Community / Play and Build Robots",
+    "presenter": "Kim Wilkens",
+    "scheduled": true,
+    "themes": [
+      "hands-on",
+      "community"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Let’s Build an Agent, Part B",
+    "presenter": "Justin Schroder",
+    "scheduled": true,
+    "themes": [
+      "ai",
+      "hands-on"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "How to (Not) Kill Your Trees",
+    "presenter": "Taylor Vierrether",
+    "scheduled": true,
+    "themes": [
+      "life"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Proof of Thought: What’s Working to Bring Slop Down to Zero?",
+    "presenter": "John Feminella",
+    "scheduled": true,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "How to Raise Our Children in a Highly Intelligent (AI) World?",
+    "presenter": "Shannon Coble",
+    "scheduled": true,
+    "themes": [
+      "ai",
+      "life"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Home Automation (Privacy Focused)",
+    "presenter": "Boris Rapoport",
+    "scheduled": true,
+    "themes": [
+      "hands-on"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "What Are All the Dead Stores That Are Now Spirit Halloweens?",
+    "presenter": "Jon Kropko",
+    "scheduled": true,
+    "themes": [
+      "culture",
+      "data"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "How to Start Collecting Rare Books (and Touch One for the First Time!)",
+    "presenter": "Donna Sy",
+    "scheduled": true,
+    "themes": [
+      "culture"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Unsolicited Career Advice",
+    "presenter": "Doug Turnbull",
+    "scheduled": true,
+    "themes": [
+      "careers"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "What Have You Vibe-Coded Lately?",
+    "presenter": "Jessica Otey",
+    "scheduled": true,
+    "themes": [
+      "ai",
+      "software"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "AI Sucks: Change My Mind",
+    "presenter": "Noah Bloom",
+    "scheduled": true,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Taiwanese Civic Hacking & Digital Democracy",
+    "presenter": "Joe Holmes",
+    "scheduled": true,
+    "themes": [
+      "civic"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "Meditation (Share & Discuss)",
+    "presenter": "William Proffitt",
+    "scheduled": true,
+    "themes": [
+      "life"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "How to Learn in the Age of AI",
+    "presenter": "Vaughn Spurrier",
+    "scheduled": true,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "How to Make Health Decisions Without Data?",
+    "presenter": "Jason Itri",
+    "scheduled": true,
+    "themes": [
+      "health",
+      "data"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "AI Security",
+    "presenter": "Carson Sweet",
+    "scheduled": true,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "State of the Charlottesville Technology Community",
+    "presenter": "Patrick Harrison",
+    "scheduled": true,
+    "themes": [
+      "community",
+      "civic"
+    ]
+  },
+  {
+    "board": 1,
+    "title": "The Crazy Alcohol Regs of USA",
+    "presenter": "Sidd Dalal",
+    "scheduled": true,
+    "themes": [
+      "culture"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "AI Adversarialism So We Don’t Lose Our Minds",
+    "presenter": "Eugene Geis",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Making a Makerspace (How We Built a Community…)",
+    "presenter": "Dan Funk",
+    "scheduled": false,
+    "themes": [
+      "community",
+      "hands-on"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "AI to the People, Not Corporations",
+    "presenter": "Kalia Sadeghi",
+    "scheduled": false,
+    "themes": [
+      "ai",
+      "civic"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Help Me RAG",
+    "presenter": "Mason Montgomery",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Emails That Don’t Suck",
+    "presenter": "Albert Lee",
+    "scheduled": false,
+    "themes": [
+      "careers"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Hype Meter: What You Should (and Shouldn’t) Be Excited About",
+    "presenter": "John Feminella",
+    "scheduled": false,
+    "themes": [
+      "software"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Are AI Models Conscious?",
+    "presenter": "Joe Holmes",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Pytest! You’re Using It Wrong (Web Series)",
+    "presenter": "Noah Bloom",
+    "scheduled": false,
+    "themes": [
+      "software"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "The E-Bike Forecasting Illusion",
+    "presenter": "Liam Donoghue",
+    "scheduled": false,
+    "themes": [
+      "data"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Robotics and AI",
+    "presenter": "Josh Anthony",
+    "scheduled": false,
+    "themes": [
+      "ai",
+      "hands-on"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Advisory Work Second Brain",
+    "presenter": "Nick Edwards",
+    "scheduled": false,
+    "themes": [
+      "careers"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Is Figure Skating (and Sports in General) Actually Predictable?",
+    "presenter": "Jessie",
+    "scheduled": false,
+    "themes": [
+      "data",
+      "culture"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Immersive AI Experiences",
+    "presenter": "Eugene Geis",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "RAG",
+    "presenter": "Doug T.",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "What’s Your Favorite Sea Shanty, Maritime Ballad, or Work Song? (Historical)",
+    "presenter": "Daniel",
+    "scheduled": false,
+    "themes": [
+      "culture"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Nanotechnology: UVA Student Journey",
+    "presenter": "Fadi",
+    "scheduled": false,
+    "themes": [
+      "science"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Are We at AGI?",
+    "presenter": "Sidd Dalal",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "AI Conversation Insights App for Meaningful Connections",
+    "presenter": "Stefan",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 2,
+    "title": "Build a Search Engine from Scratch",
+    "presenter": "David Beach",
+    "scheduled": false,
+    "themes": [
+      "software",
+      "hands-on"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "4 Colors → Fluid",
+    "presenter": "Noah Healy",
+    "scheduled": false,
+    "themes": [
+      "data"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "DuckDB: How It Will Change Everything You Know? Eh.",
+    "presenter": "Rusty Conover",
+    "scheduled": false,
+    "themes": [
+      "software",
+      "data"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Accountability, Risk Management, and Sandboxes in Agentic Systems",
+    "presenter": "Ben Cutter",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "LLM Self-Preference Risks, Findings, More",
+    "presenter": "Nick Edwards",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Multipolar Frameworks (Generative Interfaces & Agentic Patterns)",
+    "presenter": "Ben",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Security Basics for AI Apps",
+    "presenter": "Bryan Person",
+    "scheduled": false,
+    "themes": [
+      "ai",
+      "software"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Saving Tissues After Heart Attack and Stroke",
+    "presenter": "Ming-Feng Tsai",
+    "scheduled": false,
+    "themes": [
+      "health",
+      "science"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "A Better Component Library",
+    "presenter": "Josh Anthony",
+    "scheduled": false,
+    "themes": [
+      "software"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Let’s Build a Central VA Tech Mentorship Program",
+    "presenter": "Montgomery Ratte",
+    "scheduled": false,
+    "themes": [
+      "community",
+      "careers"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Airplanes: Learn to Fly / Teach Computers to Fly",
+    "presenter": "Michael Holroyd",
+    "scheduled": false,
+    "themes": [
+      "hands-on",
+      "culture"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Logging Our Lives",
+    "presenter": "Bryan Person",
+    "scheduled": false,
+    "themes": [
+      "life",
+      "data"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Keep It Simple",
+    "presenter": "Travis Eley",
+    "scheduled": false,
+    "themes": [
+      "software"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Whiteboard AI – SDLC Software Factories",
+    "presenter": "Owen Zanzal",
+    "scheduled": false,
+    "themes": [
+      "ai",
+      "software"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Find a Job",
+    "presenter": "Montgomery Ratte",
+    "scheduled": false,
+    "themes": [
+      "careers"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "OR-Tools for Scheduling Many People: Constraint Programming",
+    "presenter": "Peter Malcolm",
+    "scheduled": false,
+    "themes": [
+      "software",
+      "data"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Ecodome",
+    "scheduled": false,
+    "themes": []
+  },
+  {
+    "board": 3,
+    "title": "What We Keep: Values, Principles, and Social Fabric as Politics and Tech Change",
+    "presenter": "Dan Funk",
+    "scheduled": false,
+    "themes": [
+      "civic"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Relational Integrity with AI",
+    "presenter": "Lina Cauti",
+    "scheduled": false,
+    "themes": [
+      "ai",
+      "life"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "Workshop Your Personal Mission Statement",
+    "presenter": "Ariann Oxford",
+    "scheduled": false,
+    "themes": [
+      "careers",
+      "hands-on"
+    ]
+  },
+  {
+    "board": 3,
+    "title": "AI-Driven Workflows",
+    "presenter": "Fred McDavid",
+    "scheduled": false,
+    "themes": [
+      "ai"
+    ]
+  }
+]

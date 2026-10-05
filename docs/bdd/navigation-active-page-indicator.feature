@@ -22,6 +22,10 @@ Feature: The navigation marks the page you are on
     When the visitor is on "/schedule/"
     Then the "Schedule" link shows the active marker
 
+  Scenario: A section's sub-pages mark that section
+    When the visitor is on "/history/2026/retrospective"
+    Then the "History" link shows the active marker
+
   Scenario: The home page matches the root path
     When the visitor is on "/"
     Then no navigation link shows the active marker
