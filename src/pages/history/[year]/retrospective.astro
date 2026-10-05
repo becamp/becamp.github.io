@@ -4,6 +4,7 @@ import Header from '../../../components/Header.astro';
 import PageHero from '../../../components/PageHero.astro';
 import TextLink from '../../../components/TextLink.astro';
 import PitchCharts from '../../../components/PitchCharts.astro';
+import ThemeHistory from '../../../components/ThemeHistory.astro';
 import CtaSection from '../../../components/CtaSection.astro';
 import Footer from '../../../components/Footer.astro';
 import { RETROSPECTIVES, THEME_LABELS, pitchesFor } from '../../../lib/retrospectives';
@@ -160,6 +161,14 @@ const prose = [
         <p class="mt-3 font-mono text-xs text-[#4d5480]">Themes are our reading of each title; a pitch can count toward more than one.</p>
 
         <PitchCharts pitches={pitches} />
+
+        <div class="mt-20 max-w-[720px] border-t border-divider pt-10">
+          <h2 class="text-4xl font-medium tracking-[-0.36px] text-white">How {year} compares</h2>
+          <p class="mt-6 text-lg leading-relaxed text-white/80">
+            The same themes, applied to every scheduled session since 2007.
+          </p>
+        </div>
+        <ThemeHistory year={year} />
 
         {boards.map(({ board, pitches: list }) => (
           <div class="mt-14">

@@ -1,0 +1,239 @@
+---
+/* A year's sessions against every beCamp on record, by theme. Shares are of
+   each year's scheduled sessions, from the hand-applied `themes` on each
+   session in sessions.json (our reading of titles, as for the pitches). A
+   session can carry more than one theme, so a year's column needn't sum to
+   100%. Colour: a single-hue sequential ramp (more is darker... here, brighter
+   on navy) for the heatmap; accent vs context grey for the comparison. */
+import { SESSION_HISTORY } from '../lib/sessionHistory';
+import { THEME_LABELS } from '../lib/retrospectives';
+
+interface Props {
+  year: number;
+}
+
+const { year } = Astro.props;
+const ACCENT = '#e8640c';
+const CONTEXT = '#555e92';
+
+for (const entry of SESSION_HISTORY) {
+  for (const session of entry.sessions) {
+    for (const theme of session.themes ?? []) {
+      if (!(theme in THEME_LABELS)) throw new Error(`sessions.json: ${entry.year} "${session.topic}" has unknown theme ${theme}`);
+    }
+  }
+}
+
+const years = [...SESSION_HISTORY].sort((a, b) => a.year - b.year);
+const past = years.filter((entry) => entry.year < year);
+const share = (entry: (typeof years)[number], theme: string) =>
+  entry.sessions.filter((s) => s.themes?.includes(theme)).length / entry.sessions.length;
+const count = (entry: (typeof years)[number], theme: string) => entry.sessions.filter((s) => s.themes?.includes(theme)).length;
+
+const themes = Object.keys(THEME_LABELS);
+/* Every past year weighs the same, whatever its session count. */
+const pastAverage = (theme: string) => past.reduce((sum, entry) => sum + share(entry, theme), 0) / past.length;
+const current = years.find((entry) => entry.year === year)!;
+
+/* Heatmap rows: biggest themes across all years first. */
+const rows = [...themes].sort(
+  (a, b) => years.reduce((n, e) => n + share(e, b), 0) - years.reduce((n, e) => n + share(e, a), 0),
+);
+const maxShare = Math.max(...years.flatMap((entry) => themes.map((theme) => share(entry, theme))));
+/* Sequential steps by mixing the accent into the surface: monotone in
+   lightness, one hue. Square-root scaled, so the many 4-10% cells stay
+   visible beside software's early 80-90%; the legend prints real values.
+   Zero stays the surface, so empty reads as empty. */
+const cellColor = (value: number) =>
+  value === 0 ? 'transparent' : `color-mix(in oklab, ${ACCENT} ${Math.round(14 + Math.sqrt(value / maxShare) * 86)}%, #060926)`;
+const legendSteps = [0.05, 0.1, 0.25, 0.5, 0.9];
+
+/* Comparison rows: biggest change first. */
+const comparison = themes
+  .map((theme) => ({ theme, before: pastAverage(theme), now: share(current, theme) }))
+  .filter((row) => row.before > 0 || row.now > 0)
+  .sort((a, b) => Math.abs(b.now - b.before) - Math.abs(a.now - a.before));
+const scaleMax = Math.ceil(Math.max(...comparison.flatMap((r) => [r.before, r.now])) * 10) / 10;
+const scaleTicks = Array.from({ length: Math.round(scaleMax * 10) + 1 }, (_, i) => i / 10);
+const pos = (v: number) => `${(v / scaleMax) * 100}%`;
+const pct = (v: number) => `${Math.round(v * 100)}%`;
+const firstYear = past[0]?.year;
+const lastPast = past[past.length - 1]?.year;
+const label = (theme: string) => THEME_LABELS[theme];
+---
+
+<div class="theme-history mt-14 flex flex-col gap-16" style={`--accent: ${ACCENT}; --context: ${CONTEXT};`}>
+  <figure class="m-0">
+    <figcaption>
+      <h3 class="text-2xl font-medium tracking-[-0.02em] text-white">Twenty years of topics</h3>
+      <p class="mt-2 max-w-[64ch] text-sm leading-relaxed text-white/70">
+        Share of each year's scheduled sessions by theme. Brighter is a bigger share; blank is none.
+        No beCamp ran in 2020, 2021 or 2023.
+      </p>
+    </figcaption>
+
+    <div class="mt-4 flex flex-wrap items-center gap-3 font-mono text-xs text-[#858fc6]">
+      <span>Share of the year's sessions</span>
+      <span class="flex gap-[2px]">
+        {legendSteps.map((v) => (
+          <span class="flex flex-col items-center gap-1">
+            <span class="inline-block h-3 w-9 rounded-[2px]" style={`background: ${cellColor(v)}`}></span>
+            <span class="text-[10px] text-[#4d5480]">{pct(v)}</span>
+          </span>
+        ))}
+      </span>
+    </div>
+
+    <!-- Scrolls inside its own box on narrow screens, never the page. -->
+    <div class="mt-5 overflow-x-auto pb-2">
+      <table class="border-separate border-spacing-[2px] [font-variant-numeric:tabular-nums]">
+        <thead>
+          <tr>
+            <th class="sticky left-0 z-10 bg-bg"></th>
+            {years.map((entry) => (
+              <th
+                scope="col"
+                class:list={[
+                  'px-0.5 pb-1.5 font-mono text-[11px] font-normal',
+                  entry.year === year ? 'text-white' : 'text-[#858fc6]',
+                ]}
+              >
+                <span class="hidden sm:inline">{entry.year}</span><span class="sm:hidden">’{String(entry.year).slice(2)}</span>
+                {entry.year === year && <span class="mx-auto mt-1 block h-[3px] w-5 rounded-full bg-[var(--accent)]" aria-hidden="true"></span>}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((theme) => (
+            <tr>
+              <th scope="row" class="sticky left-0 z-10 bg-bg pr-3 text-left text-sm font-normal whitespace-nowrap text-white/80">{label(theme)}</th>
+              {years.map((entry) => {
+                const value = share(entry, theme);
+                return (
+                  <td
+                    tabindex="0"
+                    data-tip={JSON.stringify([pct(value), `${label(theme)} · ${entry.year}`, `${count(entry, theme)} of ${entry.sessions.length} sessions`])}
+                    aria-label={`${label(theme)}, ${entry.year}: ${pct(value)}`}
+                    class:list={[
+                      'h-7 w-9 min-w-9 rounded-[3px] bg-white/[0.03] outline-offset-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white sm:w-11 sm:min-w-11',
+                    ]}
+                    style={value > 0 ? `background: ${cellColor(value)}` : undefined}
+                  ></td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <details class="mt-4">
+      <summary class="font-mono text-xs text-[#858fc6] hover:text-white">Show as a table</summary>
+      <div class="mt-3 overflow-x-auto">
+        <table class="border-collapse font-mono text-xs text-white/80 [font-variant-numeric:tabular-nums]">
+          <thead>
+            <tr class="text-[#858fc6]">
+              <th class="py-1 pr-4 text-left font-normal">Theme</th>
+              {years.map((entry) => <th class="py-1 pr-3 text-right font-normal">{entry.year}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((theme) => (
+              <tr class="border-t border-[#12152e]">
+                <td class="py-1 pr-4 whitespace-nowrap">{label(theme)}</td>
+                {years.map((entry) => <td class="py-1 pr-3 text-right">{pct(share(entry, theme))}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </figure>
+
+  <figure class="m-0">
+    <figcaption>
+      <h3 class="text-2xl font-medium tracking-[-0.02em] text-white">{year} against {firstYear}–{lastPast}</h3>
+      <p class="mt-2 max-w-[64ch] text-sm leading-relaxed text-white/70">
+        Each theme's share of {year}'s sessions next to its average across the {past.length} earlier beCamps, biggest change first.
+      </p>
+    </figcaption>
+    <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-xs text-[#858fc6]">
+      <span class="flex items-center gap-2"><span class="inline-block size-3 rounded-full bg-[var(--context)]"></span>{firstYear}–{lastPast} average</span>
+      <span class="flex items-center gap-2"><span class="inline-block size-3 rounded-full bg-[var(--accent)]"></span>{year}</span>
+    </div>
+
+    <div class="mt-5 max-w-[860px]">
+      {comparison.map((row) => (
+        <div
+          class="grid grid-cols-[112px_minmax(0,1fr)_72px] items-center gap-x-4 py-[7px] sm:grid-cols-[140px_minmax(0,1fr)_96px]"
+          tabindex="0"
+          data-tip={JSON.stringify([`${pct(row.before)} → ${pct(row.now)}`, label(row.theme), `${firstYear}–${lastPast} average → ${year}`])}
+        >
+          <span class="truncate text-sm text-white/80">{label(row.theme)}</span>
+          <span class="relative h-4">
+            <span class="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-white/[0.06]"></span>
+            <span
+              class="absolute top-1/2 h-[2px] -translate-y-1/2 bg-white/30"
+              style={`left: ${pos(Math.min(row.before, row.now))}; width: calc(${pos(Math.abs(row.now - row.before))})`}
+            ></span>
+            <span class="absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--context)] ring-2 ring-bg" style={`left: ${pos(row.before)}`}></span>
+            <span class="absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent)] ring-2 ring-bg" style={`left: ${pos(row.now)}`}></span>
+          </span>
+          <span class="text-right font-mono text-xs text-[#858fc6] [font-variant-numeric:tabular-nums]">
+            {pct(row.before)} → <span class="text-white/90">{pct(row.now)}</span>
+          </span>
+        </div>
+      ))}
+      <div class="mt-1 grid grid-cols-[112px_minmax(0,1fr)_72px] gap-x-4 sm:grid-cols-[140px_minmax(0,1fr)_96px]" aria-hidden="true">
+        <span></span>
+        <span class="relative h-5 border-t border-[#2a2f55]">
+          {scaleTicks.map((t) => (
+            <span class="absolute top-1 -translate-x-1/2 font-mono text-[11px] text-[#4d5480]" style={`left: ${pos(t)}`}>{pct(t)}</span>
+          ))}
+        </span>
+      </div>
+    </div>
+    <p class="mt-4 font-mono text-xs text-[#4d5480]">
+      Themes are our reading of each session title. Each earlier year counts equally. Years have 15–25 sessions, so one session moves a year 4–7 points.
+    </p>
+  </figure>
+</div>
+
+<script>
+  /* Tooltips for the heatmap cells and comparison rows; every value is also
+     in the table view or printed beside its row. Titles go in by
+     textContent. Reuses the shared tooltip from PitchCharts when present. */
+  const init = () => {
+    const root = document.querySelector<HTMLElement>('.theme-history');
+    const tip = document.querySelector<HTMLElement>('[data-chart-tip]');
+    if (!root || !tip) return;
+    const lines = [...tip.querySelectorAll<HTMLElement>('[data-tip-line]')];
+    const show = (target: HTMLElement, x: number, y: number) => {
+      let content: string[] = [];
+      try {
+        content = JSON.parse(target.dataset.tip ?? '[]');
+      } catch {
+        return;
+      }
+      lines.forEach((line, i) => {
+        line.textContent = content[i] ?? '';
+        line.hidden = !content[i];
+      });
+      tip.hidden = false;
+      const { width, height } = tip.getBoundingClientRect();
+      tip.style.left = `${Math.min(Math.max(8, x + 14), window.innerWidth - width - 8)}px`;
+      tip.style.top = `${Math.max(8, y + 14 + height > window.innerHeight - 8 ? y - height - 14 : y + 14)}px`;
+    };
+    for (const target of root.querySelectorAll<HTMLElement>('[data-tip]')) {
+      target.addEventListener('pointermove', (e) => show(target, e.clientX, e.clientY));
+      target.addEventListener('pointerleave', () => (tip.hidden = true));
+      target.addEventListener('focus', () => {
+        const r = target.getBoundingClientRect();
+        show(target, r.left + r.width / 2, r.bottom);
+      });
+      target.addEventListener('blur', () => (tip.hidden = true));
+    }
+  };
+  document.addEventListener('astro:page-load', init);
+</script>

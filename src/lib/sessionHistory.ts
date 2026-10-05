@@ -47,6 +47,9 @@ export interface ArchivedSession {
   type?: string;
   links?: SessionLink[];
   notes?: string;
+  /* Our reading of the title, for the theme charts; keys of THEME_LABELS
+     in lib/retrospectives. */
+  themes?: string[];
 }
 
 export interface ArchivedYear {
