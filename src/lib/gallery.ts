@@ -5,8 +5,10 @@
  * (YEAR_handle_slug), the camera's own date for the 2008 set, and for the
  * Flickr batches either what is in the frame (the 2007 banner reads "June
  * 15–16, 2007"; the 2008 room carries the CBIC sign) or, for 2009 and 2011,
- * only when the batch was uploaded. Move a file to another year's folder if
- * one of those turns out wrong; nothing else needs to change.
+ * only when the batch was uploaded. 2026 is dated by the phone's own
+ * timestamps: Pitch Night on Friday, sessions on Saturday. Move a file to
+ * another year's folder if one of those turns out wrong; nothing else needs
+ * to change.
  *
  * Credits are what the files tell us and no more. The 2014–2017 photos carry
  * the photographer's handle in their name; the Flickr batches carry no owner
@@ -22,6 +24,56 @@ const files = import.meta.glob<{ default: ImageMetadata }>('../assets/gallery/*/
 
 /* Keyed by "<year>/<filename without .jpg>". */
 const ALT: Record<string, string> = {
+  /* 2026: the UVA School of Data Science. Pitch Night on Friday (an
+     organizer's selfies with each pitcher), sessions on Saturday. */
+  '2026/img-0644': "A speaker at the lectern beside the screen reading 'beCamp Charlottesville 20th Anniversary'",
+  '2026/img-0645': "An organizer's selfie with a pitcher in a green beCamp T-shirt speaking at the lectern",
+  '2026/img-0646': "An organizer's selfie from the lectern, the Pitch Night crowd filling the room behind",
+  '2026/img-0647': 'An organizer pulling a face in a selfie with a pitcher at the microphone',
+  '2026/img-0648': "An organizer's selfie with a smiling pitcher in a cap waving to the room",
+  '2026/img-0649': "An organizer's selfie with a pitcher in a beCamp 2018 T-shirt, mid-gesture at the microphone",
+  '2026/img-0650': "An organizer's selfie with a pitcher in a green T-shirt holding the microphone",
+  '2026/img-0651': "An organizer's selfie with a pitcher in a cap and grey hoodie holding the microphone",
+  '2026/img-0652': 'The Pitch Night audience in rows of orange chairs, seen from the lectern',
+  '2026/img-0654': "An organizer's selfie from the lectern, the Pitch Night audience behind",
+  '2026/img-0718': 'The pitch board: rows of handwritten beCamp pitch cards taped to a window, each marked with vote tallies',
+  '2026/img-0719': 'Another section of the pitch board, handwritten pitch cards with tally-mark votes',
+  '2026/img-0720': 'Pitch cards with vote tallies arranged in rows on a white board',
+  '2026/img-0721': 'A session in a lecture room, a presenter at the front between two projected screens of text',
+  '2026/img-0722': 'A lecture room session seen from the side, attendees in blue chairs facing the projected screens',
+  '2026/img-0723': 'Attendees at desks watching a presenter in a lecture room, a coffee cup in the foreground',
+  '2026/img-0724': 'A presenter at the lectern beside the title slide "Proof of Thought"',
+  '2026/img-0725': 'Attendees raising their hands during a session in a lecture room',
+  '2026/img-0726': 'A young attendee wiring electronics into a green robot chassis beside a laptop',
+  '2026/img-0727': 'Two attendees assembling small electronics kits on a sofa',
+  '2026/img-0728': 'Attendees at a long table playing a robot board game on illustrated grid mats',
+  '2026/img-0729': 'An adult and a child building a small robot together at a table covered in parts',
+  '2026/img-0730': 'Attendees around a robot game mat, coding pieces scattered across the table',
+  '2026/img-0731': 'The retrospective: attendees in a circle of chairs beneath screens asking "What should beCamp keep, change, and try?"',
+  '2026/img-0732': 'A presenter gesturing beside a slide titled "A Harmful Prompt Goes Through the Same Weights"',
+  '2026/img-0733': "An organizer gesturing at the day's session board on the main hall's video wall",
+  '2026/img-0735': 'A lightning talk in the main hall, the video wall showing the lightning-talk timer',
+  '2026/img-0736': 'A speaker at the lectern in the main hall during lightning talks',
+  '2026/img-0737': 'Two speakers giving a lightning talk in front of the video wall timer',
+  '2026/img-0738': 'A lightning talk speaker under the video wall reading "Want to talk? Line up to the right of the screen"',
+  '2026/img-0739': 'A small session around a long table, seen through a glass wall',
+  '2026/img-0741': "The full main hall seen from the side, the video wall showing beCamp's 20th anniversary logo",
+  '2026/img-0742': 'The main hall during the welcome, the screen reading "Twenty years of showing up"',
+  '2026/img-0743': 'A packed hall, attendees standing at the back while the voting rules show on screen',
+  '2026/img-0744': 'Attendees writing on and reading the pitch board during voting',
+  '2026/img-0745': 'The pitch board: rows of handwritten pitch cards on a dark wall',
+  '2026/img-0746': 'The registration table under the School of Data Science sign, a beCamp welcome banner in front',
+  '2026/img-0747': 'A wide lecture room with attendees at scattered tables during a session',
+  '2026/img-0748': 'A discussion circle in a bright room with floor-to-ceiling windows and a wall of binary code',
+  '2026/img-0749': 'Attendees around a long wooden table in a conference room during a discussion',
+  '2026/img-0750': 'A presenter standing at the front of a lecture room, attendees in blue chairs around tables',
+  '2026/img-0751': 'A presenter beside a projected diagram at the front of a lecture room, attendees listening',
+  '2026/img-0752': 'A session in the main hall, a large historic city map filling the video wall',
+  '2026/img-0753': 'A presenter beside a slide quoting "Internet and democracy — not two things, but one and the same thing in Taiwan"',
+  '2026/img-4155': "The empty stage before doors, the screen reading 'beCamp Charlottesville 20th Anniversary' over rows of orange chairs",
+  '2026/img-4931': "A speaker at the lectern beside a bar chart on the main hall's video wall, attendees in orange chairs",
+  '2026/img-shared': 'A remote speaker on the giant video wall, presenting to a packed hall',
+
   /* 2007: a Tudor-style lodge with a stage, a band and a bar room. */
   '2007/flickr-3035585500': 'Three panelists on stools on stage under the beCamp June 15–16, 2007 banner, one speaking into a microphone',
   '2007/flickr-559590676': 'The beCamp 2007 banner on a glass door, sponsor logos beneath the June 15–16 dates',
