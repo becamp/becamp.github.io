@@ -30,7 +30,10 @@ const stats = [
 const years = SESSION_HISTORY;
 const newest = years[0];
 
-const columns = 'grid grid-cols-[96px_minmax(0,1fr)] gap-x-5 sm:grid-cols-[96px_minmax(0,1fr)_190px_168px_104px]';
+/* The full six-column table needs about 1280px beside the year rail; below
+   that, each row stacks speaker, room, type and notes under the topic. (The
+   table used to start at 640px, where the topic column collapsed to nothing.) */
+const columns = 'grid grid-cols-[96px_minmax(0,1fr)] gap-x-5 xl:grid-cols-[96px_minmax(0,1fr)_160px_150px_96px_112px]';
 const meta = 'font-mono text-[13px] text-[#858fc6]';
 const panel = 'border border-white/[0.08] bg-white/[0.03]';
 ---
@@ -143,9 +146,10 @@ const panel = 'border border-white/[0.08] bg-white/[0.03]';
               <div class={`${columns} border-y border-divider py-2.5 font-mono text-[11px] tracking-[0.06em] text-[#4d5480]`}>
                 <span>TIME</span>
                 <span>TOPIC</span>
-                <span class="max-sm:hidden">SPEAKER</span>
-                <span class="max-sm:hidden">ROOM</span>
-                <span class="max-sm:hidden">TYPE</span>
+                <span class="max-xl:hidden">SPEAKER</span>
+                <span class="max-xl:hidden">ROOM</span>
+                <span class="max-xl:hidden">TYPE</span>
+                <span class="max-xl:hidden">NOTES</span>
               </div>
 
               {year.sessions.map((session) => (
@@ -153,20 +157,39 @@ const panel = 'border border-white/[0.08] bg-white/[0.03]';
                   data-session
                   data-text={searchText(session)}
                   data-type={session.type ?? ''}
-                  class={`${columns} items-baseline border-b border-[#12152e] py-3.5 max-sm:gap-y-1.5`}
+                  class={`${columns} items-baseline border-b border-[#12152e] py-3.5 max-xl:gap-y-1.5`}
                 >
                   <span class={meta}>{session.time}</span>
-                  <span class="text-base leading-snug text-white">{session.topic}</span>
-                  <span class="text-sm text-white/80 max-sm:col-start-2 max-sm:text-[13px]">
+                  <span class="text-base leading-snug text-white">
+                    {session.topic}
+                    {session.notes && (
+                      <span class="mt-1.5 block text-sm leading-relaxed text-white/60">{session.notes}</span>
+                    )}
+                  </span>
+                  <span class="text-sm text-white/80 max-xl:col-start-2 max-xl:text-[13px]">
                     {session.speaker ?? '—'}
                   </span>
-                  {/* A lone em dash is fine in a desktop table column, but on a
-                      phone it becomes its own line of nothing — so drop it there. */}
-                  <span class={`max-sm:col-start-2 max-sm:text-[11px] ${meta} ${session.room ? '' : 'max-sm:hidden'}`}>
+                  {/* A lone em dash is fine in a desktop table column, but in the
+                      stacked layout it becomes its own line of nothing — so drop it there. */}
+                  <span class={`max-xl:col-start-2 max-xl:text-[11px] ${meta} ${session.room ? '' : 'max-xl:hidden'}`}>
                     {session.room ?? '—'}
                   </span>
-                  <span class={`font-mono text-xs max-sm:col-start-2 ${typeTone(session.type)} ${session.type ? '' : 'max-sm:hidden'}`}>
+                  <span class={`font-mono text-xs max-xl:col-start-2 ${typeTone(session.type)} ${session.type ? '' : 'max-xl:hidden'}`}>
                     {session.type ?? '—'}
+                  </span>
+                  {/* Links live in the Notes column; a text note already shows
+                      under the topic, so a text-only row just says so here (and
+                      the stacked layout, where the note sits right above, skips it). */}
+                  <span class={`max-xl:col-start-2 ${session.links?.length ? '' : 'max-xl:hidden'}`}>
+                    {session.links?.length ? (
+                      <span class="flex flex-wrap gap-x-3 gap-y-1">
+                        {session.links.map((link) => (
+                          <TextLink href={link.url} external class="text-[13px]">{link.label}&nbsp;↗</TextLink>
+                        ))}
+                      </span>
+                    ) : (
+                      <span class={meta}>{session.notes ? 'Note' : '—'}</span>
+                    )}
                   </span>
                 </div>
               ))}
