@@ -78,7 +78,7 @@
   {
     "board": 1,
     "title": "Let’s Build an Agent, Part B",
-    "presenter": "Justin Schroder",
+    "presenter": "Justin Schroeder",
     "scheduled": true,
     "themes": [
       "ai",
@@ -256,7 +256,7 @@
   {
     "board": 2,
     "title": "AI to the People, Not Corporations",
-    "presenter": "Kalia Sadeghi",
+    "presenter": "Kolia Sadeghi",
     "scheduled": false,
     "themes": [
       "ai",
@@ -358,7 +358,7 @@
   {
     "board": 2,
     "title": "RAG",
-    "presenter": "Doug T.",
+    "presenter": "Doug Turnbull",
     "scheduled": false,
     "themes": [
       "ai"
@@ -367,7 +367,7 @@
   {
     "board": 2,
     "title": "What’s Your Favorite Sea Shanty, Maritime Ballad, or Work Song? (Historical)",
-    "presenter": "Daniel",
+    "presenter": "Daniel Postilnik",
     "scheduled": false,
     "themes": [
       "culture"
@@ -376,7 +376,7 @@
   {
     "board": 2,
     "title": "Nanotechnology: UVA Student Journey",
-    "presenter": "Fadi",
+    "presenter": "Fadi Zamjaoui",
     "scheduled": false,
     "themes": [
       "science"
@@ -403,7 +403,7 @@
   {
     "board": 2,
     "title": "Build a Search Engine from Scratch",
-    "presenter": "David Beach",
+    "presenter": "Daniel Beach",
     "scheduled": false,
     "themes": [
       "software",
@@ -450,7 +450,7 @@
   {
     "board": 3,
     "title": "Multipolar Frameworks (Generative Interfaces & Agentic Patterns)",
-    "presenter": "Ben",
+    "presenter": "Ben Blohowiak",
     "scheduled": false,
     "themes": [
       "ai"
@@ -518,7 +518,7 @@
   {
     "board": 3,
     "title": "Keep It Simple",
-    "presenter": "Travis Eley",
+    "presenter": "Travis Eden",
     "scheduled": false,
     "themes": [
       "software"
@@ -571,7 +571,7 @@
   {
     "board": 3,
     "title": "Relational Integrity with AI",
-    "presenter": "Lina Cauti",
+    "presenter": "Tina Canuti",
     "scheduled": false,
     "themes": [
       "ai",
@@ -581,7 +581,7 @@
   {
     "board": 3,
     "title": "Workshop Your Personal Mission Statement",
-    "presenter": "Ariann Oxford",
+    "presenter": "Arion Oxford",
     "scheduled": false,
     "themes": [
       "careers",
