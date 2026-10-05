@@ -20,8 +20,23 @@
  *
  * Many older rows carry no speaker and no type — the Present / Learn / Share
  * labels only came in part way through. The page shows those gaps rather than
- * hiding the columns, because the gaps are part of the record. */
+ * hiding the columns, because the gaps are part of the record.
+ *
+ * NOTES are whatever a presenter has shared since: slides, a repo, a
+ * recording, a write-up. Add them to a session in src/data/sessions.json as
+ *
+ *   "links": [{ "label": "Slides", "url": "https://…" }],
+ *   "notes": "One or two sentences, shown under the topic."
+ *
+ * Either field may appear alone. Links must be http(s), or a path on this
+ * site such as /talks/… for material hosted under public/; the build fails on
+ * anything else, so a typo cannot ship a javascript: or broken relative link. */
 import sessions from '../data/sessions.json';
+
+export interface SessionLink {
+  label: string;
+  url: string;
+}
 
 export interface ArchivedSession {
   topic: string;
@@ -30,6 +45,8 @@ export interface ArchivedSession {
   room?: string;
   /* Free text: "Present", "Share", "Present/Learn", … */
   type?: string;
+  links?: SessionLink[];
+  notes?: string;
 }
 
 export interface ArchivedYear {
@@ -38,6 +55,16 @@ export interface ArchivedYear {
 }
 
 export const SESSION_HISTORY: ArchivedYear[] = sessions;
+
+for (const year of SESSION_HISTORY) {
+  for (const session of year.sessions) {
+    for (const link of session.links ?? []) {
+      if (!/^(https?:\/\/|\/(?!\/))/.test(link.url) || !link.label?.trim()) {
+        throw new Error(`sessions.json: ${year.year} "${session.topic}" has a link that is not a labelled http(s) URL or site path: ${JSON.stringify(link)}`);
+      }
+    }
+  }
+}
 
 /* The three labels a pitch can carry. A session may carry more than one
    ("Present/Share"), so filtering is a substring test, not equality. */
@@ -58,7 +85,9 @@ export const typeTone = (type?: string): string => {
 /* Lowercased haystack for the client-side search box; built once at build time
    so the browser never has to walk the objects. */
 export const searchText = (session: ArchivedSession): string =>
-  [session.topic, session.speaker ?? '', session.room ?? ''].join(' ').toLowerCase();
+  [session.topic, session.speaker ?? '', session.room ?? '', session.notes ?? '', ...(session.links ?? []).map((l) => l.label)]
+    .join(' ')
+    .toLowerCase();
 
 export const totalSessions = SESSION_HISTORY.reduce((n, year) => n + year.sessions.length, 0);
 
