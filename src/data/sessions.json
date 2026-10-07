@@ -61,10 +61,15 @@
         "type": "Share/Learn",
         "links": [
           {
+            "label": "Slides",
+            "url": "https://docs.google.com/presentation/d/1ZxZgHAtf74WVSPSSCzV5LPtttI6pmBgPhqzvycVmvME/edit"
+          },
+          {
             "label": "Roversa",
             "url": "https://www.roversa.com/"
           }
         ],
+        "notes": "Playing with Robots and Building Community: Roversa is an educator-ready robotics platform, coded in blocks, text or with AI, built because classroom robots are expensive and most teachers aren’t trained to teach CS. Kim covered the origin story, keeping an open-source ethos while sustaining a business, and the free guides for building and playing with the robots.",
         "themes": [
           "hands-on",
           "community"
@@ -205,6 +210,7 @@
             "url": "https://docs.google.com/presentation/d/1UdTITKEo3h_6Znu4ArkPq0TD8-ZXTje6zfsKoNGcpxY/edit"
           }
         ],
+        "notes": "Grow a career by creating opportunities: blog posts, talks, videos and posts turn into conversations, and conversations into roles and consulting work. Pick an undervalued domain like an investor, lead with enthusiasm over expertise, favor clarity over novelty, and share your mistakes and strong opinions held weakly.",
         "themes": [
           "careers"
         ]
@@ -221,6 +227,7 @@
             "url": "/talks/upgrading-democracy.html"
           }
         ],
+        "notes": "Upgrading Democracy: lessons from Taiwan’s civic hackers, from g0v’s 2012 hackathons and the 2014 Sunflower occupation of the legislature to the government inviting them in to build vTaiwan. Joe showed how Pol.is maps opinion groups and finds “bridge” statements both sides agree on, the process that settled Taiwan’s Uber fight, and how a 2024 citizens’ assembly shaped its law on deepfake scam ads.",
         "themes": [
           "civic"
         ]
@@ -280,17 +287,24 @@
             "url": "https://github.com/carson-sweet/jev-mice"
           }
         ],
-        "notes": "Carson also shared his Game of Life–style mouse colony simulation, which came up in questions (unrelated to the security talk): the game, a design article and the repo.",
+        "notes": "LLM Security Flyover: how refusals are supposed to work, until they don’t. Safety training only “paints” the parts of a model its examples reach, so most jailbreaks route around the refusal circuit through untrained regions (rare languages, past tense, personas) rather than breaking it. Carson also shared his Game of Life–style mouse colony simulation, which came up in questions (unrelated to the security talk): the game, a design article and the repo.",
         "themes": [
           "ai"
         ]
       },
       {
-        "topic": "How to make health decisions with data",
+        "topic": "How to make health decisions without data",
         "time": "2:50pm",
         "speaker": "Jason Itri",
         "room": "Breakout Room 4",
         "type": "Present",
+        "links": [
+          {
+            "label": "Slides",
+            "url": "/talks/health-decisions-without-data.pdf"
+          }
+        ],
+        "notes": "No large randomized trial means no guideline, no insurance coverage and usually no prescription, even for treatments like testosterone or BPC-157 that can’t be patented and so rarely get one. Jason’s alternative: define the outcome you want to change, weigh mechanism and safety signals, set a prior, and run an N-of-1 trial (baseline, treatment, washout, rechallenge) to ask whether it works for you.",
         "themes": [
           "health",
           "data"
@@ -302,6 +316,13 @@
         "speaker": "Sidd Dalal",
         "room": "Breakout Room 5",
         "type": "Present/Share",
+        "links": [
+          {
+            "label": "Slides",
+            "url": "https://www.darooh.net/alcohol-regs"
+          }
+        ],
+        "notes": "Two bottles, one maze: an Indian gin and an American whiskey land in a New Jersey warehouse, then hit 51 sets of rules — license, franchise and control states, who may ship spirits by mail, and residency limits on who can be a wholesaler. Ninety-odd years after Prohibition ended, it’s still why a California restaurant can’t simply buy the gin. The slides’ access code is becamp.",
         "themes": [
           "culture"
         ]
