@@ -91,6 +91,13 @@
         "speaker": "Nish Tahir",
         "room": "Breakout Room 3",
         "type": "Present",
+        "links": [
+          {
+            "label": "Article",
+            "url": "https://nishtahir.com/build-your-own-decision-model/"
+          }
+        ],
+        "notes": "Build your own decision model: models like Jev pick from a fixed set of options in a single pass instead of generating an answer token by token. Nish masked a small model’s vocabulary down to A–E, scored it on CommonsenseQA (59% accuracy, 62% after a quick finetune), then showed why its answer probabilities aren’t confidence: in its most confident range it was about 98% sure and right only 70% of the time, until temperature scaling brought its scores in line with its accuracy.",
         "themes": [
           "software",
           "hands-on"
