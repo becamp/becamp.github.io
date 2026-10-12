@@ -91,6 +91,12 @@
         "speaker": "Nish Tahir",
         "room": "Breakout Room 3",
         "type": "Present",
+        "links": [
+          {
+            "label": "Article",
+            "url": "https://nishtahir.com/build-your-own-decision-model/"
+          }
+        ],
         "themes": [
           "software",
           "hands-on"
